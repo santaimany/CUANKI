@@ -213,7 +213,7 @@ const FeaturesSection = () => {
                 <div className="absolute top-full left-1/2 -translate-x-1/2 w-7 h-[61vh] bg-[#0EFF95] line-anim"></div>
               </div>
             </div>
-            <div className="absolute top-[20rem] right-20 z-10 card-node-anim">
+            <div className="absolute top-[15rem] right-25 z-10 card-node-anim">
               <div className="relative">
                 <FeatureCard
                   icon={EduIcon}
@@ -226,7 +226,7 @@ const FeaturesSection = () => {
                     </>
                   }
                 />
-                <div className="absolute top-full left-1/2 -translate-x-1/2 w-7 h-[36vh] bg-[#0EFF95] line-anim"></div>
+                <div className="absolute top-full left-1/2 -translate-x-1/2 w-7 h-[45vh] bg-[#0EFF95] line-anim"></div>
               </div>
             </div>
           </div>
@@ -258,7 +258,7 @@ const FeaturesSection = () => {
               <div className="lg:translate-x-40">
                 <h3
                   ref={milestoneTitleRef}
-                  className="text-[#50488A] text-[clamp(2.5rem,8vw,5rem)] lg:text-7xl font-bold leading-tight max-w-7xl mx-auto text-center"
+                  className="text-[#50488A] text-[clamp(2.5rem,8vw,5rem)] lg:text-7xl  leading-tight max-w-7xl mx-auto text-center"
                 >
                   We <span className="font-bold"> deliver</span> you a{" "}
                   <span className="font-bold">milestone</span> <br /> to your{" "}
