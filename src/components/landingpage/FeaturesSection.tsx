@@ -210,7 +210,7 @@ const FeaturesSection = () => {
                     </>
                   }
                 />
-                <div className="absolute top-full left-1/2 rounded-r-full -translate-x-1/2 w-7 h-[61vh] bg-[#0EFF95] line-anim"></div>
+                <div className="absolute top-full left-1/2 -translate-x-1/2 w-7 h-[61vh] bg-[#0EFF95] line-anim"></div>
               </div>
             </div>
             <div className="absolute top-[20rem] right-20 z-10 card-node-anim">
