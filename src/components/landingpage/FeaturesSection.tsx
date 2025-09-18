@@ -11,12 +11,18 @@ import MoneyIcon from "@/assets/landingpage/icons/money-icon.svg";
 import CalendarIcon from "@/assets/landingpage/icons/calendar-icon.svg";
 import AiIcon from "@/assets/landingpage/icons/ai-icon.svg";
 import EduIcon from "@/assets/landingpage/icons/education-icon.svg";
-import GreenBgInverted from "@/assets/landingpage/background/green-features-inverted.png";
+import GreenBgInverted from "@/assets/landingpage/background/green-features-inverted.svg";
 
 gsap.registerPlugin(ScrollTrigger, SplitText);
 
-const FeatureCard = ({ icon, alt, title }) => (
-  <div className="bg-[#0EFF95] rounded-3xl p-8 w-60 h-[30vh] flex flex-col items-center justify-center">
+type FeatureCardProps = {
+  icon : string, 
+  alt : string,
+  title : React.ReactNode,
+}
+
+const FeatureCard = ({ icon, alt, title } : FeatureCardProps) => (
+  <div className="bg-[#A3FFD6] rounded-3xl p-8 w-60 h-[30vh] flex flex-col items-center justify-center">
     <Image src={icon} alt={alt} width={50} height={50} className="mb-4" />
     <h4 className="text-[#453F76] text-3xl font-bold text-center leading-tight">
       {title}
@@ -50,12 +56,12 @@ const FeaturesSection = () => {
       gsap.set(".line-anim", { scaleY: 0, transformOrigin: "top" });
       tl1
         .to(".coin-jar-anim", { xPercent: 0, autoAlpha: 1, ease: "power2.out" })
+        .to(".clogo-anim", { x: 0, autoAlpha: 1, ease: "power2.out" }, "<")
         .to(
           ".title-text-anim",
           { y: 0, autoAlpha: 1, stagger: 0.1, ease: "power2.out" },
           "<"
         )
-        .to(".clogo-anim", { x: 0, autoAlpha: 1, ease: "power2.out" }, "<0.3")
         .to(
           ".card-node-anim",
           { y: 0, autoAlpha: 1, stagger: 0.15, ease: "power3.out" },
@@ -71,7 +77,7 @@ const FeaturesSection = () => {
       const tl2 = gsap.timeline({
         scrollTrigger: {
           trigger: section2Ref.current,
-          start: "top 85%", // DIUBAH: dari 70% menjadi 85%
+          start: "top 100%", // DIUBAH: dari 70% menjadi 85%
           toggleActions: "play none none reverse",
         },
       });
@@ -81,10 +87,6 @@ const FeaturesSection = () => {
       });
 
       gsap.set(section2Ref.current, { autoAlpha: 0 });
-      gsap.set(".milestone-bg-anim", {
-        clipPath: "circle(0% at 65% 0%)",
-        autoAlpha: 0,
-      });
       gsap.set(splitMilestoneTitle.words, { y: 30, autoAlpha: 0 });
       gsap.set(".milestone-paragraph", { y: 20, autoAlpha: 0 });
       gsap.set(".milestone-buttons", { autoAlpha: 0, scale: 0.8 });
@@ -104,7 +106,7 @@ const FeaturesSection = () => {
             y: 0,
             autoAlpha: 1,
             stagger: 0.05,
-            duration: 0.8,
+            duration: 1.8,
             ease: "power3.out",
           },
           "-=1.2"
@@ -125,13 +127,13 @@ const FeaturesSection = () => {
   }, []);
 
   return (
-    <div ref={mainRef} className="bg-[#363256]">
-      {/* BAGIAN 1: FITUR */}
+    <div ref={mainRef} className="bg-gradient-to-r from-[#363256]  to-[#50488A]">
+ 
       <section
         ref={section1Ref}
         className="relative h-screen flex items-center"
       >
-        <div className="absolute bottom-[-15rem] -left-32 sm:bottom-[-20rem] lg:bottom-[-27rem] z-10 coin-jar-anim">
+        <div className="absolute bottom-[-15rem]  sm:bottom-[-20rem] lg:bottom-[-27rem] z-10 coin-jar-anim">
           <Image
             src={CoinJar}
             alt="Coin Jar"
@@ -178,7 +180,7 @@ const FeaturesSection = () => {
                     </>
                   }
                 />
-                <div className="absolute top-full left-1/2 -translate-x-1/2 w-7 h-[17vh] bg-[#0EFF95] line-anim"></div>
+                <div className="absolute top-full left-1/2 -translate-x-1/2 w-7 h-[17vh] bg-[#A3FFD6] line-anim"></div>
               </div>
             </div>
             <div className="absolute top-[20rem] left-10 z-10 card-node-anim">
@@ -194,7 +196,7 @@ const FeaturesSection = () => {
                     </>
                   }
                 />
-                <div className="absolute top-full left-1/2 -translate-x-1/2 w-7 h-[36vh] bg-[#0EFF95] line-anim"></div>
+                <div className="absolute top-full left-1/2 -translate-x-1/2 w-7 h-[36vh] bg-[#A3FFD6] line-anim"></div>
               </div>
             </div>
             <div className="absolute top-[6rem] left-[15rem] z-10 card-node-anim">
@@ -210,7 +212,7 @@ const FeaturesSection = () => {
                     </>
                   }
                 />
-                <div className="absolute top-full left-1/2 -translate-x-1/2 w-7 h-[61vh] bg-[#0EFF95] line-anim"></div>
+                <div className="absolute top-full left-1/2 -translate-x-1/2 w-7 h-[61vh] bg-[#A3FFD6] line-anim"></div>
               </div>
             </div>
             <div className="absolute top-[15rem] right-25 z-10 card-node-anim">
@@ -226,7 +228,7 @@ const FeaturesSection = () => {
                     </>
                   }
                 />
-                <div className="absolute top-full left-1/2 -translate-x-1/2 w-7 h-[45vh] bg-[#0EFF95] line-anim"></div>
+                <div className="absolute top-full left-1/2 -translate-x-1/2 w-7 h-[45vh] bg-[#A3FFD6] line-anim"></div>
               </div>
             </div>
           </div>
@@ -239,7 +241,7 @@ const FeaturesSection = () => {
         className="relative z-10 px-4 sm:px-8 lg:px-16 py-16"
       >
         <div className="relative overflow-hidden">
-          <div className="absolute inset-0 z-0 milestone-bg-anim">
+          <div className="absolute inset-0 z-0 ">
             <Image
               src={GreenBgInverted}
               alt="Milestone background"
@@ -266,21 +268,21 @@ const FeaturesSection = () => {
                 </h3>
               </div>
               <div className="grid grid-cols-1 lg:grid-cols-2 items-end mt-12 lg:mt-0">
-                <div className="lg:-translate-y-20">
-                  <p className="text-[#50488A] text-[clamp(1.25rem,5vw,2.25rem)] lg:text-[3rem] max-w-4xl milestone-paragraph">
+                <div className="lg:-translate-y-30">
+                  <p className="text-[#50488A] text-[clamp(1.25rem,4vw,2.25rem)] lg:text-[2.7rem] max-w-2xl text-justify milestone-paragraph">
                     Exposing your inventory to incidents is a thing of the past.
                     We have a professional insurance policy that protects all
                     your items against damage and theft.
                   </p>
                 </div>
-                <div className="flex justify-center lg:justify-end items-center w-full mt-12 lg:mt-0 lg:-translate-x-10 lg:-translate-y-80">
+                <div className="flex justify-center lg:justify-end items-center w-full mt-12 lg:mt-0 lg:-translate-x-30 lg:-translate-y-80">
                   <div className="flex items-center gap-12 lg:gap-20 milestone-buttons">
-                    <button className="bg-[#0EFF95] text-[#1e1e1e] font-bold py-3 px-10 text-[clamp(1.25rem,4vw,2.25rem)] lg:py-4 lg:px-20 lg:text-4xl rounded-full">
+                    <button className="bg-[#A3FFD6] text-[#1e1e1e] font-bold py-3 px-10 text-[clamp(1.25rem,3vw,2rem)] lg:py-3 lg:px-14 lg:text-2xl rounded-full">
                       Read
                     </button>
                     <a
                       href="#"
-                      className="text-[#0EFF95] font-bold flex items-center gap-2 text-[clamp(1.25rem,4vw,2.25rem)] lg:text-4xl"
+                      className="text-[#A3FFD6] font-bold flex items-center gap-2 text-[clamp(1.25rem,3vw,2rem)] lg:text-2xl"
                     >
                       Explore <span>→</span>
                     </a>

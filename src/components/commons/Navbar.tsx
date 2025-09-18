@@ -30,9 +30,11 @@ const Navbar = () => {
       });
 
       tl.set(navRef.current, {
-        backgroundColor: "rgba(30, 30, 30, 0.5)",
-        backdropFilter: "blur(10px)",
-        borderBottom: "1px solid rgba(255, 255, 255, 0.1)",
+        background: "rgba(255, 255, 255, 0.08)",
+        backdropFilter: "blur(20px)",
+        borderBottom: "1px solid rgba(255, 255, 255, 0.2)",
+        border: "1px solid rgba(255, 255, 255, 0.15)",
+        boxShadow: "0 8px 32px rgba(0, 0, 0, 0.3)",
       });
       tl.set(navContainerRef.current, { paddingTop: "1.5rem", paddingBottom: "1.5rem" });
       tl.set(logoRef.current, { width: "10rem" });
@@ -47,8 +49,8 @@ const Navbar = () => {
 
       ScrollTrigger.create({
         trigger: document.documentElement,
-        // PERUBAHAN DI SINI:
-        start: "400vw top", // Trigger sekarang di 500px dari atas
+      
+        start: "400vw top",
         onEnter: () => tl.play(),
         onLeaveBack: () => tl.reverse(),
       });
@@ -61,7 +63,7 @@ const Navbar = () => {
 
   return (
     <>
-      <nav ref={navRef} className="w-full bg-[#363256] sticky top-0 z-50 border-b border-transparent">
+      <nav ref={navRef} className="w-full bg-gradient-to-r from-[#363256] to-[#50488A] sticky top-0 z-50 border-b border-transparent">
         <div ref={navContainerRef} className="w-full max-w-screen-2xl mx-auto flex justify-between items-center py-6 px-[clamp(2rem,6vw,5rem)]">
           
           <div className="flex items-center">
@@ -115,7 +117,7 @@ const Navbar = () => {
       </nav>
 
       {isMenuOpen && (
-        <div className="md:hidden bg-[#363256] px-10 pt-8 pb-12 flex flex-col space-y-10 fixed w-full z-40 shadow-xl">
+        <div className="md:hidden bg-white/10 backdrop-blur-xl border-t border-white/20 px-10 pt-8 pb-12 flex flex-col space-y-10 fixed w-full z-40 shadow-2xl">
           <a href="#" className="text-white font-semibold text-2xl hover:text-[#00E676]">Education</a>
           <div className="border-t border-white/20 pt-10">
             <button className="bg-[#00E676] w-full text-[#4A4978] font-bold py-5 rounded-full hover:bg-opacity-90 transition-all duration-200 shadow-lg text-xl">

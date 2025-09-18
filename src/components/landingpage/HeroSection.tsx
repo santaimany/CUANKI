@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import heroImage from '@/assets/landingpage/image/image-kiri.svg'; 
+import smileBg from '@/assets/landingpage/background/smile-bg.svg';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -18,17 +19,16 @@ const HeroSection = () => {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Advanced Timeline dengan multiple stages
+ 
       const masterTl = gsap.timeline({ defaults: { ease: 'power3.out' } });
 
-      // Stage 1: Backdrop & glow entrance
       masterTl
         .fromTo(glowRef.current, 
           { opacity: 0, scale: 0.5, filter: "blur(100px)" }, 
           { opacity: 1, scale: 1, filter: "blur(150px)", duration: 1.5, ease: "power2.out" }
         )
         
-        // Stage 2: Image with advanced effects
+
         .fromTo(imageRef.current, 
           { opacity: 0, x: -150, scale: 0.8, rotationY: -25, filter: "blur(10px)" },
           { opacity: 1, x: 0, scale: 1, rotationY: 0, filter: "blur(0px)", duration: 1.4, ease: "back.out(1.7)" },
@@ -154,20 +154,27 @@ const HeroSection = () => {
   }, []);
 
   return (
-    <section ref={sectionRef} className="bg-[#363256] w-full min-h-screen flex items-center relative z-20 px-4 sm:px-8 overflow-hidden">
+    <section ref={sectionRef} className="bg-gradient-to-r from-[#363256]  to-[#50488A] w-full min-h-screen flex items-center relative  px-4 sm:px-8 ">
       
-      {/* Enhanced Glow Effect */}
-      <div ref={glowRef} className="absolute top-1/2 left-0 w-1/2 h-80 -translate-y-1/2 bg-[#0EFF95]/15 blur-[150px] rounded-full"></div>
-      
-      {/* Additional Ambient Lights */}
-      <div className="absolute top-1/4 right-1/4 w-32 h-32 bg-[#0EFF95]/20 blur-[100px] rounded-full"></div>
-      <div className="absolute bottom-1/3 right-1/6 w-24 h-24 bg-[#0EFF95]/10 blur-[80px] rounded-full"></div>
+      {/* Smile Background Asset - Large on Left Side */}
+      <div className="absolute -left-[25vw] top-1/2 -translate-y-1/2 z-10">
+        <Image
+          src={smileBg}
+          alt="Smile Background"
+          width={1200}
+          height={1200}
+          className="w-[80vw] lg:w-[100vw] h-auto object-contain "
+        />
+      </div>
 
-     
+      
+
+      
+ 
 
       <div className="relative z-10 w-full max-w-screen-2xl mx-auto flex flex-col lg:flex-row items-center justify-center gap-12 lg:gap-8">
         
-        {/* Kolom Kiri: Gambar dengan Enhanced Container */}
+        
         <div ref={imageRef} className="w-full lg:w-1/2 flex items-center justify-center relative">
           <div className="relative">
             <Image
@@ -175,15 +182,14 @@ const HeroSection = () => {
               alt="Smart Financial Solution"
               width={800} 
               height={800} 
-              className="w-full max-w-xl lg:max-w-none h-auto object-contain relative z-10"
+              className="w-full max-w-2xl lg:max-w-none  h-auto object-contain relative z-10"
               priority
             />
-            {/* Image Glow Effect */}
-            <div className="absolute inset-0 bg-[#0EFF95]/5 blur-xl rounded-full scale-110 -z-10"></div>
+          
           </div>
         </div>
 
-        {/* Kolom Kanan: Konten dengan Enhanced Effects */}
+        
         <div className="w-full lg:w-1/2 flex flex-col items-center lg:items-end text-center lg:text-right">
           <div className="flex flex-col items-center lg:items-end gap-y-8 max-w-lg lg:max-w-none">
               <button ref={buttonRef}

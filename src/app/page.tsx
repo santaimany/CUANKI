@@ -1,5 +1,7 @@
 
 import AboutUsSection from "@/components/landingpage/AboutUsSection";
+import ContactSection from "@/components/landingpage/ContaactSection";
+import EducationSection from "@/components/landingpage/EducationSection";
 import FeaturesSection from "@/components/landingpage/FeaturesSection";
 import HeroSection from "@/components/landingpage/HeroSection";
 
@@ -10,6 +12,8 @@ export default function Home() {
       <HeroSection />
       <AboutUsSection />
       <FeaturesSection />
+      <EducationSection />
+      <ContactSection/>
 
       </div>
     </main>

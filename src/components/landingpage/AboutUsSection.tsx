@@ -20,54 +20,78 @@ const AboutUsSection = () => {
         }
     }, []);
 
-    const animateContent = () => {
-        if (!contentRef.current) return;
-        const els = [contentRef.current.querySelector('h2'), contentRef.current.querySelector('p')];
-        gsap.to(els, { opacity: 0, y: 15, duration: 0.3, ease: "power2.in" });
-        gsap.fromTo(els, { opacity: 0, y: -15 }, { opacity: 1, y: 0, duration: 0.5, stagger: 0.1, delay: 0.6 });
-    };
+  const handleTabSwitch = (tab: "aboutus" | "solution") => {
+    if (tab === activeTab || (tl.current && tl.current.isActive())) return;
+
+    if (!contentRef.current) return;
+
+    // Animasi latar belakang (tidak ada perubahan di sini)
+    if (tl.current) {
+        tl.current.kill();
+    }
+    tl.current = gsap.timeline({ defaults: { duration: 1.1, ease: "sine.inOut" } });
     
-    const handleTabSwitch = (tab: "aboutus" | "solution") => {
-        if (tab === activeTab || (tl.current && tl.current.isActive())) return;
+    const isSwitchingToSolution = tab === "solution";
+    const layerToRecede = isSwitchingToSolution ? greenBgContainerRef.current : whiteBgContainerRef.current;
+    const layerToAdvance = isSwitchingToSolution ? whiteBgContainerRef.current : greenBgContainerRef.current;
 
-        setActiveTab(tab);
-        animateContent();
-        
-        if (tl.current) {
-            tl.current.kill();
-        }
-
-        tl.current = gsap.timeline({ defaults: { duration: 1.1, ease: "sine.inOut" } });
-
-        const isSwitchingToSolution = tab === "solution";
-        
-        const layerToRecede = isSwitchingToSolution ? greenBgContainerRef.current : whiteBgContainerRef.current;
-        const layerToAdvance = isSwitchingToSolution ? whiteBgContainerRef.current : greenBgContainerRef.current;
-
-        tl.current.to(layerToRecede, {
-            scale: 0.95,
-        }, 0);
-
-        tl.current.to(layerToAdvance, {
+    tl.current.to(layerToRecede, { scale: 0.95 }, 0)
+        .to(layerToAdvance, {
             keyframes: [
                 { y: "-90%", scale: 1.05, duration: 0.6, ease: "sine.out" },
                 { y: "0%", scale: 1, duration: 0.5, ease: "sine.in" }
             ]
-        }, 0);
-        
-        tl.current.set(layerToAdvance, { zIndex: 3 }, 0.6);
-        
-        tl.current.set(layerToAdvance, { zIndex: 2 });
-        tl.current.set(layerToRecede, { zIndex: 1 });
-    };
+        }, 0)
+        .set(layerToAdvance, { zIndex: 3 }, 0.6)
+        .set(layerToAdvance, { zIndex: 2 })
+        .set(layerToRecede, { zIndex: 1 });
 
+
+    // Animasi konten dan tombol
+    const clickedButton = contentRef.current.querySelector(`[data-tab-button="${tab}"]`);
+    const textContent = [
+        contentRef.current.querySelector('h2'),
+        contentRef.current.querySelector('p')
+    ];
+
+    gsap.to([clickedButton, ...textContent], {
+      
+        autoAlpha: 0,
+        duration: 0.3,
+        ease: "power2.in",
+        stagger: 0.5,
+        onComplete: () => {
+            setActiveTab(tab);
+
+            gsap.delayedCall(0.5, () => {
+                if (!contentRef.current) return;
+
+                const newTextContent = [
+                   contentRef.current.querySelector('h2'),
+                   contentRef.current.querySelector('p')
+                ];
+                const newlyActiveButton = contentRef.current.querySelector(`[data-tab-button="${tab}"]`);
+
+                gsap.fromTo([newlyActiveButton, ...newTextContent], 
+               
+                    { autoAlpha: 0}, 
+                    {
+                       
+                        autoAlpha: 1,
+                        y: 0,
+                        duration: 0.1,
+                        stagger: 0.1,
+                        ease: "power2.out"
+                    }
+                );
+            });
+        }
+    });
+};
     return (
-        // PERUBAHAN 1: Tambahkan z-index pada section utama agar bisa menumpuk di atas section lain
-        <section className="relative bg-[#363256] z-20 w-full px-4 sm:px-8 lg:px-16 py-16">
+        <section className="relative bg-gradient-to-r from-[#363256] to-[#50488A]  w-full px-4 sm:px-8 lg:px-16 py-16">
             <div className="relative max-w-7xl mx-auto">
-                {/* PERUBAHAN 2: HAPUS `overflow-hidden` dari container ini */}
-                <div className="relative rounded-[3rem] lg:rounded-[4rem]">
-                    
+                <div className="relative z-30 rounded-[3rem] lg:rounded-[4rem]">
                     <Image
                         src={greenBg}
                         alt="Background Placeholder"
@@ -75,34 +99,23 @@ const AboutUsSection = () => {
                         priority
                     />
 
-                    {/* Kita tidak perlu lagi rounded-corner di sini karena bingkai utamanya sudah tidak memotong */}
                     <div ref={greenBgContainerRef} className="absolute inset-0"> 
-                        <Image
-                            src={greenBg}
-                            alt="Green Background - About Us"
-                            className="w-full h-auto object-cover"
-                            priority
-                        />
+                        <Image src={greenBg} alt="Green Background - About Us" className="w-full h-auto object-cover" priority />
                     </div>
 
                     <div ref={whiteBgContainerRef} className="absolute inset-0">
-                        <Image
-                            src={whiteBg}
-                            alt="White Background - Solution"
-                            className="w-full h-auto object-cover"
-                        />
+                        <Image src={whiteBg} alt="White Background - Solution" className="w-full h-auto object-cover" />
                     </div>
 
-                    {/* PERUBAHAN 3: Pastikan konten memiliki z-index tertinggi */}
-                    <div ref={contentRef} className="absolute inset-0 z-30 flex items-start justify-start p-8 sm:p-12 lg:p-16">
+                    <div ref={contentRef} className="absolute inset-0  flex items-start justify-start p-8 sm:p-12 lg:p-16">
                          <div className="relative z-10 max-w-2xl">
-                            {/* ... (kode tombol dan teks tidak berubah) ... */}
                             <div className="flex items-center gap-55 mb-8 -translate-y-1">
-                                <button 
+                                <button
+                                    data-tab-button="aboutus"
                                     onClick={() => handleTabSwitch("aboutus")}
                                     className={`border-2 px-10 py-4 rounded-full font-semibold text-lg transition-all duration-300 ${
                                         activeTab === "aboutus" 
-                                            ? "bg-transparent text-black border-[#4A4978] " 
+                                            ? "bg-transparent text-black border-[#4A4978]" 
                                             : "border-gray-600 border-2 bg-[#4A4978] hover:bg-[#4A4978] text-white hover:border-[#4A4978]"
                                     }`}
                                 >
@@ -112,11 +125,12 @@ const AboutUsSection = () => {
                                 <div className="relative">
                                     <div className=" rounded-full px-6 py-2 ">
                                         <button 
+                                            data-tab-button="solution"
                                             onClick={() => handleTabSwitch("solution")}
                                             className={`px-6 py-3 rounded-full font-semibold text-lg transition-all duration-300 ${
                                                 activeTab === "solution" 
-                                                    ? "bg-transparent text-black border-2 border-[#4A4978] " 
-                                                    : "bg-[#4A4978] text-[#ffffff] "
+                                                    ? "bg-transparent text-black border-2 border-[#4A4978]" 
+                                                    : "bg-[#4A4978] text-[#ffffff]"
                                             }`}
                                         >
                                             Solution
