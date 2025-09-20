@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef } from "react";
 import Logo from "@/assets/landingpage/logo/cuanki-logo.svg";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import Link from "next/link";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -67,15 +68,17 @@ const Navbar = () => {
         <div ref={navContainerRef} className="w-full max-w-screen-2xl mx-auto flex justify-between items-center py-6 px-[clamp(2rem,6vw,5rem)]">
           
           <div className="flex items-center">
+            <Link href="/">
             <Image ref={logoRef} src={Logo} alt="Cuanki Logo" className="w-[clamp(12rem,8vw,18rem)] h-auto" />
+            </Link>
             <div className="hidden md:flex items-center ml-16 space-x-12">
-              <a 
+              <Link
                 ref={el => { navLinkRefs.current[0] = el; }}
-                href="#" 
+                href="education" 
                 className="text-white font-semibold text-xl hover:text-[#00E676] transition-colors duration-200"
               >
                 Education
-              </a>
+              </Link>
             </div>
           </div>
 
@@ -118,7 +121,7 @@ const Navbar = () => {
 
       {isMenuOpen && (
         <div className="md:hidden bg-white/10 backdrop-blur-xl border-t border-white/20 px-10 pt-8 pb-12 flex flex-col space-y-10 fixed w-full z-40 shadow-2xl">
-          <a href="#" className="text-white font-semibold text-2xl hover:text-[#00E676]">Education</a>
+          <Link href="#" className="text-white font-semibold text-2xl hover:text-[#00E676]">Education</Link>
           <div className="border-t border-white/20 pt-10">
             <button className="bg-[#00E676] w-full text-[#4A4978] font-bold py-5 rounded-full hover:bg-opacity-90 transition-all duration-200 shadow-lg text-xl">
               Login
