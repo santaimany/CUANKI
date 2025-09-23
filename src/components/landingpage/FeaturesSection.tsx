@@ -12,16 +12,18 @@ import CalendarIcon from "@/assets/landingpage/icons/calendar-icon.svg";
 import AiIcon from "@/assets/landingpage/icons/ai-icon.svg";
 import EduIcon from "@/assets/landingpage/icons/education-icon.svg";
 import GreenBgInverted from "@/assets/landingpage/background/green-features-inverted.svg";
+import WhiteEllipse from "@/assets/commons/icons/white-ellipse.svg";
+import CGreen from "@/assets/commons/icons/c-green.svg";  
 
 gsap.registerPlugin(ScrollTrigger, SplitText);
 
 type FeatureCardProps = {
-  icon : string, 
-  alt : string,
-  title : React.ReactNode,
-}
+  icon: string;
+  alt: string;
+  title: React.ReactNode;
+};
 
-const FeatureCard = ({ icon, alt, title } : FeatureCardProps) => (
+const FeatureCard = ({ icon, alt, title }: FeatureCardProps) => (
   <div className="bg-[#A3FFD6] rounded-3xl p-8 w-60 h-[30vh] flex flex-col items-center justify-center">
     <Image src={icon} alt={alt} width={50} height={50} className="mb-4" />
     <h4 className="text-[#453F76] text-3xl font-bold text-center leading-tight">
@@ -127,8 +129,10 @@ const FeaturesSection = () => {
   }, []);
 
   return (
-    <div ref={mainRef} className="bg-gradient-to-r from-[#363256]  to-[#50488A]">
- 
+    <div
+      ref={mainRef}
+      className="bg-gradient-to-r from-[#363256]  to-[#50488A]"
+    >
       <section
         ref={section1Ref}
         className="relative h-screen flex items-center"
@@ -238,9 +242,9 @@ const FeaturesSection = () => {
       {/* BAGIAN 2: MILESTONE */}
       <section
         ref={section2Ref}
-        className="relative z-10 px-4 sm:px-8 lg:px-16 py-16"
+        className="relative z-10 px-4 sm:px-8 overflow-hidden lg:px-16 py-16"
       >
-        <div className="relative overflow-hidden">
+        <div className="relative  ">
           <div className="absolute inset-0 z-0 ">
             <Image
               src={GreenBgInverted}
@@ -249,6 +253,15 @@ const FeaturesSection = () => {
               objectFit="fill"
             />
           </div>
+               <div className="absolute top-[70%] right-[35%] z-[-20]">
+                    <Image
+                      src={WhiteEllipse}
+                      alt="White Ellipse"
+                      width={200}
+                      height={200}
+                      className="w-44 h-44"
+                    />
+                  </div>
           <div className="relative z-10">
             <Image
               src={GreenBgInverted}
@@ -275,6 +288,7 @@ const FeaturesSection = () => {
                     your items against damage and theft.
                   </p>
                 </div>
+
                 <div className="flex justify-center lg:justify-end items-center w-full mt-12 lg:mt-0 lg:-translate-x-30 lg:-translate-y-80">
                   <div className="flex items-center gap-12 lg:gap-20 milestone-buttons">
                     <button className="bg-[#A3FFD6] text-[#1e1e1e] font-bold py-3 px-10 text-[clamp(1.25rem,3vw,2rem)] lg:py-3 lg:px-14 lg:text-2xl rounded-full">
@@ -292,6 +306,15 @@ const FeaturesSection = () => {
             </div>
           </div>
         </div>
+                     <div className="absolute bottom-0  -right-20 ">
+                    <Image
+                      src={CGreen}
+                      alt="C Green Ellipse"
+                      width={200}
+                      height={200}
+                      className="w-64 h-64"
+                    />
+                  </div>
       </section>
     </div>
   );
