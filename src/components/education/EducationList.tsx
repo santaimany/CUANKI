@@ -74,7 +74,7 @@ const EducationList = () => {
       </div>
 
       {/* C Kanan Bawah - behind card 4 */}
-      <div className="absolute bottom-[13vw] right-[16vw] transform translate-x-1/2 z-0">
+      <div className="absolute bottom-[12vw] right-[16vw] transform translate-x-1/2 z-0">
         <Image
           src={cKananBawah}
           alt="C decoration behind card 4"
@@ -124,7 +124,7 @@ const EducationList = () => {
           {/* Pagination Dots - Right below cards */}
           <div className="flex justify-center items-center gap-4 mt-6 relative">
             {/* Smile Icon - left of pagination */}
-            <div className="absolute left-0 top-[6vw]  transform -translate-x-10">
+            <div className="absolute left-0 top-[10vw]  transform -translate-x-10">
               <Image
                 src={smileKiri}
                 alt="Smile decoration left of pagination"

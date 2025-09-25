@@ -9,7 +9,7 @@ import Link from 'next/link';
 
 const EducationSection2 = () => {
   return (
-    <section className="relative flex items-center justify-center bg-gradient-to-r from-[#363256] to-[#50488A] min-h-[130vh] py-16  md:py-8 overflow-hidden ">
+    <section className="relative flex items-center justify-center bg-gradient-to-r from-[#363256] to-[#50488A] min-h-[150vh] py-16  md:py-8 overflow-hidden ">
       
       {/* Decorative Elements - Positioned Absolutely */}
       {/* Smile Kanan - kanan bawah */}
@@ -56,7 +56,7 @@ const EducationSection2 = () => {
         />
       </div>
 
-      <div className="relative max-w-7xl mt-40  mx-auto w-full px-4 sm:px-6 lg:px-8">
+      <div className="relative max-w-7xl mt-70  mx-auto w-full px-4 sm:px-6 lg:px-8">
 
         <div className="absolute inset-0 z-10 flex items-center justify-center">
           <Image
