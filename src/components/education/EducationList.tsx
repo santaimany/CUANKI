@@ -5,6 +5,13 @@
 import React, { useState } from "react";
 import EducationCard from "./EducationCard";
 import { educationData } from '@/data/educationData';
+import cKiriAtas from "@/assets/education/icons/c-kiri-atas.svg";
+import cKananAtas from "@/assets/education/icons/c-kanan-atas.svg";
+import vKiriBawah from "@/assets/education/icons/v-kiri-bawah.svg";
+import cKananBawah from "@/assets/education/icons/c-kanan-bawah.svg";
+import smileKiri from "@/assets/education/icons/smile-kiri.svg";
+import Image from "next/image";
+
 
 
 const EducationList = () => {
@@ -31,9 +38,54 @@ const EducationList = () => {
   };
 
   return (
-    <section className="relative bg-gradient-to-r from-[#363256] to-[#50488A]  py-40 px-8 lg:px-16 overflow-hidden">
+    <section className="relative bg-gradient-to-r from-[#363256] to-[#50488A]  pb-80 px-8 lg:px-16 overflow-hidden">
 
- <div className="max-w-7xl mx-auto">
+     
+      <div className="absolute top-[15vw] left-[12vw] transform  z-0">
+        <Image
+          src={cKiriAtas}
+          alt="C decoration behind card 1"
+          width={60}
+          height={60}
+          className="w-12 h-12 lg:w-full lg:h-auto "
+        />
+      </div>
+
+      
+      <div className="absolute top-[20vw] right-[16vw] transform translate-x-1/2 z-0">
+        <Image
+          src={cKananAtas}
+          alt="C decoration behind card 2"
+          width={60}
+          height={60}
+          className="w-12 h-12 lg:w-full lg:h-auto "
+        />
+      </div>
+
+      {/* V Kiri Bawah - behind card 3 */}
+      <div className="absolute bottom-[16vw] left-[14vw] transform -translate-x-1/2 z-0">
+        <Image
+          src={vKiriBawah}
+          alt="V decoration behind card 3"
+          width={60}
+          height={60}
+          className="w-12 h-12 lg:w-full lg:h-auto "
+        />
+      </div>
+
+      {/* C Kanan Bawah - behind card 4 */}
+      <div className="absolute bottom-[13vw] right-[16vw] transform translate-x-1/2 z-0">
+        <Image
+          src={cKananBawah}
+          alt="C decoration behind card 4"
+          width={60}
+          height={60}
+          className="w-12 h-12 lg:w-76 lg:h-auto "
+        />
+      </div>
+
+
+      <div className="max-w-7xl mx-auto">
 
         <div className="relative">
           {/* Education Cards Grid */}
@@ -70,7 +122,18 @@ const EducationList = () => {
           </div>
 
           {/* Pagination Dots - Right below cards */}
-          <div className="flex justify-center items-center gap-4 mt-6">
+          <div className="flex justify-center items-center gap-4 mt-6 relative">
+            {/* Smile Icon - left of pagination */}
+            <div className="absolute left-0 top-[6vw]  transform -translate-x-10">
+              <Image
+                src={smileKiri}
+                alt="Smile decoration left of pagination"
+                width={80}
+                height={80}
+                className="w-16 h-16 lg:w-50 lg:h-auto"
+              />
+            </div>
+
             <button
               onClick={prevSlide}
               className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center hover:bg-white/30 transition-colors"

@@ -1,13 +1,62 @@
 import React from 'react';
 import Image from 'next/image';
 import Substract from "@/assets/education/image/Subtract.svg";
+import smileKanan from '@/assets/education/background/smile-kanan.svg';
+import cIjoBawah from '@/assets/education/background/c-ijo-bawah.svg';
+import cPutihBawah from '@/assets/education/background/c-putih-bawah.svg';
+import vKiriBawah from '@/assets/education/background/v-kiri-bawah.svg';
 import Link from 'next/link';
 
 const EducationSection2 = () => {
   return (
-    <section className="relative flex items-center justify-center bg-gradient-to-r from-[#363256] to-[#50488A] min-h-screen py-16 md:py-24">
+    <section className="relative flex items-center justify-center bg-gradient-to-r from-[#363256] to-[#50488A] min-h-[130vh] py-16  md:py-8 overflow-hidden ">
       
-      <div className="relative max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8">
+      {/* Decorative Elements - Positioned Absolutely */}
+      {/* Smile Kanan - kanan bawah */}
+      <div className="absolute bottom-[4vw] -right-[10vw] z-10">
+        <Image
+          src={smileKanan}
+          alt="Smile decoration right bottom"
+          width={60}
+          height={60}
+          className="w-full h-auto opacity-70"
+        />
+      </div>
+
+
+      <div className="absolute bottom-[3vw] left-[40vw] z-10">
+        <Image
+          src={cIjoBawah}
+          alt="Green C decoration bottom"
+          width={50}
+          height={50}
+          className="w-full h-auto"
+        />
+      </div>
+
+      {/* C Putih Bawah - bottom right */}
+      <div className="absolute bottom-[1vw] right-[32vw] z-10">
+        <Image
+          src={cPutihBawah}
+          alt="White C decoration bottom right"
+          width={70}
+          height={70}
+          className="w-full h-auto opacity-80"
+        />
+      </div>
+
+      {/* V Kiri Bawah - bottom left */}
+      <div className="absolute bottom-[10vw] left-[18vw] z-10">
+        <Image
+          src={vKiriBawah}
+          alt="V decoration bottom left"
+          width={50}
+          height={50}
+          className="w-full h-auto "
+        />
+      </div>
+
+      <div className="relative max-w-7xl mt-40  mx-auto w-full px-4 sm:px-6 lg:px-8">
 
         <div className="absolute inset-0 z-10 flex items-center justify-center">
           <Image
