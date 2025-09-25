@@ -40,7 +40,7 @@ const EducationSection = () => {
                 scrollTrigger: {
                     trigger: sectionRef.current,
                     start: "top 50%",
-                    toggleActions: "play none none reverse"
+                    toggleActions: "play none none none"
                 }
             });
 
@@ -76,9 +76,9 @@ const EducationSection = () => {
         return () => ctx.revert();
     }, []);
     return (
-        <section ref={sectionRef} className="relative bg-gradient-to-r from-[#363256] to-[#50488A] py-16 lg:py-24">
+        <section ref={sectionRef} className="relative bg-gradient-to-r from-[#363256] to-[#50488A] py-[4vw] sm:py-[5vw] md:py-[4.5vw] lg:py-[5vw] xl:py-[6vw]">
          
-            <div className="relative w-full max-w-[1600px] mx-auto">
+            <div className="relative w-full max-w-[90vw] mx-auto sm:max-w-[95vw] md:max-w-[92vw] lg:max-w-[91vw] xl:max-w-[90vw]">
                 <div className="relative">
                     <Image
                         src={WhiteBg}
@@ -89,12 +89,12 @@ const EducationSection = () => {
                     />
                     
                     {/* Education Badge */}
-                    <div className="absolute top-[20%] right-8 lg:right-12 bg-[#50488A] text-white px-10 py-3 rounded-full text-2xl font-semibold cursor-pointer transform transition-transform duration-300 hover:scale-110">
+                    <div className="absolute top-[20%] right-[2vw] bg-[#50488A] text-white px-[2.5vw] py-[0.8vw] rounded-full text-[1.5vw] font-semibold cursor-pointer transform transition-transform duration-300 hover:scale-110 sm:right-[1.5vw] sm:px-[3.5vw] sm:py-[1.1vw] sm:text-[2.1vw] md:right-[1.8vw] md:px-[3vw] md:py-[1vw] md:text-[1.8vw] lg:right-[2.5vw] lg:px-[2.8vw] lg:py-[0.9vw] lg:text-[1.6vw] xl:right-[3vw] xl:px-[2.5vw] xl:py-[0.8vw] xl:text-[1.5vw]">
                         Education
                     </div>
 
                     {/* Graduation Image - positioned on left side of green area */}
-                    <div className="absolute -top-[10vw] left-0 xl:left-0 lg:left-16 w-60 sm:w-72 lg:w-96 xl:w-[52rem] z-10">
+                    <div className="absolute -top-[10vw] left-0 w-[40vw] z-10 sm:-top-[12vw] sm:left-[-2vw] sm:w-[50vw] md:-top-[11vw] md:left-[-1vw] md:w-[45vw] lg:-top-[10.5vw] lg:left-[4vw] lg:w-[24vw] xl:-top-[10vw] xl:left-0 xl:w-[40vw]">
                         <Image
                             src={TopiToga}
                             alt="Graduation Cap and Diploma with coins"
@@ -105,8 +105,8 @@ const EducationSection = () => {
                     </div>
 
                     {/* Main Content - positioned on right side */}
-                    <div className="absolute top-1/2 right-8 lg:right-16 -translate-y-1/2 max-w-4xl text-right">
-                        <h2 className="text-[#50488A] text-4xl sm:text-5xl lg:text-7xl font-medium leading-tight">
+                    <div className="absolute top-1/2 right-[2vw] -translate-y-1/2 max-w-[50vw] text-right sm:right-[1vw] sm:max-w-[55vw] md:right-[1.5vw] md:max-w-[52vw] lg:right-[4vw] lg:max-w-[50vw] xl:right-[4vw] xl:max-w-[50vw]">
+                        <h2 className="text-[#50488A] text-[3.8vw] font-medium leading-tight sm:text-[4.5vw] md:text-[4.2vw] lg:text-[3.8vw] xl:text-[3.8vw]">
                             <span className="font-black">Smart education</span><br />
                             for your smart <span className="font-black">financial</span>
                         </h2>
@@ -114,8 +114,8 @@ const EducationSection = () => {
                 </div>
 
                 {/* Education Cards */}
-                <div className="relative -mt-16 px-8 lg:px-16 z-20">
-                    <div ref={cardsRef} className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 justify-items-center max-w-7xl mx-auto">
+                <div className="relative -mt-[4vw] px-[2vw] z-20 sm:-mt-[5vw] sm:px-[1vw] md:-mt-[4.5vw] md:px-[1.5vw] lg:-mt-[4.2vw] lg:px-[4vw] xl:-mt-[4vw] xl:px-[4vw]">
+                    <div ref={cardsRef} className="grid grid-cols-1 gap-[17vw] justify-items-center max-w-[60vw] mx-auto sm:grid-cols-1 sm:gap-[20vw] sm:max-w-[70vw] md:grid-cols-2 md:gap-[18vw] md:max-w-[65vw] lg:grid-cols-2 lg:gap-[17.5vw] lg:max-w-[62vw] xl:grid-cols-3 xl:gap-[17vw] xl:max-w-[60vw]">
                         <CardEducation 
                             title="Financial Planning"
                             description="Learn how to create and manage your personal financial plan effectively"

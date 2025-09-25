@@ -154,7 +154,7 @@ const HeroSection = () => {
   }, []);
 
   return (
-    <section ref={sectionRef} className="bg-gradient-to-r from-[#363256]  to-[#50488A] w-full min-h-screen flex items-center relative  px-4 sm:px-8 ">
+    <section ref={sectionRef} className="bg-gradient-to-r from-[#363256] to-[#50488A] w-full min-h-screen flex items-center relative" style={{ padding: "0 2vw" }}>
       
       {/* Smile Background Asset - Large on Left Side */}
       <div className="absolute -left-[25vw] top-1/2 -translate-y-1/2 z-10">
@@ -163,16 +163,12 @@ const HeroSection = () => {
           alt="Smile Background"
           width={1200}
           height={1200}
-          className="w-[80vw] lg:w-[100vw] h-auto object-contain "
+          style={{ width: "80vw", height: "auto" }}
+          className="lg:w-[100vw] object-contain"
         />
       </div>
 
-      
-
-      
- 
-
-      <div className="relative z-10 w-full max-w-screen-2xl mx-auto flex flex-col lg:flex-row items-center justify-center gap-12 lg:gap-8">
+      <div className="relative z-10 w-full max-w-screen-2xl mx-auto flex flex-col lg:flex-row items-center justify-center" style={{ gap: "3vw" }}>
         
         
         <div ref={imageRef} className="w-full lg:w-1/2 flex items-center justify-center relative">
@@ -182,7 +178,8 @@ const HeroSection = () => {
               alt="Smart Financial Solution"
               width={800} 
               height={800} 
-              className="w-full max-w-2xl lg:max-w-none  h-auto object-contain relative z-10"
+              style={{ width: "35vw", height: "auto", maxWidth: "none" }}
+              className="object-contain relative z-10"
               priority
             />
           
@@ -191,7 +188,7 @@ const HeroSection = () => {
 
         
         <div className="w-full lg:w-1/2 flex flex-col items-center lg:items-end text-center lg:text-right">
-          <div className="flex flex-col items-center lg:items-end gap-y-8 max-w-lg lg:max-w-none">
+          <div className="flex flex-col items-center lg:items-end lg:max-w-none" style={{ gap: "2vw", maxWidth: "40vw" }}>
               <button ref={buttonRef}
               className="border-2 border-[#0EFF95] text-[#0EFF95] font-bold rounded-full 
                          hover:bg-[#0EFF95] hover:text-[#1e1e1e] 
@@ -199,14 +196,14 @@ const HeroSection = () => {
                          before:absolute before:inset-0 before:bg-[#0EFF95] before:opacity-0 
                          before:transition-opacity before:duration-300 hover:before:opacity-20"
               style={{
-                fontSize: 'clamp(1rem, 2vw, 1.25rem)',
-                padding: 'clamp(0.75rem, 2vh, 1rem) clamp(1.5rem, 5vw, 2.5rem)',
+                fontSize: '1.3vw',
+                padding: '0.8vw 2.5vw',
               }}
             >
               <span className="relative z-10">Register</span>
             </button>
-            <h1 ref={headlineRef} className="leading-tight  text-white relative"
-              style={{ fontSize: 'clamp(2.5rem, 8vw, 6rem)' }}
+            <h1 ref={headlineRef} className="leading-tight text-white relative"
+              style={{ fontSize: '4.5vw', lineHeight: '1.1' }}
             >
               <span className="text-[#0EFF95] font-bold relative">
                 Smart
@@ -223,8 +220,8 @@ const HeroSection = () => {
 
             <p ref={paragraphRef} className="text-gray-300 relative"
               style={{
-                fontSize: 'clamp(1.125rem, 2.5vw, 1.5rem)',
-                lineHeight: 'clamp(1.75rem, 4vw, 2.25rem)',
+                fontSize: '1.4vw',
+                lineHeight: '2vw',
               }}
             >
               Exposing your inventory to incidents is a thing of the past. We have a professional insurance policy that protects all your items.

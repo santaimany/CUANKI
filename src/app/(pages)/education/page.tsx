@@ -1,6 +1,7 @@
 'use client';
 import HeroSection from "@/components/education/HeroSection";
 import EducationList from "@/components/education/EducationList";
+import EducationSection2 from "@/components/education/EducationSection2";
 
 
 
@@ -9,6 +10,7 @@ const EducationPage = () => {
         <div>
             <HeroSection />
             <EducationList />
+            <EducationSection2 />
         </div>
     );
 }

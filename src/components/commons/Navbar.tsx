@@ -37,11 +37,11 @@ const Navbar = () => {
         border: "1px solid rgba(255, 255, 255, 0.15)",
         boxShadow: "0 8px 32px rgba(0, 0, 0, 0.3)",
       });
-      tl.set(navContainerRef.current, { paddingTop: "1.5rem", paddingBottom: "1.5rem" });
-      tl.set(logoRef.current, { width: "10rem" });
-      tl.set(navLinkRefs.current, { fontSize: "1.125rem" });
-      tl.set(loginBtnRef.current, { padding: "0.5rem 2rem", fontSize: "1.125rem" });
-      tl.set(langRef.current, { padding: "0.5rem 1.5rem" });
+      tl.set(navContainerRef.current, { paddingTop: "1.2vw", paddingBottom: "1.2vw" });
+      tl.set(logoRef.current, { width: "8vw" });
+      tl.set(navLinkRefs.current, { fontSize: "1.1vw" });
+      tl.set(loginBtnRef.current, { padding: "0.4vw 1.6vw", fontSize: "1.1vw" });
+      tl.set(langRef.current, { padding: "0.4vw 1.2vw" });
 
       tl.to(navRef.current, { 
         yPercent: 0, 
@@ -65,36 +65,36 @@ const Navbar = () => {
   return (
     <>
       <nav ref={navRef} className="w-full bg-gradient-to-r from-[#363256] to-[#50488A] sticky top-0 z-50 border-b border-transparent">
-        <div ref={navContainerRef} className="w-full max-w-screen-2xl mx-auto flex justify-between items-center py-6 px-[clamp(2rem,6vw,5rem)]">
+        <div ref={navContainerRef} className="w-full max-w-screen-2xl mx-auto flex justify-between items-center px-[6vw] py-[1.5vw] sm:px-[4vw] sm:py-[1.2vw] md:px-[5vw] md:py-[1.3vw] lg:px-[6vw] lg:py-[1.5vw]">
           
           <div className="flex items-center">
-            <Link href="/">
-            <Image ref={logoRef} src={Logo} alt="Cuanki Logo" className="w-[clamp(12rem,8vw,18rem)] h-auto" />
+            <Link href="/" className="cursor-pointer transition-transform duration-200 w-[9vw] sm:w-[12vw] md:w-[10vw] lg:w-[9vw]">
+            <Image ref={logoRef} src={Logo} alt="Cuanki Logo"/>
             </Link>
-            <div className="hidden md:flex items-center ml-16 space-x-12">
+            <div className="hidden md:flex items-center ml-[2.5vw] gap-[2vw] sm:ml-[3vw] sm:gap-[2.5vw] md:ml-[2.8vw] md:gap-[2.2vw] lg:ml-[2.5vw] lg:gap-[2vw]">
               <Link
                 ref={el => { navLinkRefs.current[0] = el; }}
                 href="education" 
-                className="text-white font-semibold text-xl hover:text-[#00E676] transition-colors duration-200"
+                className="text-white font-semibold hover:text-[#00E676] transition-colors duration-200 text-[1.3vw] sm:text-[1.6vw] md:text-[1.4vw] lg:text-[1.3vw]"
               >
                 Education
               </Link>
             </div>
           </div>
 
-          <div className="hidden md:flex items-center space-x-10">
-            <div ref={langRef} className="flex items-center text-white border-2 border-white/30 rounded-full px-8 py-3 cursor-pointer hover:bg-white/10 transition-colors duration-200">
-              <span className="font-semibold text-lg">EN</span>
+          <div className="hidden md:flex items-center gap-[1.5vw] sm:gap-[2vw] md:gap-[1.8vw] lg:gap-[1.5vw]">
+            <div ref={langRef} className="flex items-center text-white border-2 border-white/30 rounded-full cursor-pointer hover:bg-white/10 transition-colors duration-200 px-[1.6vw] py-[0.3vw] sm:px-[2vw] sm:py-[0.4vw] md:px-[1.8vw] md:py-[0.35vw] lg:px-[1.6vw] lg:py-[0.3vw]">
+              <span className="font-semibold text-[1.1vw] sm:text-[1.4vw] md:text-[1.2vw] lg:text-[1.1vw]">EN</span>
               <svg 
-                className="ml-3 w-6 h-6" 
+                className="ml-3 w-[1.2vw] h-[1.2vw] sm:w-[1.5vw] sm:h-[1.5vw] md:w-[1.3vw] md:h-[1.3vw] lg:w-[1.2vw] lg:h-[1.2vw]"
                 fill="none" 
                 stroke="currentColor" 
-                viewBox="0 0 24"
+                viewBox="0 0 24 24"
               >
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
               </svg>
             </div>
-            <button ref={loginBtnRef} className="bg-[#0EFF95] text-[#4A4978] font-bold px-12 py-3 rounded-full hover:bg-opacity-90 transition-all duration-200 shadow-lg text-xl">
+            <button ref={loginBtnRef} className="bg-[#0EFF95] text-[#4A4978] font-bold rounded-full hover:bg-opacity-90 transition-all duration-200 shadow-lg px-[2.4vw] py-[0.3vw] text-[1.1vw] sm:px-[3vw] sm:py-[0.4vw] sm:text-[1.4vw] md:px-[2.7vw] md:py-[0.35vw] md:text-[1.2vw] lg:px-[2.4vw] lg:py-[0.3vw] lg:text-[1.1vw]">
               Login
             </button>
           </div>
@@ -102,10 +102,10 @@ const Navbar = () => {
           <div className="md:hidden">
             <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="text-white focus:outline-none">
               <svg 
-                className="w-11 h-11" 
+                className="w-[2.2vw] h-[2.2vw] sm:w-[3vw] sm:h-[3vw] md:w-[2.5vw] md:h-[2.5vw]"
                 fill="none" 
                 stroke="currentColor" 
-                viewBox="0 0 24"
+                viewBox="0 0 24 24"
               >
                 {isMenuOpen ? (
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -120,10 +120,10 @@ const Navbar = () => {
       </nav>
 
       {isMenuOpen && (
-        <div className="md:hidden bg-white/10 backdrop-blur-xl border-t border-white/20 px-10 pt-8 pb-12 flex flex-col space-y-10 fixed w-full z-40 shadow-2xl">
-          <Link href="#" className="text-white font-semibold text-2xl hover:text-[#00E676]">Education</Link>
-          <div className="border-t border-white/20 pt-10">
-            <button className="bg-[#00E676] w-full text-[#4A4978] font-bold py-5 rounded-full hover:bg-opacity-90 transition-all duration-200 shadow-lg text-xl">
+        <div className="md:hidden bg-white/10 backdrop-blur-xl border-t border-white/20 flex flex-col fixed w-full z-40 shadow-2xl p-[2vw] gap-[2.5vw] sm:p-[3vw] sm:gap-[3vw]">
+          <Link href="#" className="text-white font-semibold hover:text-[#00E676] text-[3vw] sm:text-[4vw]">Education</Link>
+          <div className="border-t border-white/20 pt-[2.5vw] sm:pt-[3vw]">
+            <button className="bg-[#00E676] w-full text-[#4A4978] font-bold rounded-full hover:bg-opacity-90 transition-all duration-200 shadow-lg p-[1.2vw] text-[2.5vw] sm:p-[1.5vw] sm:text-[3vw]">
               Login
             </button>
           </div>
