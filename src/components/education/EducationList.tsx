@@ -3,6 +3,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 import EducationCard from "./EducationCard";
 import { educationData } from '@/data/educationData';
 import cKiriAtas from "@/assets/education/icons/c-kiri-atas.svg";
@@ -17,6 +18,7 @@ import Image from "next/image";
 const EducationList = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const totalSlides = Math.ceil(educationData.length / 4);
+  const router = useRouter();
 
   const nextSlide = () => {
     setCurrentSlide((prev) => (prev + 1) % totalSlides);
@@ -32,9 +34,7 @@ const EducationList = () => {
 
   const handleCardClick = (id: string) => {
     // Navigate to education detail page
-    console.log(`Navigating to education detail: ${id}`);
-    // TODO: Implement navigation to detail page
-    // router.push(`/education/${id}`)
+    router.push(`/education/${id}`);
   };
 
   return (
