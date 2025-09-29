@@ -74,7 +74,7 @@ const Navbar = () => {
             <div className="hidden md:flex items-center ml-[2.5vw] gap-[2vw] sm:ml-[3vw] sm:gap-[2.5vw] md:ml-[2.8vw] md:gap-[2.2vw] lg:ml-[2.5vw] lg:gap-[2vw]">
               <Link
                 ref={el => { navLinkRefs.current[0] = el; }}
-                href="education" 
+                href="/education" 
                 className="text-white font-semibold hover:text-[#00E676] transition-colors duration-200 text-[1.3vw] sm:text-[1.6vw] md:text-[1.4vw] lg:text-[1.3vw]"
               >
                 Education
@@ -121,7 +121,7 @@ const Navbar = () => {
 
       {isMenuOpen && (
         <div className="md:hidden bg-white/10 backdrop-blur-xl border-t border-white/20 flex flex-col fixed w-full z-40 shadow-2xl p-[2vw] gap-[2.5vw] sm:p-[3vw] sm:gap-[3vw]">
-          <Link href="#" className="text-white font-semibold hover:text-[#00E676] text-[3vw] sm:text-[4vw]">Education</Link>
+          <Link href="/education" className="text-white font-semibold hover:text-[#00E676] text-[3vw] sm:text-[4vw]">Education</Link>
           <div className="border-t border-white/20 pt-[2.5vw] sm:pt-[3vw]">
             <button className="bg-[#00E676] w-full text-[#4A4978] font-bold rounded-full hover:bg-opacity-90 transition-all duration-200 shadow-lg p-[1.2vw] text-[2.5vw] sm:p-[1.5vw] sm:text-[3vw]">
               Login

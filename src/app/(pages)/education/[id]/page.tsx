@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import HeaderBackground from "@/assets/education/background/header-detail.svg";
 import { educationData } from '@/data/educationData';
+import ReadOthers from '@/components/education/ReadOthers';
 
 interface PageProps {
   params: {
@@ -105,6 +106,9 @@ export default function EducationDetailPage({ params }: PageProps) {
           </div>
         </div>
       </section>
+
+      {/* Read Others Section */}
+      <ReadOthers currentId={params.id} />
 
       {/* Bottom Spacing */}
       <div className="h-16"></div>
