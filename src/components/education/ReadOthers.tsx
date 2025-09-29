@@ -114,7 +114,7 @@ export default function ReadOthers({ currentId }: ReadOthersProps) {
         )}
 
         {/* Bottom Icons */}
-        <div className="flex justify-center items-center bottom-8 left-0 right-0 z-20 space-x-8 sm:space-x-12 lg:space-x-16">
+        <div className="flex justify-center items-center bottom-0 left-0 right-0 z-20 space-x-8 sm:space-x-12 lg:space-x-50">
           <div className="w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24">
             <Image
               src={cKiri}
