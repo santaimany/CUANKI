@@ -15,8 +15,8 @@ const Navbar = () => {
   const navContainerRef = useRef<HTMLDivElement>(null);
   const logoRef = useRef<HTMLImageElement>(null);
   const navLinkRefs = useRef<(HTMLAnchorElement | null)[]>([]);
-  const langRef = useRef<HTMLDivElement>(null);
-  const loginBtnRef = useRef<HTMLButtonElement>(null);
+  const langRef = useRef<HTMLAnchorElement | null>(null);
+  const loginBtnRef = useRef<HTMLAnchorElement | null>(null);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -83,20 +83,12 @@ const Navbar = () => {
           </div>
 
           <div className="hidden md:flex items-center gap-[1.5vw] sm:gap-[2vw] md:gap-[1.8vw] lg:gap-[1.5vw]">
-            <div ref={langRef} className="flex items-center text-white border-2 border-white/30 rounded-full cursor-pointer hover:bg-white/10 transition-colors duration-200 px-[1.6vw] py-[0.3vw] sm:px-[2vw] sm:py-[0.4vw] md:px-[1.8vw] md:py-[0.35vw] lg:px-[1.6vw] lg:py-[0.3vw]">
-              <span className="font-semibold text-[1.1vw] sm:text-[1.4vw] md:text-[1.2vw] lg:text-[1.1vw]">EN</span>
-              <svg 
-                className="ml-3 w-[1.2vw] h-[1.2vw] sm:w-[1.5vw] sm:h-[1.5vw] md:w-[1.3vw] md:h-[1.3vw] lg:w-[1.2vw] lg:h-[1.2vw]"
-                fill="none" 
-                stroke="currentColor" 
-                viewBox="0 0 24 24"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-              </svg>
-            </div>
-            <button ref={loginBtnRef} className="bg-[#0EFF95] text-[#4A4978] font-bold rounded-full hover:bg-opacity-90 transition-all duration-200 shadow-lg px-[2.4vw] py-[0.3vw] text-[1.1vw] sm:px-[3vw] sm:py-[0.4vw] sm:text-[1.4vw] md:px-[2.7vw] md:py-[0.35vw] md:text-[1.2vw] lg:px-[2.4vw] lg:py-[0.3vw] lg:text-[1.1vw]">
+            <Link href="/register" ref={langRef} className="flex items-center text-[#0EFF95] border-2 border-[#0EFF95] rounded-full cursor-pointer hover:bg-white/10 transition-colors duration-200 px-[1.6vw] py-[0.3vw] sm:px-[2vw] sm:py-[0.4vw] md:px-[1.8vw] md:py-[0.35vw] lg:px-[1.6vw] lg:py-[0.3vw]">
+              <span className="font-semibold text-[1.1vw] sm:text-[1.4vw] md:text-[1.2vw] lg:text-[1.1vw]">Register</span>
+            </Link>
+            <Link href="/login" ref={loginBtnRef} className="bg-[#0EFF95] text-[#4A4978] font-bold rounded-full hover:bg-opacity-90 transition-all duration-200 shadow-lg px-[2.4vw] py-[0.3vw] text-[1.1vw] sm:px-[3vw] sm:py-[0.4vw] sm:text-[1.4vw] md:px-[2.7vw] md:py-[0.35vw] md:text-[1.2vw] lg:px-[2.4vw] lg:py-[0.3vw] lg:text-[1.1vw] flex items-center justify-center">
               Login
-            </button>
+            </Link>
           </div>
 
           <div className="md:hidden">
@@ -123,9 +115,9 @@ const Navbar = () => {
         <div className="md:hidden bg-white/10 backdrop-blur-xl border-t border-white/20 flex flex-col fixed w-full z-40 shadow-2xl p-[2vw] gap-[2.5vw] sm:p-[3vw] sm:gap-[3vw]">
           <Link href="/education" className="text-white font-semibold hover:text-[#00E676] text-[3vw] sm:text-[4vw]">Education</Link>
           <div className="border-t border-white/20 pt-[2.5vw] sm:pt-[3vw]">
-            <button className="bg-[#00E676] w-full text-[#4A4978] font-bold rounded-full hover:bg-opacity-90 transition-all duration-200 shadow-lg p-[1.2vw] text-[2.5vw] sm:p-[1.5vw] sm:text-[3vw]">
+            <Link href="/login" className="bg-[#00E676] w-full text-[#4A4978] font-bold rounded-full hover:bg-opacity-90 transition-all duration-200 shadow-lg p-[1.2vw] text-[2.5vw] sm:p-[1.5vw] sm:text-[3vw] flex items-center justify-center">
               Login
-            </button>
+            </Link>
           </div>
         </div>
       )}

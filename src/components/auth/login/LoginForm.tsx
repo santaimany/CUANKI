@@ -15,11 +15,12 @@ const LoginForm = () => {
     };
 
     return (
-        <>
-            <h1 className="text-5xl font-bold text-[#363256] mb-3 text-center">
+        // Responsive container that preserves current layout but scales typography/padding on small screens
+        <div className="w-full max-w-md mx-auto px-4 sm:px-6 md:max-w-lg lg:max-w-xl">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-[#363256] mb-3 text-center">
                 Welcome Back!
             </h1>
-            <p className="text-[#363256] mb-10 text-center text-lg opacity-70">
+            <p className="text-[#363256] mb-8 sm:mb-10 text-center text-base sm:text-lg opacity-70">
                 Enter your email & password to access your account
             </p>
 
@@ -31,7 +32,7 @@ const LoginForm = () => {
                         placeholder="Email"
                         onFocus={() => setFocusedField('email')}
                         onBlur={() => setFocusedField(null)}
-                        className={`w-full px-6 py-5 rounded-2xl border-none text-gray-700 placeholder-gray-400 focus:outline text-xl transition-all focus:duration-300 ${getFieldStyle('email', 'bg-white')}`}
+                        className={`w-full px-4 py-4 sm:px-6 sm:py-5 rounded-2xl border-none text-gray-700 placeholder-gray-400 focus:outline text-lg sm:text-xl transition-all focus:duration-300 ${getFieldStyle('email', 'bg-white')}`}
                     />
                 </div>
 
@@ -42,13 +43,13 @@ const LoginForm = () => {
                         placeholder="Enter your password"
                         onFocus={() => setFocusedField('password')}
                         onBlur={() => setFocusedField(null)}
-                        className={`w-full px-6 py-5 rounded-2xl border-none text-gray-700 placeholder-gray-400 focus:outline text-xl pr-14 transition-all focus:duration-300 ${getFieldStyle('password', 'bg-white')}`}
+                        className={`w-full px-4 py-4 sm:px-6 sm:py-5 rounded-2xl border-none text-gray-700 placeholder-gray-400 focus:outline text-lg sm:text-xl pr-14 transition-all focus:duration-300 ${getFieldStyle('password', 'bg-white')}`}
                     />
                     <button
                         type="button"
                         className="absolute right-6 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
                     >
-                        <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg className="w-6 h-6 sm:w-7 sm:h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                         </svg>
@@ -56,7 +57,7 @@ const LoginForm = () => {
                 </div>
 
                 {/* Remember Me & Forgot Password */}
-                <div className="flex items-center justify-between text-base">
+                <div className="flex items-center justify-between text-sm sm:text-base">
                     <div className="flex items-center">
                         <input
                             type="checkbox"
@@ -75,7 +76,7 @@ const LoginForm = () => {
                 {/* Login Button */}
                 <button
                     type="submit"
-                    className="w-full bg-[#363256] text-white py-5 rounded-2xl text-xl font-semibold hover:bg-[#2d2747] transition-colors duration-300 mt-10"
+                    className="w-full bg-[#363256] text-white py-4 sm:py-5 rounded-2xl text-lg sm:text-xl font-semibold hover:bg-[#2d2747] transition-colors duration-300 mt-6 sm:mt-10"
                 >
                     Login
                 </button>
@@ -83,9 +84,9 @@ const LoginForm = () => {
                 {/* Google Login Button */}
                 <button
                     type="button"
-                    className="w-full bg-white text-gray-600 py-5 rounded-2xl text-xl font-medium border border-gray-200 hover:bg-gray-50 transition-colors duration-300 flex items-center justify-center space-x-3"
+                    className="w-full bg-white text-gray-600 py-4 sm:py-5 rounded-2xl text-lg sm:text-xl font-medium border border-gray-200 hover:bg-gray-50 transition-colors duration-300 flex items-center justify-center space-x-3"
                 >
-                    <svg className="w-7 h-7" viewBox="0 0 24 24">
+                    <svg className="w-6 h-6 sm:w-7 sm:h-7" viewBox="0 0 24 24">
                         <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
                         <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
                         <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
@@ -96,13 +97,13 @@ const LoginForm = () => {
             </form>
 
             {/* Sign Up Link */}
-            <div className="text-center mt-8">
-                <span className="text-[#363256] opacity-70 text-base">Don&apos;t have an account? </span>
-                <a href="#" className="text-[#363256] font-semibold hover:underline text-base">
+            <div className="text-center mt-6 sm:mt-8">
+                <span className="text-[#363256] opacity-70 text-sm sm:text-base">Don&apos;t have an account? </span>
+                <a href="#" className="text-[#363256] font-semibold hover:underline text-sm sm:text-base">
                     Sign up
                 </a>
             </div>
-        </>
+        </div>
     );
 }
 
