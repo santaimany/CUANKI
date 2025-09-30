@@ -4,6 +4,9 @@ import { notFound } from 'next/navigation';
 import HeaderBackground from "@/assets/education/background/header-detail.svg";
 import { educationData } from '@/data/educationData';
 import ReadOthers from '@/components/education/ReadOthers';
+import cKiri from '@/assets/education/icons/c-kiri-readothers.svg';
+import cTengah from '@/assets/education/icons/c-tengah-readothers.svg';
+import cKanan from '@/assets/education/icons/c-kanan-readothers.svg';
 
 interface PageProps {
   params: {
@@ -34,23 +37,21 @@ export default function EducationDetailPage({ params }: PageProps) {
           </div>
           
           <div className="relative z-20">
-            <div className="max-w-sm sm:max-w-md lg:max-w-lg space-y-4 sm:space-y-6">
-              <span className="inline-block bg-[#0EFF95] text-[#363256] px-4 sm:px-6 lg:px-8 py-2 sm:py-3 rounded-full text-sm sm:text-base font-bold">
-                FinTech
-              </span>
-              <h1 className="text-[#363256] text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold leading-tight">
+            <div className="max-w-sm sm:max-w-md lg:max-w-xl space-y-2 sm:space-y-3">
+              <p className="inline-block  text-[#50488A] rounded-full text-xl sm:text-7xl ">
+               <span className='font-plus-jakarta-bold'>Fin</span>Tech
+              </p>
+              <h1 className="text-[#50488A] text-xl sm:text-xl lg:text-2xl xl:text-3xl  leading-tight">
                 {educationItem.title}
               </h1>
-              <p className="text-[#363256] text-sm sm:text-base lg:text-lg opacity-80 leading-relaxed">
-                {educationItem.description}
-              </p>
+           
             </div>
           </div>
         </div>
       </section>
 
       {/* Main Content Section */}
-      <section className="px-4 sm:px-6 lg:px-12 -mt-20 sm:-mt-32 lg:-mt-30 xl:-mt-40 relative">
+      <section className="px-4 sm:px-6 lg:px-12 -mt-20 sm:-mt-32 lg:-mt-20 xl:-mt-30 relative">
         <div className="max-w-full sm:max-w-[90vw] lg:max-w-[87vw] xl:max-w-[70vw] mx-auto">
           
           <div className="bg-transparent rounded-xl sm:rounded-2xl shadow-xl overflow-hidden relative">
@@ -110,8 +111,35 @@ export default function EducationDetailPage({ params }: PageProps) {
       {/* Read Others Section */}
       <ReadOthers currentId={params.id} />
 
-      {/* Bottom Spacing */}
-      <div className="h-16"></div>
+        <div className="flex justify-center items-center bottom-0 left-0 right-0 z-20 space-x-8 sm:space-x-12 lg:space-x-50">
+          <div className="w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24">
+            <Image
+              src={cKiri}
+              alt="Left icon"
+              width={96}
+              height={96}
+              className="w-full h-full object-contain"
+            />
+          </div>
+          <div className="w-10 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24">
+            <Image
+              src={cTengah}
+              alt="Center icon"
+              width={96}
+              height={96}
+              className="w-full h-full object-contain"
+            />
+          </div>
+          <div className="w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24">
+            <Image
+              src={cKanan}
+              alt="Right icon"
+              width={96}
+              height={96}
+              className="w-full h-full object-contain"
+            />
+          </div>
+        </div>
     </main>
   );
 }

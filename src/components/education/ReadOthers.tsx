@@ -5,9 +5,7 @@ import { useRouter } from 'next/navigation';
 import { educationData } from '@/data/educationData';
 import EducationCard from './EducationCard';
 import smileBg from '@/assets/landingpage/background/smile-bg.svg';
-import cKiri from '@/assets/education/icons/c-kiri-readothers.svg';
-import cTengah from '@/assets/education/icons/c-tengah-readothers.svg';
-import cKanan from '@/assets/education/icons/c-kanan-readothers.svg';
+
 import Image from 'next/image';
 
 
@@ -113,36 +111,6 @@ export default function ReadOthers({ currentId }: ReadOthersProps) {
           </div>
         )}
 
-        {/* Bottom Icons */}
-        <div className="flex justify-center items-center bottom-0 left-0 right-0 z-20 space-x-8 sm:space-x-12 lg:space-x-50">
-          <div className="w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24">
-            <Image
-              src={cKiri}
-              alt="Left icon"
-              width={96}
-              height={96}
-              className="w-full h-full object-contain"
-            />
-          </div>
-          <div className="w-10 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24">
-            <Image
-              src={cTengah}
-              alt="Center icon"
-              width={96}
-              height={96}
-              className="w-full h-full object-contain"
-            />
-          </div>
-          <div className="w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24">
-            <Image
-              src={cKanan}
-              alt="Right icon"
-              width={96}
-              height={96}
-              className="w-full h-full object-contain"
-            />
-          </div>
-        </div>
       </div>
     </section>
   );

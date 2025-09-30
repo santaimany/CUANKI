@@ -15,7 +15,7 @@ export default function useOnboarding() {
       const raw = localStorage.getItem(STORAGE_KEY);
       if (raw) setState(JSON.parse(raw));
     } catch {
-      // ignore parse errors
+
     }
   }, []);
 
@@ -23,7 +23,7 @@ export default function useOnboarding() {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
     } catch {
-      // ignore
+
     }
   }, [state]);
 
