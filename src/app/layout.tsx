@@ -22,19 +22,23 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const pathname = usePathname();
-  const isNoNavbarFooterPage = pathname?.startsWith('/login') || pathname?.startsWith('/register') || pathname?.startsWith('/auth') || pathname?.startsWith('/get-started') || pathname?.startsWith('/onboarding') || pathname?.startsWith('/complete-on-boarding');
+  const isNoNavbarFooterPage =
+    pathname?.startsWith("/login") ||
+    pathname?.startsWith("/register") ||
+    pathname?.startsWith("/auth") ||
+    pathname?.startsWith("/get-started") ||
+    pathname?.startsWith("/onboarding") ||
+    pathname?.startsWith("/complete-on-boarding") ||
+    pathname?.startsWith("/dashboard");
 
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-  
-
         {!isNoNavbarFooterPage && <Navbar />}
         {children}
         {!isNoNavbarFooterPage && <Footer />}
-
       </body>
     </html>
   );
