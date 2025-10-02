@@ -5,6 +5,12 @@ import { usePathname } from "next/navigation";
 import Navbar from "@/components/commons/Navbar";
 import Footer from "@/components/commons/Footer";
 import "./globals.css";
+import { Metadata } from "next";
+
+// export const metadata: Metadata = {
+//   title: "Cuanki - Smart Solution for Your Smart Financial",
+//   description: "Cuanki is a smart financial solution that helps you manage your finances effectively and efficiently.",
+// };
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,6 +39,12 @@ export default function RootLayout({
 
   return (
     <html lang="en">
+        <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="icon" href="/favicon.ico" />
+        <link rel="apple-touch-icon" href="/favicon.scg" />
+        <link rel="shortcut icon" href="/favicon.svg" />
+        </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >

@@ -133,7 +133,7 @@ const SavingsChart = () => {
   };
 
   return (
-    <div className="bg-gradient-to-r from-[#50488A] to-[#363256] rounded-2xl p-6 text-white">
+    <div className="bg-[#50488A] rounded-2xl p-6 text-white">
       <h3 className="text-sm font-medium text-white/80">Saldo saat ini</h3>
       <p className="text-4xl font-bold mb-4">Rp70.000,00</p>
       

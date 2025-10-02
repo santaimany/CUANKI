@@ -9,21 +9,21 @@ import CalendarView from '@/components/dashboard/homepage/CalendarView';
 
 const DashboardPage = () => {
   return (
-    <div className="p-6 bg-[#363256] grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div className="p-6 grid grid-cols-1 md:grid-cols-3 gap-6">
       
       {/* Baris 1 */}
-      <div className="md:col-span-2">
-        <GoalsProgress />
+      <div className="md:col-span-3">
+        <BalanceOverview />
       </div>
 
+      <div className="md:col-span-2 md:row-span-3">
+        <GoalsProgress />
+      </div>
       <div>
         <Streak />
       </div>
 
       {/* Baris 2 & 3 - Kiri */}
-      <div className="md:col-span-3 md:row-span-3">
-        <BalanceOverview />
-      </div>
 
       {/* Baris 2 & 3 - Kanan (ditumpuk vertikal) */}
       <div className='md:col-start-1 md:col-span-2 md:row-span-2'>
