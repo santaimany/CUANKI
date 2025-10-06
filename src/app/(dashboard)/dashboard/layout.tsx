@@ -7,9 +7,10 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex bg-[#363256]  h-screen">
+    <div className="flex bg-[#363256] h-screen">
       <Sidebar />
-      <main className="flex-1  overflow-auto ">
+      {/* UserProfileHeader dihapus dari sini */}
+      <main className="flex-1 overflow-auto p-6">
         {children}
       </main>
     </div>

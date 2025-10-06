@@ -1,8 +1,11 @@
 "use client";
-import React from 'react';
+// Impor hook dan GSAP
+import React, { useRef, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { gsap } from 'gsap';
+
 import CuankiLogo from "@/assets/landingpage/logo/cuanki-logo.svg";
 import HomeIcon from "@/assets/dashboard/icons/homepage-icon.svg";
 
@@ -17,6 +20,11 @@ interface SidebarProps {
 const Sidebar: React.FC<SidebarProps> = ({ className = '' }) => {
   const pathname = usePathname();
 
+  const indicatorRef = useRef<HTMLDivElement>(null);
+  const itemsRef = useRef<(HTMLLIElement | null)[]>([]);
+  // PENAMBAHAN: Ref untuk menandai render pertama kali
+  const isInitialLoad = useRef(true);
+
   const menuItems = [
     { name: 'Homepage', path: '/dashboard', icon: <Image src={HomeIcon} alt="Homepage" width={24} height={24} /> },
     { name: 'Transaksi', path: '/dashboard/transaksi', icon: <TransaksiIcon/> },
@@ -24,10 +32,41 @@ const Sidebar: React.FC<SidebarProps> = ({ className = '' }) => {
     { name: 'Goals', path: '/dashboard/goals', icon: <GoalsIcon/> },
   ];
 
+  // MODIFIKASI: useEffect kini memiliki logika berbeda untuk animasi awal
+  useEffect(() => {
+    const activeIndex = menuItems.findIndex(item => item.path === pathname);
+    const activeItemEl = itemsRef.current[activeIndex];
+
+    if (activeItemEl && indicatorRef.current) {
+      if (isInitialLoad.current) {
+        // --- Animasi Pertama Kali (Kiri ke Kanan) ---
+        gsap.set(indicatorRef.current, { // Atur posisi vertikal secara instan
+          top: activeItemEl.offsetTop,
+          height: activeItemEl.offsetHeight,
+        });
+        
+        gsap.fromTo(indicatorRef.current, 
+          { x: '-100%', opacity: 0 }, // Dari: posisi kiri & transparan
+          { x: 0, opacity: 1, duration: 0.8, ease: "power3.out" } // Ke: posisi normal & terlihat
+        );
+
+        isInitialLoad.current = false; // Tandai bahwa animasi awal sudah selesai
+      } else {
+        // --- Animasi Selanjutnya (Atas ke Bawah) ---
+        gsap.to(indicatorRef.current, {
+          top: activeItemEl.offsetTop,
+          height: activeItemEl.offsetHeight,
+          duration: 0.6,
+          ease: "power3.inOut"
+        });
+      }
+    }
+  }, [pathname, menuItems]);
+
   return (
     <div className="h-screen py-4">
-      <div className={`h-full w-64 ml-4 flex flex-col ${className}`}>
-        <div className="bg-[#2E2A4A] text-center pt-12 pb-10 rounded-tr-4xl">
+      <div className={`h-full w-64 ml-4 flex flex-col bg-[#50488A] rounded-3xl ${className}`}>
+        <div className="bg-[#2E2A4A] text-center pt-12 pb-10 rounded-3xl">
           <div className="flex justify-center mb-6 ml-4">
             <Image src={CuankiLogo} alt="Cuanki Logo" width={52} height={52} className="w-full h-auto" />
           </div>
@@ -37,36 +76,27 @@ const Sidebar: React.FC<SidebarProps> = ({ className = '' }) => {
           </div>
         </div>
 
-        <div className="bg-[#50488A] flex-grow flex flex-col justify-between rounded-br-4xl">
+        <div className="bg-[#50488A] flex-grow flex flex-col justify-between rounded-b-4xl">
           <nav className="mt-10 px-6">
-            <ul className="space-y-4">
-              {menuItems.map((item) => {
+            <ul className="space-y-4 relative">
+              <div ref={indicatorRef} className="absolute -left-6 w-full bg-[#363256] rounded-r-full opacity-0">
+                  <div className="absolute -top-6  h-6 w-6 bg-[#50488A] shadow-[0px_12px_0_0_#363256] rounded-bl-2xl"></div>
+                  <div className="absolute -bottom-6  h-6 w-6 bg-[#50488A] shadow-[0px_-12px_0_0_#363256] rounded-tl-2xl"></div>
+              </div>
+
+              {menuItems.map((item, index) => {
                 const isActive = pathname === item.path;
                 return (
-                  // <li> diberi posisi relative agar bisa menampung kurva
-                  <li key={item.path} className="relative">
+                  <li key={item.path} ref={el => itemsRef.current[index] = el} className="relative z-10">
                     <Link
                       href={item.path}
-                      className={`flex items-center gap-4 py-3 text-lg font-medium transition-colors duration-200
-                        ${ isActive
-                          ? 'bg-[#363256] text-white -ml-6 pl-10 pr-4 rounded-r-full'
-                          : 'text-white/80 hover:text-white hover:bg-white/10 rounded-full px-4'
-                        }`
+                      className={`flex items-center gap-4 py-3 text-lg font-medium transition-colors duration-200 w-full pl-10 pr-4
+                        ${isActive ? 'text-white' : 'text-white/80 hover:text-white'}`
                       }
                     >
                       {item.icon}
                       <span>{item.name}</span>
                     </Link>
-                    
-                    {/* PENAMBAHAN: Kurva Pemotong (Scoops) */}
-                    {isActive && (
-                      <>
-                        {/* Kurva Atas */}
-                        <div className="absolute -top-6 -left-6 h-6 w-6 bg-[#50488A] shadow-[0px_12px_0_0_#363256] rounded-bl-2xl"></div>
-                        {/* Kurva Bawah */}
-                        <div className="absolute -bottom-6 -left-6 h-6 w-6 bg-[#50488A] shadow-[0px_-12px_0_0_#363256] rounded-tl-2xl"></div>
-                      </>
-                    )}
                   </li>
                 );
               })}

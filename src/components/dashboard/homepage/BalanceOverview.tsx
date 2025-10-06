@@ -1,56 +1,56 @@
 'use client';
 import React from 'react';
-
-// 1. Impor komponen yang diperlukan dari Chart.js dan wrapper-nya
 import { Chart as ChartJS, ArcElement } from 'chart.js';
-import { Pie } from 'react-chartjs-2';
+import { Doughnut } from 'react-chartjs-2';
 
-// 2. Daftarkan elemen yang akan kita gunakan (ArcElement untuk Pie/Donut Chart)
 ChartJS.register(ArcElement);
 
-// 3. Siapkan data dengan format yang sesuai untuk Chart.js
-export const data = {
-  datasets: [
-    {
-      data: [50, 25, 25], // Proporsi data sama seperti sebelumnya
-      backgroundColor: [
-        '#00F5A0', // Hijau terang
-        '#A3FFD6', // Hijau Pucat
-        '#34D399', // Hijau Gelap
-      ],
-      borderWidth: 0, // Menghilangkan border antar segmen
-    },
-  ],
-};
+const BalanceOverview = () => {
+  const progress = 70;
 
-// 4. Siapkan opsi untuk menghilangkan tooltip dan legend
-export const options = {
+  const data = {
+    datasets: [{
+      data: [progress, 100 - progress],
+      backgroundColor: ['#00F5A0', 'rgba(229, 231, 235, 0.3)'],
+      borderWidth: 0,
+      borderRadius: 20,
+    }],
+  };
+  
+  const options = {
     responsive: true,
     maintainAspectRatio: false,
+    cutout: '75%',
+    rotation: -135,
+    circumference: 270,
     plugins: {
-        legend: {
-            display: false, // Menyembunyikan legend bawaan
-        },
-        tooltip: {
-            enabled: false, // Menonaktifkan tooltip saat hover
-        }
+      tooltip: { enabled: false },
     }
-}
+  };
 
-const BalanceOverview = () => {
   return (
-    <div className="bg-gradient-to-tl from-[#7971BC] to-[#373456] rounded-2xl p-6 text-white relative">
+    <div className="bg-[#6F64A7] rounded-2xl p-6 text-white relative">
       <div className="flex items-center gap-6">
-        {/* PIE CHART menggunakan react-chartjs-2 */}
-        <div className="w-28 h-28">
-            <Pie data={data} options={options} />
+        <div className="flex flex-col items-center justify-center w-28">
+          <div className="relative w-28 h-24">
+            {/* Plugin untuk animasi panah dihapus dari sini */}
+            <Doughnut data={data} options={options} />
+            
+            <div className="absolute inset-0 flex items-center justify-center">
+              {/* MODIFIKASI: Panah sekarang statis dengan rotasi tetap */}
+              <div className="transform -rotate-45">
+                <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                </svg>
+              </div>
+            </div>
+          </div>
+          <p className="text-base font-semibold mt-1">{progress}% Terpakai</p>
         </div>
         
-        {/* Konten Teks dan Tombol (Tidak ada perubahan di sini) */}
         <div className="flex-1">
           <p className="text-base mb-1">Hai Ian!, ini uang kamu hari ini:</p>
           <h2 className="text-5xl font-bold mb-4">Rp 70.000,00</h2>
-          
           <div className="flex gap-3">
             <button className="bg-[#00F5A0] text-[#363256] px-4 py-1.5 rounded-xl text-sm font-semibold border-b-2 border-white hover:opacity-90 transition-opacity">
               + pendapatan
@@ -62,10 +62,9 @@ const BalanceOverview = () => {
         </div>
       </div>
       
-      {/* Panah (Tidak ada perubahan di sini) */}
       <div className="absolute right-6 bottom-6">
-        <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-            <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd"></path>
+        <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+          <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd"></path>
         </svg>
       </div>
     </div>
