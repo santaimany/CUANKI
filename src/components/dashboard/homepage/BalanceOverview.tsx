@@ -31,8 +31,8 @@ const BalanceOverview = () => {
   return (
     <div className="bg-[#6F64A7] rounded-2xl p-6 text-white relative">
       <div className="flex items-center gap-6">
-        <div className="flex flex-col items-center justify-center w-28">
-          <div className="relative w-28 h-24">
+        <div className="flex flex-col items-center justify-center w-28 ">
+          <div className="relative w-28 h-auto">
             {/* Plugin untuk animasi panah dihapus dari sini */}
             <Doughnut data={data} options={options} />
             
