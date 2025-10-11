@@ -29,7 +29,7 @@ const BalanceOverview = () => {
   };
 
   return (
-    <div className="bg-[#6F64A7] rounded-2xl p-6 text-white relative">
+    <div className="bg-[#6F64A7] rounded-2xl p-6 h-[40vh] text-white relative">
       <div className="flex items-center gap-6">
         <div className="flex flex-col items-center justify-center w-28 ">
           <div className="relative w-28 h-auto">
@@ -48,14 +48,14 @@ const BalanceOverview = () => {
           <p className="text-base font-semibold mt-1">{progress}% Terpakai</p>
         </div>
         
-        <div className="flex-1">
+        <div className="flex-2">
           <p className="text-base mb-1">Hai Ian!, ini uang kamu hari ini:</p>
-          <h2 className="text-5xl font-bold mb-4">Rp 70.000,00</h2>
+          <h2 className="text-7xl font-bold mb-4">Rp 70.000,00</h2>
           <div className="flex gap-3">
-            <button className="bg-[#00F5A0] text-[#363256] px-4 py-1.5 rounded-xl text-sm font-semibold border-b-2 border-white hover:opacity-90 transition-opacity">
+            <button className="bg-[#00F5A0] text-[#363256] px-4 py-2.5 rounded-xl text-3xl font-semibold border-b-2 border-white hover:opacity-90 transition-opacity">
               + pendapatan
             </button>
-            <button className="bg-[#E85D5D] text-white px-4 py-1.5 rounded-xl text-sm font-semibold border-b-2 border-white hover:opacity-90 transition-opacity">
+            <button className="bg-[#E85D5D] text-white px-4 py-2.5 rounded-xl text-3xl font-semibold border-b-2 border-white hover:opacity-90 transition-opacity">
               - pengeluaran
             </button>
           </div>
