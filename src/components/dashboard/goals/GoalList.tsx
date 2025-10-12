@@ -46,12 +46,12 @@ const GoalList: React.FC<GoalListProps> = ({ goals }) => {
         return (
           <div
             key={goal.id}
-            className="bg-gradient-to-br from-[#7971BC] to-[#6B5CE7] rounded-3xl p-6 shadow-lg"
+            className="bg-[#7971BC]  rounded-3xl p-10 shadow-lg"
           >
             <div className="flex items-start justify-between mb-4">
               <div className="flex items-center gap-4">
                 {/* Icon */}
-                <div className="w-14 h-14 bg-[#5A4FCF] rounded-full flex items-center justify-center">
+                <div className="w-14 h-14 bg-[#50488A] rounded-full flex items-center justify-center">
                   <svg className="w-7 h-7 text-white" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M8 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM15 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z" />
                     <path d="M3 4a1 1 0 00-1 1v10a1 1 0 001 1h1.05a2.5 2.5 0 014.9 0H10a1 1 0 001-1V5a1 1 0 00-1-1H3zM14 7a1 1 0 00-1 1v6.05A2.5 2.5 0 0115.95 16H17a1 1 0 001-1v-5a1 1 0 00-.293-.707l-2-2A1 1 0 0015 7h-1z" />
