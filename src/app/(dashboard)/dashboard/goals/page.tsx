@@ -9,12 +9,7 @@ export default function GoalsPage() {
   return (
     <div className="min-h-screen bg-[#363256] p-6">
       <div className="max-w-[1600px] mx-auto">
-        {/* Header with User Profile */}
-        <div className="flex justify-end mb-6">
-          <UserProfile />
-        </div>
-
-        {/* Main Content - 2 Column Layout */}
+        {/* Main Layout - 2 Columns from top */}
         <div className="flex gap-6">
           {/* Left Column - Main Content */}
           <div className="flex-1 space-y-6">
@@ -42,8 +37,14 @@ export default function GoalsPage() {
             <GoalList />
           </div>
 
-          {/* Right Column - AI Reminder */}
-          <div className="w-80 flex-shrink-0">
+          {/* Right Column - User Profile & AI Reminder */}
+          <div className="w-80 flex-shrink-0 space-y-6">
+            {/* User Profile at top */}
+            <div className="flex justify-end">
+              <UserProfile />
+            </div>
+
+            {/* AI Reminder below */}
             <AIReminder />
           </div>
         </div>
