@@ -25,10 +25,10 @@ export default function GoalsPage() {
 
             {/* Action Buttons */}
             <div className="flex gap-3">
-              <button className="flex-1 bg-gradient-to-r from-[#A3FFD6] to-[#0EFF95] border-b-2 border-white text-black font-bold py-4 rounded-3xl hover:shadow-lg transition-all">
+              <button className=" bg-gradient-to-r from-[#A3FFD6] to-[#0EFF95] border-b-2 border-white text-black font-bold px-9 py-4 rounded-3xl hover:shadow-lg transition-all">
                 + Tambah goals
               </button>
-              <button className="flex-1 bg-[#DF4000] border-b-2 border-[#8B2800] text-white font-bold py-4 rounded-3xl hover:shadow-lg transition-all">
+              <button className=" bg-[#DF4000] border-b-2 border-white text-white font-bold px-9 py-4 rounded-3xl hover:shadow-lg transition-all">
                 - Hapus goals
               </button>
             </div>
