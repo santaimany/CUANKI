@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import UserProfileHeader from '@/components/dashboard/UserProfile';
-import AIReminder from '@/components/dashboard/transaksi/AIReminder';
+import AIReminder from '@/components/dashboard/AIReminder';
 import TransactionSummary from '@/components/dashboard/transaksi/TransactionSummary';
 import TransactionTabs from '@/components/dashboard/transaksi/TransactionTabs';
 import SearchAndFilter from '@/components/dashboard/transaksi/SearchAndFilter';
