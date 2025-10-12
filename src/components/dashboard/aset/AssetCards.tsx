@@ -10,9 +10,10 @@ interface Asset {
 
 interface AssetCardsProps {
   assets?: Asset[];
+  showButtons?: boolean;
 }
 
-const AssetCards: React.FC<AssetCardsProps> = ({ assets }) => {
+const AssetCards: React.FC<AssetCardsProps> = ({ assets, showButtons = true }) => {
   const [currentPage, setCurrentPage] = useState(1);
   
   const defaultAssets: Asset[] = [
@@ -20,6 +21,7 @@ const AssetCards: React.FC<AssetCardsProps> = ({ assets }) => {
     { id: '2', name: 'BCA', amount: 100000, color: 'bg-[#00D9D9]' },
     { id: '3', name: 'Sisa', amount: 100000, color: 'bg-[#7BFFC7]' },
     { id: '4', name: 'Cash', amount: 100000, color: 'bg-[#4DD4AC]' },
+     { id: '5', name: 'Cash', amount: 100000, color: 'bg-[#4DD4AC]' },
   ];
 
   const displayAssets = assets || defaultAssets;
@@ -35,23 +37,23 @@ const AssetCards: React.FC<AssetCardsProps> = ({ assets }) => {
 
   return (
     <div className="mb-6">
-      {/* Asset Cards Grid - Same style as homepage cards */}
+      {/* Asset Cards Grid - Compact style */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         {visibleAssets.map((asset) => (
           <div
             key={asset.id}
-            className="rounded-2xl overflow-hidden shadow-lg flex flex-col bg-white hover:shadow-xl transition-shadow cursor-pointer"
+            className="rounded-3xl overflow-hidden shadow-lg flex flex-col bg-white hover:shadow-xl transition-shadow cursor-pointer"
           >
             {/* Bagian Atas: Nama Akun */}
-            <div className="p-6">
-              <h3 className="text-center text-3xl font-bold text-[#363256]">
+            <div className="py-5 px-6">
+              <h3 className="text-center text-4xl font-bold text-[#363256]">
                 {asset.name}
               </h3>
             </div>
 
             {/* Bagian Bawah: Saldo */}
-            <div className={`${asset.color} text-black p-4`}>
-              <p className="text-center text-2xl font-semibold">
+            <div className={`${asset.color} text-black py-4 px-6`}>
+              <p className="text-center text-2xl font-bold">
                 Rp {asset.amount.toLocaleString('id-ID')}
               </p>
             </div>
@@ -59,15 +61,17 @@ const AssetCards: React.FC<AssetCardsProps> = ({ assets }) => {
         ))}
       </div>
 
-      {/* Action Buttons */}
-      <div className="flex gap-3 mb-6">
-        <button className="flex-1 bg-[#00F5A0] text-black font-bold py-4 rounded-3xl hover:shadow-lg transition-all">
-          + Tambah aset
-        </button>
-        <button className="flex-1 bg-gradient-to-r from-[#FF6B6B] to-[#FF8E53] text-white font-bold py-4 rounded-3xl hover:shadow-lg transition-all">
-          - Hapus aset
-        </button>
-      </div>
+      {/* Action Buttons - Only show if showButtons is true */}
+      {showButtons && (
+        <div className="flex gap-3 mb-6">
+          <button className="flex-1 bg-[#00F5A0] text-black font-bold py-4 rounded-3xl hover:shadow-lg transition-all">
+            + Tambah aset
+          </button>
+          <button className="flex-1 bg-gradient-to-r from-[#FF6B6B] to-[#FF8E53] text-white font-bold py-4 rounded-3xl hover:shadow-lg transition-all">
+            - Hapus aset
+          </button>
+        </div>
+      )}
 
       {/* Pagination */}
       {totalPages > 1 && (
