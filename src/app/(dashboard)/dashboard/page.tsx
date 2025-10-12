@@ -4,7 +4,7 @@ import GoalsProgress from '@/components/dashboard/homepage/GoalsProgress';
 import Streak from '@/components/dashboard/homepage/Streak';
 import BalanceOverview from '@/components/dashboard/homepage/BalanceOverview';
 import SpendingBreakdown from '@/components/dashboard/homepage/SpendingBreakdown';
-import SavingsChart from '@/components/dashboard/homepage/SavingsChart';
+import SavingsChart from '@/components/dashboard/SavingsChart';
 import CalendarView from '@/components/dashboard/homepage/CalendarView'; 
 import MyAccounts from '@/components/dashboard/homepage/card/MyAccount';
 import TransactionHistoryList from '@/components/dashboard/homepage/TransactionHistory';
