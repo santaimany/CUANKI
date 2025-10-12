@@ -70,7 +70,7 @@ export default function OnboardingCompletePage() {
   
     <div ref={mainRef} className="min-h-screen flex flex-col items-center justify-center p-6 gap-10 md:gap-12">
       <div className="relative flex items-center justify-center w-full h-72 md:h-96">
-        {/* Left Card */}
+      
         <div 
           ref={leftCardRef} 
           onClick={() => handleCardClick(0)}
