@@ -46,11 +46,11 @@ const AssetProgress: React.FC<AssetProgressProps> = ({ savings }) => {
         return (
           <div
             key={saving.id}
-            className="bg-gradient-to-br from-[#7971BC] to-[#6B5CE7] rounded-3xl p-6 shadow-lg"
+            className="bg-[#7971BC]  rounded-3xl p-6 shadow-lg"
           >
             <div className="flex items-start justify-between mb-4">
               <div className="flex items-center gap-4">
-                <div className="w-14 h-14 bg-[#5A4FCF] rounded-full flex items-center justify-center">
+                <div className="w-14 h-14 bg-[#50488A] rounded-full flex items-center justify-center">
                   <svg className="w-7 h-7 text-white" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M4 4a2 2 0 00-2 2v4.586A2 2 0 003.414 12L7 15.586V17a1 1 0 102 0v-1.586l3.586-3.586A2 2 0 0014 10.586V6a2 2 0 00-2-2H4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1z" clipRule="evenodd" />
                   </svg>
@@ -68,7 +68,6 @@ const AssetProgress: React.FC<AssetProgressProps> = ({ savings }) => {
               </div>
             </div>
 
-            {/* Progress Bar */}
             <div className="relative w-full h-4 bg-white/30 rounded-full overflow-hidden">
               <div
                 className="absolute top-0 left-0 h-full bg-[#00F5A0] rounded-full transition-all duration-500"
