@@ -1,7 +1,21 @@
 import axios from 'axios';
 
+// Get base URL and clean it (remove quotes if any)
+const getBaseURL = () => {
+    const url = process.env.NEXT_PUBLIC_API_URL || 'http://103.186.0.127';
+    // Remove any surrounding quotes that might be in env variable
+    return url.replace(/^['"]|['"]$/g, '').trim();
+};
+
+const baseURL = getBaseURL();
+
+// Log for debugging (only in development)
+if (process.env.NODE_ENV === 'development') {
+    console.log('🌐 API Base URL:', baseURL);
+}
+
 const axiosInstance = axios.create({
-    baseURL: process.env.NEXT_PUBLIC_API_URL,
+    baseURL: baseURL,
     timeout: 10000,
     headers: {
         'Content-Type': 'application/json',
