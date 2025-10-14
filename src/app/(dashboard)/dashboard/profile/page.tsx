@@ -1,10 +1,13 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { GreetingUsersResponse } from '@/types/api';
 import { getUserGreeting } from '@/lib/api/user';
+import { logout } from '@/lib/services/authService';
 
 export default function ProfilePage() {
+  const router = useRouter();
   const [userData, setUserData] = useState<GreetingUsersResponse | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -22,6 +25,18 @@ export default function ProfilePage() {
 
     fetchUserData();
   }, []);
+
+  const handleLogout = () => {
+    if (confirm('Apakah Anda yakin ingin keluar?')) {
+      try {
+        logout();
+        router.push('/login');
+      } catch (error) {
+        console.error('Logout error:', error);
+        alert('Gagal logout. Silakan coba lagi.');
+      }
+    }
+  };
 
   if (loading) {
     return (
@@ -128,10 +143,32 @@ export default function ProfilePage() {
             </div>
           </div>
 
-          {/* Save Button */}
-          <div className="mt-6 flex justify-end">
+          {/* Action Buttons */}
+          <div className="mt-6 flex flex-col sm:flex-row gap-3 sm:gap-4 justify-between items-stretch sm:items-center">
+            {/* Logout Button */}
             <button
-              className="bg-gradient-to-r from-[#0EFF95] to-[#00D9D9] text-[#363256] font-bold px-8 sm:px-12 py-3 rounded-full hover:shadow-lg transition-all duration-200 text-sm sm:text-base"
+              onClick={handleLogout}
+              className="bg-gradient-to-r from-[#E85D5D] to-[#C54545] text-white font-bold px-6 sm:px-8 py-3 rounded-full hover:shadow-lg hover:scale-105 transition-all duration-200 text-sm sm:text-base flex items-center justify-center gap-2"
+            >
+              <svg 
+                className="w-5 h-5" 
+                fill="none" 
+                stroke="currentColor" 
+                viewBox="0 0 24 24"
+              >
+                <path 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round" 
+                  strokeWidth={2} 
+                  d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" 
+                />
+              </svg>
+              Keluar
+            </button>
+
+            {/* Save Button */}
+            <button
+              className="bg-gradient-to-r from-[#0EFF95] to-[#00D9D9] text-[#363256] font-bold px-8 sm:px-12 py-3 rounded-full hover:shadow-lg hover:scale-105 transition-all duration-200 text-sm sm:text-base"
             >
               Simpan
             </button>
