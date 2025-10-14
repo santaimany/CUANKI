@@ -1,8 +1,10 @@
 'use client';
 
-import React, { useLayoutEffect, useRef, useState } from 'react'; // Ganti useEffect dengan useLayoutEffect
+import React, { useLayoutEffect, useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { gsap } from 'gsap';
+import { setOnboardingCompleted } from '@/lib/utils/auth';
+import { getAdvice, type AdviceResponse } from '@/lib/services/onboardingService';
 
 // Asumsi path import ini sudah benar
 import CardKiri from '@/assets/getstarted/image/card-kiri.svg';
@@ -17,6 +19,8 @@ export default function OnboardingCompletePage() {
   const textRef = useRef(null);
   
   const [flippedCard, setFlippedCard] = useState<number | null>(null);
+  const [adviceData, setAdviceData] = useState<AdviceResponse | null>(null);
+  const [isLoadingAdvice, setIsLoadingAdvice] = useState(true);
 
   const handleCardClick = (cardIndex: number) => {
     if (flippedCard === cardIndex) {
@@ -26,8 +30,30 @@ export default function OnboardingCompletePage() {
     }
   };
 
+  const handleToDashboard = () => {
+    // Set flag onboarding completed
+    setOnboardingCompleted(true);
+    // Redirect ke dashboard/homepage
+    window.location.href = '/';
+  };
 
-  // Gunakan useLayoutEffect untuk animasi agar tidak ada "flicker"
+  // Fetch advice saat component mount
+  useEffect(() => {
+    async function fetchAdvice() {
+      try {
+        const response = await getAdvice();
+        console.log('🎯 Advice Response:', response);
+        console.log('📊 Cards:', response.cards);
+        setAdviceData(response);
+      } catch (error) {
+        console.error('❌ Error fetching advice:', error);
+      } finally {
+        setIsLoadingAdvice(false);
+      }
+    }
+    fetchAdvice();
+  }, []);
+
   useLayoutEffect(() => {
 
     const ctx = gsap.context(() => {
@@ -99,9 +125,11 @@ export default function OnboardingCompletePage() {
               transition: 'transform 0.8s'
             }}
           >
-            <h3 className="text-[#363256] text-base md:text-xl font-bold mb-2">AI Analytics</h3>
+            <h3 className="text-[#363256] text-base md:text-xl font-bold mb-2">
+              {isLoadingAdvice ? 'Loading...' : (adviceData?.cards?.[0]?.title || 'AI Analytics')}
+            </h3>
             <p className="text-[#363256] text-[10px] md:text-xs leading-relaxed">
-              Oke, jadi dengan budget Rp 120.000, hal yang paling urgent kamu prioritaskan untuk 3 minggu pertama terlebih dahulu adalah transportasi (80.000), baru sisanya untuk makan (40.000). Mungkin kamu juga bisa makan lebih hemat (cari warteg, masak sendiri, dll). Dengan pengeluaran tersebut, target yang kamu bisa capai dalam 3 minggu adalah Rp 33.000, mengingat lifestyle kamu yang ketat.
+              {isLoadingAdvice ? 'Loading advice...' : (adviceData?.cards?.[0]?.content || 'No advice available')}
             </p>
           </div>
         </div>
@@ -135,9 +163,11 @@ export default function OnboardingCompletePage() {
               transition: 'transform 0.8s'
             }}
           >
-            <h3 className="text-[#363256] text-base md:text-xl font-bold mb-2">AI Analytics</h3>
+            <h3 className="text-[#363256] text-base md:text-xl font-bold mb-2">
+              {isLoadingAdvice ? 'Loading...' : (adviceData?.cards?.[1]?.title || 'Recommendations')}
+            </h3>
             <p className="text-[#363256] text-[10px] md:text-xs leading-relaxed">
-              Analisis menunjukkan pola pengeluaran yang efisien. Dengan manajemen yang baik, kamu bisa menghemat lebih banyak untuk masa depan dan mencapai target finansial lebih cepat.
+              {isLoadingAdvice ? 'Loading recommendations...' : (adviceData?.cards?.[1]?.content || 'No recommendations available')}
             </p>
           </div>
         </div>
@@ -171,15 +201,20 @@ export default function OnboardingCompletePage() {
               transition: 'transform 0.8s'
             }}
           >
-            <h3 className="text-[#363256] text-base md:text-xl font-bold mb-2">AI Analytics</h3>
+            <h3 className="text-[#363256] text-base md:text-xl font-bold mb-2">
+              {isLoadingAdvice ? 'Loading...' : (adviceData?.cards?.[2]?.title || 'Financial Summary')}
+            </h3>
             <p className="text-[#363256] text-[10px] md:text-xs leading-relaxed">
-              Rekomendasi fokus pada investasi jangka panjang. Pertimbangkan untuk mulai berinvestasi sejak dini untuk keuntungan maksimal di masa depan.
+              {isLoadingAdvice ? 'Loading summary...' : (adviceData?.cards?.[2]?.content || 'Complete your onboarding to get personalized financial insights!')}
             </p>
           </div>
         </div>
       </div>
 
-      <button  className="bg-[#00F5A0] text-[#363256] font-semibold px-20 py-4 rounded-xl text-base shadow-md transition transform hover:bg-white active:scale-95">
+      <button 
+        onClick={handleToDashboard}
+        className="bg-[#00F5A0] text-[#363256] font-semibold px-20 py-4 rounded-xl text-base shadow-md transition transform hover:bg-white active:scale-95"
+      >
         To Dashboard
       </button>
       <h1 ref={textRef} className="text-[#0EFF95] text-2xl md:text-4xl font-semibold text-center max-w-lg leading-tight">

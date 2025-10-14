@@ -6,11 +6,10 @@ import AddBankModal from './AddBankModal';
 type Props = {
   items?: string[];
   onChange?: (items: string[]) => void;
+  availableBanks?: string[];
 };
 
-const ALL_AVAILABLE_BANKS = ['BCA', 'BRI', 'BSI', 'BLU', 'Mandiri', 'BNI', 'CIMB Niaga', 'Danamon', 'OCBC NISP'];
-
-export default function AddList({ items = [], onChange }: Props) {
+export default function AddList({ items = [], onChange, availableBanks = [] }: Props) {
   const [list, setList] = useState<string[]>(items);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -58,7 +57,7 @@ export default function AddList({ items = [], onChange }: Props) {
         <AddBankModal
           onClose={() => setIsModalOpen(false)}
           onAdd={handleAddBank}
-          availableBanks={ALL_AVAILABLE_BANKS.filter(b => !list.includes(b))}
+          availableBanks={availableBanks.filter((b: string) => !list.includes(b))}
         />
       )}
     </div>
