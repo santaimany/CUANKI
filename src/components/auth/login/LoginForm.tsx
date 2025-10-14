@@ -171,7 +171,7 @@ const LoginForm = () => {
             {/* Sign Up Link */}
             <div className="text-center mt-6 sm:mt-8">
                 <span className="text-[#363256] opacity-70 text-sm sm:text-base">Don&apos;t have an account? </span>
-                <a href="#" className="text-[#363256] font-semibold hover:underline text-sm sm:text-base">
+                <a href="register" className="text-[#363256] font-semibold hover:underline text-sm sm:text-base">
                     Sign up
                 </a>
             </div>
