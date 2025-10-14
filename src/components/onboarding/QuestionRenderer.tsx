@@ -18,9 +18,10 @@ type Props = {
   value?: string;
   onChange?: (v: string) => void;
   onSelectNext?: (v: string) => void;
+  availableBanks?: string[];
 };
 
-export default function QuestionRenderer({ question, value, onChange, onSelectNext }: Props) {
+export default function QuestionRenderer({ question, value, onChange, onSelectNext, availableBanks = [] }: Props) {
   switch (question.type) {
     case 'dropdown':
       return <DropdownSelect options={question.options || []} value={value} onChange={onChange} onSelectNext={onSelectNext} />;
@@ -29,7 +30,7 @@ export default function QuestionRenderer({ question, value, onChange, onSelectNe
       return <OptionGroup options={question.options || []} onSelect={onChange || (() => {})} selected={value} />;
     
     case 'addlist':
-      return <AddList items={value ? (value.split('|') || []) : []} onChange={(items) => onChange?.(items.join('|'))} />;
+      return <AddList items={value ? (value.split('|') || []) : []} onChange={(items) => onChange?.(items.join('|'))} availableBanks={availableBanks} />;
     
     case 'currency':
       return <CurrencyInput value={value} onChange={onChange} placeholder={question.placeholder} />;

@@ -1,8 +1,10 @@
 'use client';
 
-import React, { useLayoutEffect, useRef } from 'react'; // Ganti useEffect dengan useLayoutEffect
+import React, { useLayoutEffect, useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { gsap } from 'gsap';
+import { setOnboardingCompleted } from '@/lib/utils/auth';
+import { getAdvice, type AdviceResponse } from '@/lib/services/onboardingService';
 
 // Asumsi path import ini sudah benar
 import CardKiri from '@/assets/getstarted/image/card-kiri.svg';
@@ -15,9 +17,43 @@ export default function OnboardingCompletePage() {
   const centerCardRef = useRef(null);
   const rightCardRef = useRef(null);
   const textRef = useRef(null);
+  
+  const [flippedCard, setFlippedCard] = useState<number | null>(null);
+  const [adviceData, setAdviceData] = useState<AdviceResponse | null>(null);
+  const [isLoadingAdvice, setIsLoadingAdvice] = useState(true);
 
+  const handleCardClick = (cardIndex: number) => {
+    if (flippedCard === cardIndex) {
+      setFlippedCard(null);
+    } else {
+      setFlippedCard(cardIndex);
+    }
+  };
 
-  // Gunakan useLayoutEffect untuk animasi agar tidak ada "flicker"
+  const handleToDashboard = () => {
+    // Set flag onboarding completed
+    setOnboardingCompleted(true);
+    // Redirect ke dashboard/homepage
+    window.location.href = '/';
+  };
+
+  // Fetch advice saat component mount
+  useEffect(() => {
+    async function fetchAdvice() {
+      try {
+        const response = await getAdvice();
+        console.log('🎯 Advice Response:', response);
+        console.log('📊 Cards:', response.cards);
+        setAdviceData(response);
+      } catch (error) {
+        console.error('❌ Error fetching advice:', error);
+      } finally {
+        setIsLoadingAdvice(false);
+      }
+    }
+    fetchAdvice();
+  }, []);
+
   useLayoutEffect(() => {
 
     const ctx = gsap.context(() => {
@@ -57,21 +93,128 @@ export default function OnboardingCompletePage() {
   }, []); // Hanya berjalan sekali saat komponen mount
 
   return (
-    // Tambahkan ref utama di sini
+  
     <div ref={mainRef} className="min-h-screen flex flex-col items-center justify-center p-6 gap-10 md:gap-12">
       <div className="relative flex items-center justify-center w-full h-72 md:h-96">
-        <div ref={leftCardRef} className="absolute w-48 h-64 md:w-64 md:h-80 transform -rotate-[20deg] -translate-x-24 translate-y-8 md:-translate-x-66 p-4">
-          <Image src={CardKiri} alt="Card Pattern Left" fill className="object-contain" />
+      
+        <div 
+          ref={leftCardRef} 
+          onClick={() => handleCardClick(0)}
+          className="absolute w-48 h-64 md:w-64 md:h-80 transform -rotate-[20deg] -translate-x-24 translate-y-8 md:-translate-x-66 p-4 cursor-pointer"
+          style={{ 
+            transformStyle: 'preserve-3d'
+          }}
+        >
+          {/* Front Face */}
+          <div 
+            className="absolute inset-0"
+            style={{ 
+              backfaceVisibility: 'hidden',
+              transform: flippedCard === 0 ? 'rotateY(-180deg)' : 'rotateY(0deg)',
+              transition: 'transform 0.8s'
+            }}
+          >
+            <Image src={CardKiri} alt="Card Pattern Left" fill className="object-contain" />
+          </div>
+          {/* Back Face */}
+          <div 
+            className="absolute inset-0 bg-gradient-to-br from-[#00F5A0] to-[#00D9D9] rounded-3xl p-4 overflow-auto flex flex-col"
+            style={{ 
+              backfaceVisibility: 'hidden',
+              transform: flippedCard === 0 ? 'rotateY(0deg)' : 'rotateY(180deg)',
+              transition: 'transform 0.8s'
+            }}
+          >
+            <h3 className="text-[#363256] text-base md:text-xl font-bold mb-2">
+              {isLoadingAdvice ? 'Loading...' : (adviceData?.cards?.[0]?.title || 'AI Analytics')}
+            </h3>
+            <p className="text-[#363256] text-[10px] md:text-xs leading-relaxed">
+              {isLoadingAdvice ? 'Loading advice...' : (adviceData?.cards?.[0]?.content || 'No advice available')}
+            </p>
+          </div>
         </div>
-        <div ref={centerCardRef} className="absolute z-10 w-52 h-68 md:w-64 md:h-80 transform scale-110 p-4 shadow-black/20">
-          <Image src={CardTengah} alt="Card Pattern Center" fill className="object-contain" />
+
+        {/* Center Card */}
+        <div 
+          ref={centerCardRef} 
+          onClick={() => handleCardClick(1)}
+          className="absolute z-10 w-52 h-68 md:w-64 md:h-80 transform scale-110 p-4 shadow-black/20 cursor-pointer"
+          style={{ 
+            transformStyle: 'preserve-3d'
+          }}
+        >
+          {/* Front Face */}
+          <div 
+            className="absolute inset-0"
+            style={{ 
+              backfaceVisibility: 'hidden',
+              transform: flippedCard === 1 ? 'rotateY(-180deg)' : 'rotateY(0deg)',
+              transition: 'transform 0.8s'
+            }}
+          >
+            <Image src={CardTengah} alt="Card Pattern Center" fill className="object-contain" />
+          </div>
+          {/* Back Face */}
+          <div 
+            className="absolute inset-0 bg-gradient-to-br from-[#00F5A0] to-[#00D9D9] rounded-3xl p-4 overflow-auto flex flex-col"
+            style={{ 
+              backfaceVisibility: 'hidden',
+              transform: flippedCard === 1 ? 'rotateY(0deg)' : 'rotateY(180deg)',
+              transition: 'transform 0.8s'
+            }}
+          >
+            <h3 className="text-[#363256] text-base md:text-xl font-bold mb-2">
+              {isLoadingAdvice ? 'Loading...' : (adviceData?.cards?.[1]?.title || 'Recommendations')}
+            </h3>
+            <p className="text-[#363256] text-[10px] md:text-xs leading-relaxed">
+              {isLoadingAdvice ? 'Loading recommendations...' : (adviceData?.cards?.[1]?.content || 'No recommendations available')}
+            </p>
+          </div>
         </div>
-        <div ref={rightCardRef} className="absolute w-48 h-64 md:w-64 md:h-80 transform rotate-[20deg] translate-x-24 translate-y-8 md:translate-x-66 p-4">
-          <Image src={CardKanan} alt="Card Pattern Right" fill className="object-contain" />
+
+        {/* Right Card */}
+        <div 
+          ref={rightCardRef} 
+          onClick={() => handleCardClick(2)}
+          className="absolute w-48 h-64 md:w-64 md:h-80 transform rotate-[20deg] translate-x-24 translate-y-8 md:translate-x-66 p-4 cursor-pointer"
+          style={{ 
+            transformStyle: 'preserve-3d'
+          }}
+        >
+          {/* Front Face */}
+          <div 
+            className="absolute inset-0"
+            style={{ 
+              backfaceVisibility: 'hidden',
+              transform: flippedCard === 2 ? 'rotateY(-180deg)' : 'rotateY(0deg)',
+              transition: 'transform 0.8s'
+            }}
+          >
+            <Image src={CardKanan} alt="Card Pattern Right" fill className="object-contain" />
+          </div>
+          {/* Back Face */}
+          <div 
+            className="absolute inset-0 bg-gradient-to-br from-[#00F5A0] to-[#00D9D9] rounded-3xl p-4 overflow-auto flex flex-col"
+            style={{ 
+              backfaceVisibility: 'hidden',
+              transform: flippedCard === 2 ? 'rotateY(0deg)' : 'rotateY(180deg)',
+              transition: 'transform 0.8s'
+            }}
+          >
+            <h3 className="text-[#363256] text-base md:text-xl font-bold mb-2">
+              {isLoadingAdvice ? 'Loading...' : (adviceData?.cards?.[2]?.title || 'Financial Summary')}
+            </h3>
+            <p className="text-[#363256] text-[10px] md:text-xs leading-relaxed">
+              {isLoadingAdvice ? 'Loading summary...' : (adviceData?.cards?.[2]?.content || 'Complete your onboarding to get personalized financial insights!')}
+            </p>
+          </div>
         </div>
       </div>
 
-      <button  className="bg-[#00F5A0] text-[#363256] font-semibold px-20 py-4 rounded-xl text-base shadow-md transition transform hover:bg-white active:scale-95">
+      <button 
+        onClick={handleToDashboard}
+        className="bg-[#00F5A0] text-[#363256] font-semibold px-20 py-4 rounded-xl text-base shadow-md transition transform hover:bg-white active:scale-95"
+      >
         To Dashboard
       </button>
       <h1 ref={textRef} className="text-[#0EFF95] text-2xl md:text-4xl font-semibold text-center max-w-lg leading-tight">

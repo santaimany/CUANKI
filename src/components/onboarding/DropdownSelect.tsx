@@ -41,10 +41,10 @@ export default function DropdownSelect({ options, value, onChange }: Props) {
       </div>
 
       {isOpen && (
-        <div className="absolute top-full mt-2 bg-white rounded-lg w-full shadow-lg overflow-hidden z-10">
-          {options.map((o) => (
+        <div className="absolute top-full mt-2 bg-white rounded-lg w-full shadow-lg overflow-hidden z-10 max-h-60 overflow-y-auto">
+          {options.map((o, index) => (
             <div
-              key={o}
+              key={`${o}-${index}`}
               onClick={() => handleOptionClick(o)}
               className={`px-6 py-3 text-center cursor-pointer transition-colors duration-150 ${
                 value === o 

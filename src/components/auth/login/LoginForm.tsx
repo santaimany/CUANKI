@@ -1,8 +1,52 @@
 'use client';
 import { useState } from 'react';
+import { loginUser } from '@/lib/services/authService';
+import { hasCompletedOnboarding, setOnboardingCompleted } from '@/lib/utils/auth';
 
 const LoginForm = () => {
     const [focusedField, setFocusedField] = useState<string | null>(null);
+    const [formData, setFormData] = useState({
+        email: '',
+        password: '',
+    });
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setFormData((prev) => ({
+            ...prev,
+            [name]: value,
+        }));
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setError(null);
+        setIsLoading(true);
+
+        try {
+            const response = await loginUser(formData);
+            console.log('Login successful:', response);
+
+            // Check apakah user sudah complete onboarding
+            const hasCompleted = response.data?.user?.has_completed_onboarding || hasCompletedOnboarding();
+            
+            if (hasCompleted) {
+                setOnboardingCompleted(true);
+                window.location.href = '/';
+            } else {
+                setOnboardingCompleted(false);
+                window.location.href = '/get-started';
+            }
+        } catch (err) {
+            const errorMessage = err instanceof Error ? err.message : 'Login failed. Please check your credentials.';
+            setError(errorMessage);
+            console.error('Login error:', err);
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
     const getFieldStyle = (fieldName: string, baseColor: string = 'bg-white') => {
         if (focusedField === null) {
@@ -24,14 +68,25 @@ const LoginForm = () => {
                 Enter your email & password to access your account
             </p>
 
-            <form className="space-y-6">
+            <form onSubmit={handleSubmit} className="space-y-6">
+                {/* Error Message */}
+                {error && (
+                    <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-2xl text-sm">
+                        {error}
+                    </div>
+                )}
+
                 {/* Email Input */}
                 <div>
                     <input
                         type="email"
+                        name="email"
+                        value={formData.email}
+                        onChange={handleChange}
                         placeholder="Email"
                         onFocus={() => setFocusedField('email')}
                         onBlur={() => setFocusedField(null)}
+                        required
                         className={`w-full px-4 py-4 sm:px-6 sm:py-5 rounded-2xl border-none text-gray-700 placeholder-gray-400 focus:outline text-lg sm:text-xl transition-all focus:duration-300 ${getFieldStyle('email', 'bg-white')}`}
                     />
                 </div>
@@ -40,9 +95,13 @@ const LoginForm = () => {
                 <div className="relative">
                     <input
                         type="password"
+                        name="password"
+                        value={formData.password}
+                        onChange={handleChange}
                         placeholder="Enter your password"
                         onFocus={() => setFocusedField('password')}
                         onBlur={() => setFocusedField(null)}
+                        required
                         className={`w-full px-4 py-4 sm:px-6 sm:py-5 rounded-2xl border-none text-gray-700 placeholder-gray-400 focus:outline text-lg sm:text-xl pr-14 transition-all focus:duration-300 ${getFieldStyle('password', 'bg-white')}`}
                     />
                     <button
@@ -76,9 +135,10 @@ const LoginForm = () => {
                 {/* Login Button */}
                 <button
                     type="submit"
-                    className="w-full bg-[#363256] text-white py-4 sm:py-5 rounded-2xl text-lg sm:text-xl font-semibold hover:bg-[#2d2747] transition-colors duration-300 mt-6 sm:mt-10"
+                    disabled={isLoading}
+                    className="w-full bg-[#363256] text-white py-4 sm:py-5 rounded-2xl text-lg sm:text-xl font-semibold hover:bg-[#2d2747] transition-colors duration-300 mt-6 sm:mt-10 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                    Login
+                    {isLoading ? 'Logging in...' : 'Login'}
                 </button>
 
                 {/* Google Login Button */}

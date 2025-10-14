@@ -1,9 +1,61 @@
 'use client';
 
 import React, { useState } from 'react';
+import { registerUser } from '@/lib/services/authService';
 
 const RegisterForm = () => {
-       const [focusedField, setFocusedField] = useState<string | null>(null);
+    const [focusedField, setFocusedField] = useState<string | null>(null);
+    const [formData, setFormData] = useState({
+        first_name: '',
+        last_name: '',
+        email: '',
+        password: '',
+        password_confirmation: '',
+    });
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+    const [success, setSuccess] = useState(false);
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setFormData((prev) => ({
+            ...prev,
+            [name]: value,
+        }));
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setError(null);
+        setSuccess(false);
+        setIsLoading(true);
+
+        try {
+            const response = await registerUser(formData);
+            setSuccess(true);
+            console.log('Registration successful:', response);
+            
+            // Verify token is saved
+            const savedToken = localStorage.getItem('token');
+            console.log('Token saved after registration:', !!savedToken);
+            
+            if (!savedToken) {
+                console.error('Token not saved! Response structure:', response);
+                // Still redirect but user will need to login
+            }
+            
+            // Redirect ke get-started setelah 1 detik
+            setTimeout(() => {
+                window.location.href = '/get-started';
+            }, 1000);
+        } catch (err) {
+            const errorMessage = err instanceof Error ? err.message : 'Registration failed. Please try again.';
+            setError(errorMessage);
+            console.error('Registration error:', err);
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
     const getFieldStyle = (fieldName: string, baseColor: string = 'bg-white') => {
         if (focusedField === null) {
@@ -24,24 +76,46 @@ const RegisterForm = () => {
                 Already have an account? <a href="/login" className="underline hover:no-underline">Login</a>
             </p>
 
-            <form className="space-y-6">
+            <form onSubmit={handleSubmit} className="space-y-6">
+                {/* Error Message */}
+                {error && (
+                    <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-2xl">
+                        {error}
+                    </div>
+                )}
+
+                {/* Success Message */}
+                {success && (
+                    <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-2xl">
+                        Registration successful! Redirecting...
+                    </div>
+                )}
+
                 {/* First Name & Last Name */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                         <input
                             type="text"
+                            name="first_name"
+                            value={formData.first_name}
+                            onChange={handleChange}
                             placeholder="First Name"
                             onFocus={() => setFocusedField('firstName')}
                             onBlur={() => setFocusedField(null)}
+                            required
                             className={`w-full px-4 py-4 sm:px-6 sm:py-5 rounded-2xl border-none text-gray-700 placeholder-gray-500 focus:outline text-lg sm:text-xl transition-all focus:duration-300 ${getFieldStyle('firstName', 'bg-white')}`}
                         />
                     </div>
                     <div>
                         <input
                             type="text"
+                            name="last_name"
+                            value={formData.last_name}
+                            onChange={handleChange}
                             placeholder="Last Name"
                             onFocus={() => setFocusedField('lastName')}
                             onBlur={() => setFocusedField(null)}
+                            required
                             className={`w-full px-4 py-4 sm:px-6 sm:py-5 rounded-2xl border-none text-gray-700 placeholder-gray-500 focus:outline text-lg sm:text-xl transition-all focus:duration-300 ${getFieldStyle('lastName', 'bg-white')}`}
                         />
                     </div>
@@ -51,9 +125,13 @@ const RegisterForm = () => {
                 <div>
                     <input
                         type="email"
+                        name="email"
+                        value={formData.email}
+                        onChange={handleChange}
                         placeholder="Email"
                         onFocus={() => setFocusedField('email')}
                         onBlur={() => setFocusedField(null)}
+                        required
                         className={`w-full px-4 py-4 sm:px-6 sm:py-5 rounded-2xl border-none text-gray-700 placeholder-gray-500 focus:outline text-lg sm:text-xl transition-all focus:duration-300 ${getFieldStyle('email', 'bg-white')}`}
                     />
                 </div>
@@ -62,9 +140,14 @@ const RegisterForm = () => {
                 <div className="relative">
                     <input
                         type="password"
+                        name="password"
+                        value={formData.password}
+                        onChange={handleChange}
                         placeholder="Enter your password"
                         onFocus={() => setFocusedField('password')}
                         onBlur={() => setFocusedField(null)}
+                        required
+                        minLength={8}
                         className={`w-full px-4 py-4 sm:px-6 sm:py-5 rounded-2xl border-none text-gray-700 placeholder-gray-500 focus:outline text-lg sm:text-xl pr-14 transition-all focus:duration-300 ${getFieldStyle('password', 'bg-white')}`}
                     />
                     <button
@@ -76,6 +159,22 @@ const RegisterForm = () => {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                         </svg>
                     </button>
+                </div>
+
+                {/* Password Confirmation Input */}
+                <div className="relative">
+                    <input
+                        type="password"
+                        name="password_confirmation"
+                        value={formData.password_confirmation}
+                        onChange={handleChange}
+                        placeholder="Confirm your password"
+                        onFocus={() => setFocusedField('passwordConfirmation')}
+                        onBlur={() => setFocusedField(null)}
+                        required
+                        minLength={8}
+                        className={`w-full px-4 py-4 sm:px-6 sm:py-5 rounded-2xl border-none text-gray-700 placeholder-gray-500 focus:outline text-lg sm:text-xl pr-14 transition-all focus:duration-300 ${getFieldStyle('passwordConfirmation', 'bg-white')}`}
+                    />
                 </div>
 
                 {/* Terms Agreement */}
@@ -93,9 +192,10 @@ const RegisterForm = () => {
                 {/* Create Account Button */}
                 <button
                     type="submit"
-                    className="w-full bg-[#50488A] text-white py-4 sm:py-5 rounded-3xl text-lg sm:text-xl font-semibold hover:bg-[#2d2747] transition-colors duration-300 mt-6 sm:mt-10"
+                    disabled={isLoading}
+                    className="w-full bg-[#50488A] text-white py-4 sm:py-5 rounded-3xl text-lg sm:text-xl font-semibold hover:bg-[#2d2747] transition-colors duration-300 mt-6 sm:mt-10 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                    Create account
+                    {isLoading ? 'Creating account...' : 'Create account'}
                 </button>
 
                 {/* Google Signup Button */}
