@@ -1,7 +1,6 @@
 'use client';
 import { useState } from 'react';
 import { loginUser } from '@/lib/services/authService';
-import { hasCompletedOnboarding, setOnboardingCompleted } from '@/lib/utils/auth';
 
 const LoginForm = () => {
     const [focusedField, setFocusedField] = useState<string | null>(null);
@@ -29,15 +28,28 @@ const LoginForm = () => {
             const response = await loginUser(formData);
             console.log('Login successful:', response);
 
+            // Save token to localStorage (should be done in authService)
+            if (response.data?.token) {
+                localStorage.setItem('token', response.data.token);
+            }
+
             // Check apakah user sudah complete onboarding
-            const hasCompleted = response.data?.user?.has_completed_onboarding || hasCompletedOnboarding();
+            // User has completed onboarding if all required fields are filled
+            const user = response.data?.user;
+            const hasCompleted = !!(
+                user?.username && 
+                user?.age !== null && 
+                user?.origin_id !== null && 
+                user?.status !== null && 
+                user?.origin !== null
+            );
             
             if (hasCompleted) {
-                setOnboardingCompleted(true);
-                window.location.href = '/';
+                // Redirect to dashboard
+                window.location.href = '/dashboard';
             } else {
-                setOnboardingCompleted(false);
-                window.location.href = '/get-started';
+                // Redirect to onboarding
+                window.location.href = '/onboarding';
             }
         } catch (err) {
             const errorMessage = err instanceof Error ? err.message : 'Login failed. Please check your credentials.';

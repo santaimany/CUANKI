@@ -5,10 +5,18 @@ interface GoalHeaderProps {
   goalName: string;
   currentAmount: number;
   targetAmount: number;
+  formattedCurrent?: string;
+  formattedTarget?: string;
 }
 
-const GoalHeader: React.FC<GoalHeaderProps> = ({ goalName, currentAmount, targetAmount }) => {
-  const percentage = Math.min((currentAmount / targetAmount) * 100, 100);
+const GoalHeader: React.FC<GoalHeaderProps> = ({ 
+  goalName, 
+  currentAmount, 
+  targetAmount,
+  formattedCurrent,
+  formattedTarget 
+}) => {
+  const percentage = targetAmount > 0 ? Math.min((currentAmount / targetAmount) * 100, 100) : 0;
 
   return (
     <div className="bg-gradient-to-tl from-[#7971BC] to-[#373456] rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 mb-4 sm:mb-6 relative">
@@ -37,7 +45,7 @@ const GoalHeader: React.FC<GoalHeaderProps> = ({ goalName, currentAmount, target
         <div className='flex flex-col sm:flex-row justify-between gap-2 sm:gap-4'>
           <h3 className="text-white text-lg sm:text-xl md:text-2xl font-semibold">{goalName}</h3>
           <p className="text-white/90 text-base sm:text-lg md:text-xl whitespace-nowrap">
-            Rp {currentAmount.toLocaleString('id-ID')}/Rp {(targetAmount / 1000).toFixed(0)}t
+            {formattedCurrent || `Rp ${currentAmount.toLocaleString('id-ID')}`}/{formattedTarget || `Rp ${(targetAmount / 1000).toFixed(0)}t`}
           </p>
         </div>
       </div>

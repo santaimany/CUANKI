@@ -1,9 +1,15 @@
 'use client';
 import React, { useState } from 'react';
 import ProfileModal from './ProfileModal';
+import { GreetingUsersResponse } from '@/types/api';
 
-const UserProfileHeader = () => {
+interface UserProfileHeaderProps {
+  userData?: GreetingUsersResponse | null;
+}
+
+const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({ userData }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const username = userData?.data?.user?.username || 'User';
 
   return (
     <>
@@ -37,7 +43,7 @@ const UserProfileHeader = () => {
         </div>
         
         {/* Nama Pengguna */}
-        <span className="text-sm sm:text-base md:text-lg lg:text-xl font-semibold">AndrianFaikha</span>
+        <span className="text-sm sm:text-base md:text-lg lg:text-xl font-semibold">{username}</span>
 
         {/* Ikon Dropdown */}
         <svg

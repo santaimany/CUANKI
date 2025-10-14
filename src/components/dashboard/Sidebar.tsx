@@ -3,7 +3,7 @@
 import React, { useRef, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { gsap } from 'gsap';
 
 import CuankiLogo from "@/assets/landingpage/logo/cuanki-logo.svg";
@@ -20,11 +20,21 @@ interface SidebarProps {
 
 const Sidebar: React.FC<SidebarProps> = ({ className = '' }) => {
   const pathname = usePathname();
+  const router = useRouter();
 
   const indicatorRef = useRef<HTMLDivElement>(null);
   const itemsRef = useRef<(HTMLLIElement | null)[]>([]);
   // PENAMBAHAN: Ref untuk menandai render pertama kali
   const isInitialLoad = useRef(true);
+
+  const handleLogout = () => {
+    // Clear token from localStorage
+    localStorage.removeItem('token');
+    localStorage.removeItem('refresh_token');
+    
+    // Redirect to login
+    router.push('/login');
+  };
 
   const menuItems = React.useMemo(() => [
     { name: 'Homepage', path: '/dashboard', icon: <Image src={HomeIcon} alt="Homepage" width={24} height={24} /> },
@@ -135,7 +145,10 @@ const Sidebar: React.FC<SidebarProps> = ({ className = '' }) => {
             </nav>
 
             <div className="p-6">
-              <button className="w-full bg-[#00F5A0] text-[#363256] font-semibold py-3 px-4 rounded-full hover:bg-[#00e68f] transition-colors duration-200">
+              <button 
+                onClick={handleLogout}
+                className="w-full bg-[#00F5A0] text-[#363256] font-semibold py-3 px-4 rounded-full hover:bg-[#00e68f] transition-colors duration-200"
+              >
                 Logout
               </button>
             </div>

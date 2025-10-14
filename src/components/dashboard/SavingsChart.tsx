@@ -9,11 +9,12 @@ import {
   LineElement,
   Tooltip,
   Filler,
-  type ChartType,
   type TooltipItem,
   type ScriptableContext,
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
+
+import { GoalsProgressResponse } from '@/types/api';
 
 // 2. Registrasi semua elemen yang akan digunakan
 ChartJS.register(
@@ -25,9 +26,23 @@ ChartJS.register(
   Filler // <-- Registrasi Filler plugin
 );
 
-const SavingsChart = () => {
+interface SavingsChartProps {
+  goalsData?: GoalsProgressResponse | null;
+}
+
+const SavingsChart: React.FC<SavingsChartProps> = ({ goalsData }) => {
+  // Default data jika tidak ada data dari API
   const labels = ['Jan', 'Feb', 'Mei', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Des'];
   const dataPoints = [20000, 35000, 30000, 45000, 40000, 50000, 65000, 70000, 85000, 80000];
+  
+  // Informasi dari API untuk ditampilkan di chart
+  const currentAmount = goalsData?.data?.main_saving_target?.current_amount || 0;
+  const targetAmount = goalsData?.data?.main_saving_target?.amount || 0;
+  const monthlySavingTarget = goalsData?.data?.finance_plan?.monthly_saving_target || 0;
+  
+  // TODO: Bisa dikembangkan untuk menggunakan data historis dari backend
+  // Saat ini menggunakan mock data untuk visualisasi
+  console.log('Chart Data:', { currentAmount, targetAmount, monthlySavingTarget });
 
   // 3. Plugin kustom untuk menggambar garis vertikal saat hover
   const verticalLinePlugin = {

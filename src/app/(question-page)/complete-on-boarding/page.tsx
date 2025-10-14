@@ -3,7 +3,6 @@
 import React, { useLayoutEffect, useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { gsap } from 'gsap';
-import { setOnboardingCompleted } from '@/lib/utils/auth';
 import { getAdvice, type AdviceResponse } from '@/lib/services/onboardingService';
 
 // Asumsi path import ini sudah benar
@@ -31,10 +30,8 @@ export default function OnboardingCompletePage() {
   };
 
   const handleToDashboard = () => {
-    // Set flag onboarding completed
-    setOnboardingCompleted(true);
-    // Redirect ke dashboard/homepage
-    window.location.href = '/';
+    // Redirect to dashboard
+    window.location.href = '/dashboard';
   };
 
   // Fetch advice saat component mount

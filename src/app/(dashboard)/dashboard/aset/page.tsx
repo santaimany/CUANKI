@@ -1,25 +1,34 @@
 'use client';
-import React from 'react';
+import React, { useState } from 'react';
 import AssetSummary from '@/components/dashboard/aset/AssetSummary';
 import AssetCards from '@/components/dashboard/aset/AssetCards';
 import AssetProgress from '@/components/dashboard/aset/AssetProgress';
 import UserProfile from '@/components/dashboard/UserProfile';
 import AIReminder from '@/components/dashboard/AIReminder';
+import { UserAccount } from '@/types/api';
 
 export default function AsetPage() {
+  const [accounts, setAccounts] = useState<UserAccount[]>([]);
+
+  const handleAccountsChange = (updatedAccounts: UserAccount[]) => {
+    setAccounts(updatedAccounts);
+  };
+
   return (
     <div className="min-h-screen bg-[#363256] pb-20 md:pb-6">
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 sm:gap-6 h-full p-3 sm:p-4 md:p-6 pb-20 md:pb-6">
         {/* Left Column - Main Content (3 columns) */}
         <div className="lg:col-span-3 space-y-4 sm:space-y-6">
           {/* Title */}
-          <h1 className="text-white text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold">Kategori aset kamu</h1>
+          <h1 className="text-white text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold">
+            Kategori aset kamu
+          </h1>
           
           {/* Asset Summary with Pie Chart */}
-          <AssetSummary totalAmount={7000000} />
+          <AssetSummary accounts={accounts} />
 
           {/* Asset Cards with Pagination */}
-          <AssetCards showButtons={false} />
+          <AssetCards showButtons={false} onAccountsChange={handleAccountsChange} />
 
           {/* Action Buttons - Show on mobile */}
           <div className="flex flex-col sm:flex-row lg:hidden gap-2 sm:gap-3">

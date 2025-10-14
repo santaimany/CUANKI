@@ -2,11 +2,24 @@
 import React from 'react';
 import { Chart as ChartJS, ArcElement } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
+import { GreetingUsersResponse } from '@/types/api';
 
 ChartJS.register(ArcElement);
 
-const BalanceOverview = () => {
-  const progress = 70;
+interface BalanceOverviewProps {
+  userData?: GreetingUsersResponse | null;
+}
+
+const BalanceOverview: React.FC<BalanceOverviewProps> = ({ userData }) => {
+  // Get daily budget data
+  const dailyBudget = userData?.data?.daily_budget;
+  const currentAmount = dailyBudget?.current_amount || 0;
+  const initialAmount = dailyBudget?.initial_amount || 0;
+  
+  // Calculate progress percentage (how much budget has been used)
+  const progress = initialAmount > 0 
+    ? Math.round((currentAmount / initialAmount) * 100)
+    : 0;
 
   const data = {
     datasets: [{
@@ -28,6 +41,12 @@ const BalanceOverview = () => {
     }
   };
 
+  const userName = userData?.data?.user?.name || 'User';
+  const firstName = typeof userName === 'string' ? userName.split(' ')[0] : 'User';
+  
+  // Get formatted budget amount
+  const budgetFormatted = dailyBudget?.formatted?.current_amount || 'Rp 0';
+
   return (
     <div className="bg-[#6F64A7] rounded-2xl p-4 sm:p-5 md:p-6 min-h-[300px] md:h-[40vh] text-white relative">
       <div className="flex flex-col md:flex-row items-center md:items-start gap-4 md:gap-6">
@@ -47,8 +66,8 @@ const BalanceOverview = () => {
         </div>
         
         <div className="flex-1 text-center md:text-left">
-          <p className="text-xs sm:text-sm md:text-base mb-1 sm:mb-2">Hai Ian!, ini uang kamu hari ini:</p>
-          <h2 className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl xl:text-7xl font-bold mb-3 sm:mb-4">Rp 70.000,00</h2>
+          <p className="text-xs sm:text-sm md:text-base mb-1 sm:mb-2">Hai {firstName}!, ini uang kamu hari ini:</p>
+          <h2 className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl xl:text-7xl font-bold mb-3 sm:mb-4">{budgetFormatted}</h2>
           <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
             <button className="bg-[#00F5A0] text-[#363256] px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl font-semibold border-b-2 border-white hover:opacity-90 transition-opacity">
               + pendapatan

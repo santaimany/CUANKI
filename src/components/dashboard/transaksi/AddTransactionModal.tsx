@@ -1,6 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { getExpenseCategories } from '@/lib/api/user';
+import { ExpenseCategory } from '@/types/api';
 
 interface AddTransactionModalProps {
   isOpen: boolean;
@@ -31,16 +33,25 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
     source: '',
   });
 
-  const expenseCategories = [
-    'Makanan',
-    'Transportasi',
-    'Hiburan',
-    'Belanja',
-    'Tagihan',
-    'Kesehatan',
-    'Pendidikan',
-    'Lainnya',
-  ];
+  const [expenseCategories, setExpenseCategories] = useState<ExpenseCategory[]>([]);
+  const [loadingCategories, setLoadingCategories] = useState(false);
+
+  useEffect(() => {
+    if (isOpen && type === 'expense') {
+      const fetchCategories = async () => {
+        setLoadingCategories(true);
+        try {
+          const categories = await getExpenseCategories();
+          setExpenseCategories(categories);
+        } catch (error) {
+          console.error('Error fetching categories:', error);
+        } finally {
+          setLoadingCategories(false);
+        }
+      };
+      fetchCategories();
+    }
+  }, [isOpen, type]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -118,11 +129,14 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
                 onChange={handleChange}
                 className="w-full bg-white rounded-xl px-4 py-3 pr-16 text-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-[#00F5A0] appearance-none"
                 required
+                disabled={loadingCategories}
               >
-                <option value="">Makanan</option>
+                <option value="">
+                  {loadingCategories ? 'Loading...' : 'Pilih Kategori'}
+                </option>
                 {expenseCategories.map((cat) => (
-                  <option key={cat} value={cat}>
-                    {cat}
+                  <option key={cat.id} value={cat.name}>
+                    {cat.name}
                   </option>
                 ))}
               </select>

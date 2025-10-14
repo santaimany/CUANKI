@@ -137,7 +137,7 @@ export default function OnboardingPage() {
         monthly_income: parseInt(answers['income']) || 0,
         income_date: parseInt(answers['payday']) || 1,
         saving_target_amount: parseInt(answers['nabung']) || 0,
-        saving_target_duration: parseInt(answers['target']) * 12 || 0, // Convert tahun ke bulan
+        saving_target_duration: parseInt(answers['target']) || 0, // Backend expects years, not months
       };
       
       console.log('📝 Step 3: Submitting plan data:', planData);

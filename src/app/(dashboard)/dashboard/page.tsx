@@ -1,4 +1,5 @@
-import React from 'react';
+'use client';
+import React, { useEffect, useState } from 'react';
 import UserProfileHeader from '@/components/dashboard/UserProfile';
 import GoalsProgress from '@/components/dashboard/homepage/GoalsProgress';
 import Streak from '@/components/dashboard/homepage/Streak';
@@ -8,13 +9,52 @@ import SavingsChart from '@/components/dashboard/SavingsChart';
 import CalendarView from '@/components/dashboard/homepage/CalendarView'; 
 import MyAccounts from '@/components/dashboard/homepage/card/MyAccount';
 import TransactionHistoryList from '@/components/dashboard/homepage/TransactionHistory';
+import { GreetingUsersResponse } from '@/types/api';
+import { getUserGreeting } from '@/lib/api/user';
 
 const DashboardPage = () => {
+  const [userData, setUserData] = useState<GreetingUsersResponse | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchGreeting = async () => {
+      try {
+        const data = await getUserGreeting();
+        console.log('Dashboard userData:', JSON.stringify(data, null, 2));
+        setUserData(data);
+      } catch (error) {
+        console.error('Error fetching greeting:', error);
+        setError('Failed to load dashboard data');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchGreeting();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="pb-20 md:pb-0 flex items-center justify-center min-h-screen">
+        <div className="text-white text-xl">Loading...</div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="pb-20 md:pb-0 flex items-center justify-center min-h-screen">
+        <div className="text-white text-xl">{error}</div>
+      </div>
+    );
+  }
+
   return (
     <div className="pb-20 md:pb-0">
       {/* Mobile Layout: Stack vertically - No UserProfile */}
       <div className="md:hidden flex flex-col gap-4">
-        <BalanceOverview />
+        <BalanceOverview userData={userData} />
         <GoalsProgress />
         <Streak />
         <MyAccounts />
@@ -28,12 +68,12 @@ const DashboardPage = () => {
       <div className="hidden md:grid grid-cols-4 gap-6 h-full">
         {/* BalanceOverview: Baris 1-2, Kolom 1-3 */}
         <div className="col-span-3 row-span-2">
-          <BalanceOverview />
+          <BalanceOverview userData={userData} />
         </div>
 
         {/* UserProfileHeader: Baris 1, Kolom 4 */}
         <div className="col-start-4 row-start-1">
-          <UserProfileHeader />
+          <UserProfileHeader userData={userData} />
         </div>
 
         {/* MyAccounts: Baris 2-3, Kolom 4 */}

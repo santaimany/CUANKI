@@ -1,0 +1,19 @@
+<!-- Simple SVG icon template for Cuanki -->
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="512" height="512" fill="#363256" rx="96"/>
+  
+  <!-- Coin Icon (Cuanki = Cuan/Money) -->
+  <circle cx="256" cy="256" r="140" fill="#00F5A0" opacity="0.2"/>
+  <circle cx="256" cy="256" r="120" fill="none" stroke="#00F5A0" stroke-width="12"/>
+  
+  <!-- Dollar/Rupiah Symbol -->
+  <text x="256" y="300" font-family="Arial, sans-serif" font-size="180" font-weight="bold" fill="#00F5A0" text-anchor="middle">
+    Rp
+  </text>
+  
+  <!-- App Name -->
+  <text x="256" y="450" font-family="Arial, sans-serif" font-size="48" font-weight="600" fill="#FFFFFF" text-anchor="middle">
+    CUANKI
+  </text>
+</svg>
