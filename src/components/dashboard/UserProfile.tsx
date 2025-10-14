@@ -1,10 +1,5 @@
 // components/UserProfileHeader.jsx atau nama file yang sesuai
 import React from 'react';
-import Image from 'next/image'; // Menggunakan Image dari Next.js untuk optimasi gambar
-
-// Asumsikan Anda memiliki gambar profil di suatu tempat,
-// misalnya di folder public atau assets
-import UserAvatar from '@/assets/dashboard/user-avatar.png'; // Ganti dengan path gambar avatar Anda
 
 const UserProfileHeader = () => {
   return (

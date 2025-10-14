@@ -1,11 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 
-type Props = {
+type Props = Readonly<{
   options: string[];
   value?: string;
   onChange?: (v: string) => void;
-  // onSelectNext dihapus dari props karena tidak lagi digunakan di sini
-};
+}>;
 
 export default function DropdownSelect({ options, value, onChange }: Props) {
   const [isOpen, setIsOpen] = useState(false);

@@ -25,12 +25,12 @@ const Sidebar: React.FC<SidebarProps> = ({ className = '' }) => {
   // PENAMBAHAN: Ref untuk menandai render pertama kali
   const isInitialLoad = useRef(true);
 
-  const menuItems = [
+  const menuItems = React.useMemo(() => [
     { name: 'Homepage', path: '/dashboard', icon: <Image src={HomeIcon} alt="Homepage" width={24} height={24} /> },
     { name: 'Transaksi', path: '/dashboard/transaksi', icon: <TransaksiIcon/> },
     { name: 'Aset', path: '/dashboard/aset', icon: <TabunganIcon/> },
     { name: 'Goals', path: '/dashboard/goals', icon: <GoalsIcon/> },
-  ];
+  ], []);
 
   // MODIFIKASI: useEffect kini memiliki logika berbeda untuk animasi awal
   useEffect(() => {
@@ -87,7 +87,7 @@ const Sidebar: React.FC<SidebarProps> = ({ className = '' }) => {
               {menuItems.map((item, index) => {
                 const isActive = pathname === item.path;
                 return (
-                  <li key={item.path} ref={el => itemsRef.current[index] = el} className="relative z-10">
+                  <li key={item.path} ref={el => { itemsRef.current[index] = el; }} className="relative z-10">
                     <Link
                       href={item.path}
                       className={`flex items-center gap-4 py-3 text-lg font-medium transition-colors duration-200 w-full pl-10 pr-4

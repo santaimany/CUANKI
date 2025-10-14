@@ -13,18 +13,18 @@ type Question = {
   placeholder?: string;
 };
 
-type Props = {
+type Props = Readonly<{
   question: Question;
   value?: string;
   onChange?: (v: string) => void;
   onSelectNext?: (v: string) => void;
   availableBanks?: string[];
-};
+}>;
 
-export default function QuestionRenderer({ question, value, onChange, onSelectNext, availableBanks = [] }: Props) {
+export default function QuestionRenderer({ question, value, onChange, availableBanks = [] }: Props) {
   switch (question.type) {
     case 'dropdown':
-      return <DropdownSelect options={question.options || []} value={value} onChange={onChange} onSelectNext={onSelectNext} />;
+      return <DropdownSelect options={question.options || []} value={value} onChange={onChange} />;
     
     case 'options':
       return <OptionGroup options={question.options || []} onSelect={onChange || (() => {})} selected={value} />;
@@ -33,7 +33,7 @@ export default function QuestionRenderer({ question, value, onChange, onSelectNe
       return <AddList items={value ? (value.split('|') || []) : []} onChange={(items) => onChange?.(items.join('|'))} availableBanks={availableBanks} />;
     
     case 'currency':
-      return <CurrencyInput value={value} onChange={onChange} placeholder={question.placeholder} />;
+      return <CurrencyInput value={value || ''} onChange={onChange || (() => {})} placeholder={question.placeholder} />;
     
     case 'calendar':
       return <CalendarPicker value={value} onChange={onChange} />;
