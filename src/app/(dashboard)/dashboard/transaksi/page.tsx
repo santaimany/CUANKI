@@ -13,20 +13,20 @@ const TransaksiPage = () => {
   const [transactionType, setTransactionType] = useState<'expense' | 'income'>('expense');
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 h-full">
+    <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 sm:gap-6 h-full pb-20 md:pb-0">
       {/* Left Section - Main Content (3 columns) */}
-      <div className="lg:col-span-3 space-y-6">
+      <div className="lg:col-span-3 space-y-4 sm:space-y-6">
         {/* Transaction Summary Card */}
         <TransactionSummary />
         {/* Tabs and Search */}
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
           <TransactionTabs onTabChange={setTransactionType} />
           <SearchAndFilter />
         </div>
         {/* Transaction List */}
         <TransactionList filterType={transactionType} />
       </div> 
-      <div className="lg:col-span-1 flex flex-col gap-6">
+      <div className="hidden lg:flex lg:col-span-1 flex-col gap-6">
         <UserProfileHeader />
         <AIReminder />
         <MonthlyExpensesSummary />

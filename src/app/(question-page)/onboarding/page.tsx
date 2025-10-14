@@ -342,25 +342,25 @@ export default function OnboardingPage() {
 
   return (
   
-      <div className="w-full  max-w-7xl mx-auto px-6 flex flex-col h-[100dvh]">
-        <div className="flex items-center gap-4 pt-8 pb-4">
-          <button onClick={goBack} className="text-white/60 text-lg">←</button>
+      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 flex flex-col h-[100dvh]">
+        <div className="flex items-center gap-3 sm:gap-4 pt-6 sm:pt-8 pb-4">
+          <button onClick={goBack} className="text-white/60 text-base sm:text-lg">←</button>
           <div className="flex-1">
             <ProgressBar value={step} max={QUESTIONS.length - 1} />
           </div>
         </div>
 
         {isChatLayout ? (
-          <div className="flex items-start gap-8 flex-1 overflow-hidden">
-            <AvatarBubble src={Avatar} size={112} />
+          <div className="flex items-start gap-3 sm:gap-6 md:gap-8 flex-1 overflow-hidden">
+            <AvatarBubble src={Avatar} size={window.innerWidth < 640 ? 64 : window.innerWidth < 768 ? 80 : 112} />
             <div className="flex-1 flex flex-col h-full">
-                   <div className="flex-1 flex flex-col gap-4 overflow-y-auto pr-3">
+                   <div className="flex-1 flex flex-col gap-3 sm:gap-4 overflow-y-auto pr-2 sm:pr-3">
                 {messages.map((m, idx) => (
-                  <div key={idx} className={`flex items-start gap-4 ${m.kind === 'user' ? 'justify-end' : 'justify-start'}`}>
+                  <div key={idx} className={`flex items-start gap-2 sm:gap-3 md:gap-4 ${m.kind === 'user' ? 'justify-end' : 'justify-start'}`}>
                     {m.kind === 'user' && (
                       <>
                         <ChatBubble side="right">{m.text}</ChatBubble>
-                        <AvatarBubble src={AvatarRight} size={48} />
+                        <AvatarBubble src={AvatarRight} size={window.innerWidth < 640 ? 32 : 48} />
                       </>
                     )}
                     {m.kind === 'bot' && (
@@ -370,7 +370,7 @@ export default function OnboardingPage() {
                 ))}
                 <div ref={messagesEndRef} />
               </div>
-              <div className="pt-4 pb-8">
+              <div className="pt-3 sm:pt-4 pb-6 sm:pb-8">
                 <InputBar
                   value={answers[current.id] || ''}
                   placeholder={current.placeholder || 'Type your answer'}
@@ -382,16 +382,15 @@ export default function OnboardingPage() {
             </div>
           </div>
         ) : (
-          <div className="w-full flex items-center justify-center flex-1">
-            <div className="w-full max-w-3xl">
-              <div className="flex items-start gap-8">
-                <AvatarBubble src={Avatar} size={112} />
+          <div className="w-full flex items-center justify-center flex-1 overflow-y-auto">
+            <div className="w-full max-w-3xl py-4">
+              <div className="flex items-start gap-3 sm:gap-6 md:gap-8">
+                <AvatarBubble src={Avatar} size={window.innerWidth < 640 ? 64 : window.innerWidth < 768 ? 80 : 112} />
                 <div className="flex-1">
-                  <div className="mb-8">
-                    {/* 2. GUNAKAN 'displayText' DI SINI */}
+                  <div className="mb-6 sm:mb-8">
                     <ChatBubble side="left">{displayText}</ChatBubble>
                   </div>
-                  <div className="mb-8">
+                  <div className="mb-6 sm:mb-8">
                     <QuestionRenderer
                       question={current}
                       value={answers[current.id]}
@@ -404,7 +403,7 @@ export default function OnboardingPage() {
                     <button
                       onClick={handleContinue}
                       disabled={!hasAnswerFor(current)}
-                      className={`px-6 py-3 cursor-pointer rounded-full text-black font-semibold transition text-lg ${hasAnswerFor(current) ? 'bg-[#00F5A0]' : 'bg-white/20 cursor-not-allowed'}`}>
+                      className={`px-5 sm:px-6 py-2.5 sm:py-3 cursor-pointer rounded-full text-black font-semibold transition text-base sm:text-lg ${hasAnswerFor(current) ? 'bg-[#00F5A0]' : 'bg-white/20 cursor-not-allowed'}`}>
                       Continue
                     </button>
                   </div>

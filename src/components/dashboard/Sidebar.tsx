@@ -64,53 +64,75 @@ const Sidebar: React.FC<SidebarProps> = ({ className = '' }) => {
   }, [pathname, menuItems]);
 
   return (
-    <div className="h-screen py-4">
-      <div className={`h-full w-64 ml-4 flex flex-col bg-[#50488A] rounded-3xl ${className}`}>
-        <div className="bg-[#2E2A4A] text-center pt-12 pb-10 rounded-3xl">
-          <div className="flex justify-center mb-6 ml-4">
-            <Image src={CuankiLogo} alt="Cuanki Logo" width={52} height={52} className="w-full h-auto" />
-          </div>
-          <div className='ml-4 text-left'>
-            <h2 className="text-[#00F5A0] text-3xl font-semibold">Financial</h2>
-            <h2 className="text-white text-3xl font-bold">Dashboard</h2>
-          </div>
+    <>
+      {/* Mobile Bottom Navigation */}
+      <div className="md:hidden fixed bottom-0 left-0 right-0 bg-[#50488A] border-t border-white/10 z-50">
+        <div className="flex justify-around items-center py-3">
+          {menuItems.map((item) => {
+            const isActive = pathname === item.path;
+            return (
+              <Link
+                key={item.path}
+                href={item.path}
+                className={`flex flex-col items-center gap-1 px-4 py-2 rounded-lg transition-colors duration-200
+                  ${isActive ? 'text-[#00F5A0]' : 'text-white/60'}`}
+              >
+                <div className="w-6 h-6">{item.icon}</div>
+                <span className="text-xs font-medium">{item.name}</span>
+              </Link>
+            );
+          })}
         </div>
+      </div>
 
-        <div className="bg-[#50488A] flex-grow flex flex-col justify-between rounded-b-4xl">
-          <nav className="mt-10 px-6">
-            <ul className="space-y-4 relative">
-              <div ref={indicatorRef} className="absolute -left-6 w-full bg-[#363256] rounded-r-full opacity-0">
-                  <div className="absolute -top-6  h-6 w-6 bg-[#50488A] shadow-[0px_12px_0_0_#363256] rounded-bl-2xl"></div>
-                  <div className="absolute -bottom-6  h-6 w-6 bg-[#50488A] shadow-[0px_-12px_0_0_#363256] rounded-tl-2xl"></div>
-              </div>
+      {/* Desktop Sidebar */}
+      <div className="hidden md:block h-screen py-4">
+        <div className={`h-full w-64 ml-4 flex flex-col bg-[#50488A] rounded-3xl ${className}`}>
+          <div className="bg-[#2E2A4A] text-center pt-12 pb-10 rounded-3xl">
+            <div className="flex justify-center mb-6 ml-4">
+              <Image src={CuankiLogo} alt="Cuanki Logo" width={52} height={52} className="w-full h-auto" />
+            </div>
+            <div className='ml-4 text-left'>
+              <h2 className="text-[#00F5A0] text-3xl font-semibold">Financial</h2>
+              <h2 className="text-white text-3xl font-bold">Dashboard</h2>
+            </div>
+          </div>
 
-              {menuItems.map((item, index) => {
-                const isActive = pathname === item.path;
-                return (
-                  <li key={item.path} ref={el => { itemsRef.current[index] = el; }} className="relative z-10">
-                    <Link
-                      href={item.path}
-                      className={`flex items-center gap-4 py-3 text-lg font-medium transition-colors duration-200 w-full pl-10 pr-4
-                        ${isActive ? 'text-white' : 'text-white/80 hover:text-white'}`
-                      }
-                    >
-                      {item.icon}
-                      <span>{item.name}</span>
-                    </Link>
-                  </li>
-                );
-              })}
-            </ul>
-          </nav>
+          <div className="bg-[#50488A] flex-grow flex flex-col justify-between rounded-b-4xl">
+            <nav className="mt-10 px-6">
+              <ul className="space-y-4 relative">
+                <div ref={indicatorRef} className="absolute -left-6 w-full bg-[#363256] rounded-r-full opacity-0">
+                    <div className="absolute -top-6  h-6 w-6 bg-[#50488A] shadow-[0px_12px_0_0_#363256] rounded-bl-2xl"></div>
+                    <div className="absolute -bottom-6  h-6 w-6 bg-[#50488A] shadow-[0px_-12px_0_0_#363256] rounded-tl-2xl"></div>
+                </div>
 
-          <div className="p-6">
-            <button className="w-full bg-[#00F5A0] text-[#363256] font-semibold py-3 px-4 rounded-full hover:bg-[#00e68f] transition-colors duration-200">
-              Logout
-            </button>
+                {menuItems.map((item, index) => {
+                  const isActive = pathname === item.path;
+                  return (
+                    <li key={item.path} ref={el => { itemsRef.current[index] = el; }} className="relative z-10">
+                      <Link
+                        href={item.path}
+                        className={`flex items-center gap-4 py-3 text-lg font-medium transition-colors duration-200 w-full pl-10 pr-4
+                          ${isActive ? 'text-white' : 'text-white/80 hover:text-white'}`}
+                      >
+                        {item.icon}
+                        <span>{item.name}</span>
+                      </Link>
+                    </li>
+                  );
+                })}
+              </ul>
+            </nav>
+
+            <div className="p-6">
+              <button className="w-full bg-[#00F5A0] text-[#363256] font-semibold py-3 px-4 rounded-full hover:bg-[#00e68f] transition-colors duration-200">
+                Logout
+              </button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

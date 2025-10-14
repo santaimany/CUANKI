@@ -3,11 +3,11 @@ import React from 'react';
 
 const UserProfileHeader = () => {
   return (
-    <div className="bg-[#6F64A7] rounded-xl p-4 flex items-center justify-between text-white shadow-lg">
+    <div className="bg-[#6F64A7] rounded-xl p-3 sm:p-4 flex items-center justify-between text-white shadow-lg">
       {/* Kiri: Ikon Notifikasi */}
-      <div className="flex items-center justify-center w-10 h-10 rounded-full bg-transparent">
+      <div className="flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-transparent">
         <svg
-          className="w-7 h-7"
+          className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7"
           fill="currentColor"
           viewBox="0 0 20 20"
           xmlns="http://www.w3.org/2000/svg"
@@ -17,9 +17,9 @@ const UserProfileHeader = () => {
       </div>
 
       {/* Tengah: Avatar, Nama Pengguna, Dropdown */}
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-2 sm:gap-3">
         {/* Gambar Avatar */}
-        <div className="relative w-12 h-12 rounded-full bg-teal-300 flex items-center justify-center overflow-hidden">
+        <div className="relative w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-full bg-teal-300 flex items-center justify-center overflow-hidden">
           {/* <Image
             src={UserAvatar} // Pastikan path ini benar
             alt="User Avatar"
@@ -30,11 +30,11 @@ const UserProfileHeader = () => {
         </div>
         
         {/* Nama Pengguna */}
-        <span className="text-xl font-semibold">AndrianFaikha</span>
+        <span className="text-sm sm:text-base md:text-lg lg:text-xl font-semibold">AndrianFaikha</span>
 
         {/* Ikon Dropdown */}
         <svg
-          className="w-5 h-5 ml-1"
+          className="w-4 h-4 sm:w-5 sm:h-5 ml-0.5 sm:ml-1"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"

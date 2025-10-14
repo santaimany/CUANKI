@@ -36,24 +36,24 @@ const AssetCards: React.FC<AssetCardsProps> = ({ assets, showButtons = true }) =
   const visibleAssets = displayAssets.slice((currentPage - 1) * 4, currentPage * 4);
 
   return (
-    <div className="mb-6">
+    <div className="mb-4 sm:mb-6">
       {/* Asset Cards Grid - Compact style */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-4 sm:mb-6">
         {visibleAssets.map((asset) => (
           <div
             key={asset.id}
-            className="rounded-3xl overflow-hidden shadow-lg flex flex-col bg-white hover:shadow-xl transition-shadow cursor-pointer"
+            className="rounded-2xl sm:rounded-3xl overflow-hidden shadow-lg flex flex-col bg-white hover:shadow-xl transition-shadow cursor-pointer"
           >
             {/* Bagian Atas: Nama Akun */}
-            <div className="py-5 px-6">
-              <h3 className="text-center text-4xl font-bold text-[#363256]">
+            <div className="py-4 sm:py-5 px-4 sm:px-6">
+              <h3 className="text-center text-2xl sm:text-3xl md:text-4xl font-bold text-[#363256]">
                 {asset.name}
               </h3>
             </div>
 
             {/* Bagian Bawah: Saldo */}
-            <div className={`${asset.color} text-black py-4 px-6`}>
-              <p className="text-center text-2xl font-bold">
+            <div className={`${asset.color} text-black py-3 sm:py-4 px-4 sm:px-6`}>
+              <p className="text-center text-base sm:text-lg md:text-xl lg:text-2xl font-bold">
                 Rp {asset.amount.toLocaleString('id-ID')}
               </p>
             </div>
@@ -63,11 +63,11 @@ const AssetCards: React.FC<AssetCardsProps> = ({ assets, showButtons = true }) =
 
       {/* Action Buttons - Only show if showButtons is true */}
       {showButtons && (
-        <div className="flex gap-3 mb-6">
-          <button className="flex-1 bg-[#00F5A0] text-black font-bold py-4 rounded-3xl hover:shadow-lg transition-all">
+        <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 mb-4 sm:mb-6">
+          <button className="flex-1 bg-[#00F5A0] text-black font-bold py-3 sm:py-4 text-sm sm:text-base rounded-2xl sm:rounded-3xl hover:shadow-lg transition-all">
             + Tambah aset
           </button>
-          <button className="flex-1 bg-gradient-to-r from-[#FF6B6B] to-[#FF8E53] text-white font-bold py-4 rounded-3xl hover:shadow-lg transition-all">
+          <button className="flex-1 bg-gradient-to-r from-[#FF6B6B] to-[#FF8E53] text-white font-bold py-3 sm:py-4 text-sm sm:text-base rounded-2xl sm:rounded-3xl hover:shadow-lg transition-all">
             - Hapus aset
           </button>
         </div>
@@ -75,14 +75,14 @@ const AssetCards: React.FC<AssetCardsProps> = ({ assets, showButtons = true }) =
 
       {/* Pagination */}
       {totalPages > 1 && (
-        <div className="flex items-center justify-center gap-2">
+        <div className="flex items-center justify-center gap-1.5 sm:gap-2">
           {/* Previous Button */}
           <button
             onClick={() => handlePageChange(currentPage - 1)}
             disabled={currentPage === 1}
-            className="w-10 h-10 rounded-full bg-white flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-100 transition-colors"
+            className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-white flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-100 transition-colors"
           >
-            <svg className="w-5 h-5 text-[#363256]" fill="currentColor" viewBox="0 0 20 20">
+            <svg className="w-4 h-4 sm:w-5 sm:h-5 text-[#363256]" fill="currentColor" viewBox="0 0 20 20">
               <path fillRule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clipRule="evenodd" />
             </svg>
           </button>
@@ -92,7 +92,7 @@ const AssetCards: React.FC<AssetCardsProps> = ({ assets, showButtons = true }) =
             <button
               key={page}
               onClick={() => handlePageChange(page)}
-              className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold transition-colors ${
+              className={`w-8 h-8 sm:w-10 sm:h-10 text-sm sm:text-base rounded-full flex items-center justify-center font-semibold transition-colors ${
                 currentPage === page
                   ? 'bg-[#00F5A0] text-black'
                   : 'bg-white text-[#363256] hover:bg-gray-100'
@@ -106,9 +106,9 @@ const AssetCards: React.FC<AssetCardsProps> = ({ assets, showButtons = true }) =
           <button
             onClick={() => handlePageChange(currentPage + 1)}
             disabled={currentPage === totalPages}
-            className="w-10 h-10 rounded-full bg-white flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-100 transition-colors"
+            className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-white flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-100 transition-colors"
           >
-            <svg className="w-5 h-5 text-[#363256]" fill="currentColor" viewBox="0 0 20 20">
+            <svg className="w-4 h-4 sm:w-5 sm:h-5 text-[#363256]" fill="currentColor" viewBox="0 0 20 20">
               <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
             </svg>
           </button>

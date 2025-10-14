@@ -50,18 +50,18 @@ const AssetSummary: React.FC<AssetSummaryProps> = ({ totalAmount }) => {
   };
 
   return (
-    <div className="bg-gradient-to-tl from-[#7971BC] to-[#373456] rounded-3xl p-8 mb-6">
+    <div className="bg-gradient-to-tl from-[#7971BC] to-[#373456] rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 mb-4 sm:mb-6">
      
-      <div className="flex items-center gap-12">
+      <div className="flex flex-col sm:flex-row items-center sm:items-center gap-4 sm:gap-6 md:gap-8 lg:gap-12">
         {/* Pie Chart */}
-        <div className="relative w-56 h-56 flex-shrink-0">
+        <div className="relative w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 lg:w-56 lg:h-56 flex-shrink-0">
           <Doughnut data={data} options={options} />
         </div>
 
         {/* Total Amount */}
-        <div className="flex-1">
-          <p className="text-white/90 text-2xl mb-3">Total uang kamu:</p>
-          <p className="text-white text-5xl font-bold">
+        <div className="flex-1 text-center sm:text-left">
+          <p className="text-white/90 text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl mb-2 sm:mb-3">Total uang kamu:</p>
+          <p className="text-white text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold">
             Rp {totalAmount.toLocaleString('id-ID')},00
           </p>
         </div>

@@ -9,10 +9,10 @@ interface AuthLayoutProps {
 
 const AuthLayout = ({ children }: AuthLayoutProps) => {
     return (
-        // Use fixed full-screen height and hide overflow to avoid page-level scroll
-        <div className="h-screen flex overflow-hidden">
-            {/* Left Side - Login Image with Smile Background */}
-            <div className="flex-1 relative bg-gradient-to-br from-[#363256] via-50% to-[#50488A] flex items-center justify-center overflow-hidden">
+        // Mobile: Single column scrollable, Desktop: Side-by-side fixed height
+        <div className="min-h-screen md:h-screen flex flex-col md:flex-row md:overflow-hidden">
+            {/* Left Side - Login Image with Smile Background - Hidden on mobile, shown on desktop */}
+            <div className="hidden md:flex md:flex-1 relative bg-gradient-to-br from-[#363256] via-50% to-[#50488A] items-center justify-center overflow-hidden">
                 {/* Smile Background */}
                 <div className="absolute inset-0 scale-170">
                     <Image
@@ -33,9 +33,9 @@ const AuthLayout = ({ children }: AuthLayoutProps) => {
                 </div>
             </div>
 
-            {/* Right Side - Form Content */}
-            <div className="flex-1 bg-[#0EFF95] flex items-center justify-center px-6 sm:px-8 py-8 sm:py-12">
-                <div className="w-full max-w-lg">
+            {/* Right Side - Form Content - Full screen on mobile, half on desktop */}
+            <div className="flex-1 bg-[#0EFF95] flex items-center justify-center px-4 sm:px-6 md:px-8 py-8 sm:py-12 md:overflow-y-auto">
+                <div className="w-full max-w-md md:max-w-lg">
                     {children}
                 </div>
             </div>

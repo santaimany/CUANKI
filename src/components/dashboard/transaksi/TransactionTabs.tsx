@@ -14,10 +14,10 @@ const TransactionTabs: React.FC<TransactionTabsProps> = ({ onTabChange }) => {
   };
 
   return (
-    <div className="flex gap-4">
+    <div className="flex gap-2 sm:gap-3 md:gap-4">
       <button
         onClick={() => handleTabClick('expense')}
-        className={`px-8 py-3 rounded-full font-semibold text-2xl transition-all duration-200 ${
+        className={`px-4 sm:px-6 md:px-8 py-2 sm:py-2.5 md:py-3 rounded-full font-semibold text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl transition-all duration-200 ${
           activeTab === 'expense'
             ? 'bg-[#50488A] text-white shadow-lg'
             : 'bg-transparent text-white/70 hover:text-white'
@@ -27,7 +27,7 @@ const TransactionTabs: React.FC<TransactionTabsProps> = ({ onTabChange }) => {
       </button>
       <button
         onClick={() => handleTabClick('income')}
-        className={`px-8 py-3 rounded-full font-semibold text-2xl transition-all duration-200 ${
+        className={`px-4 sm:px-6 md:px-8 py-2 sm:py-2.5 md:py-3 rounded-full font-semibold text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl transition-all duration-200 ${
           activeTab === 'income'
             ? 'bg-[#50488A] text-white shadow-lg'
             : 'bg-transparent text-white/70 hover:text-white'
