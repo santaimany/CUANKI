@@ -13,7 +13,8 @@ export async function GET(
   { params }: { params: Promise<{ path: string[] }> }
 ) {
   const { path } = await params;
-  const url = `${cleanBackendUrl}/api/${path.join('/')}`;
+  // Don't add /api/ prefix here since path already includes it
+  const url = `${cleanBackendUrl}/${path.join('/')}`;
   const searchParams = request.nextUrl.searchParams.toString();
   const fullUrl = searchParams ? `${url}?${searchParams}` : url;
 
@@ -58,7 +59,8 @@ export async function POST(
   { params }: { params: Promise<{ path: string[] }> }
 ) {
   const { path } = await params;
-  const url = `${cleanBackendUrl}/api/${path.join('/')}`;
+  // Don't add /api/ prefix here since path already includes it
+  const url = `${cleanBackendUrl}/${path.join('/')}`;
 
   console.log('[Proxy POST]', url);
 
@@ -106,7 +108,8 @@ export async function PUT(
   { params }: { params: Promise<{ path: string[] }> }
 ) {
   const { path } = await params;
-  const url = `${cleanBackendUrl}/api/${path.join('/')}`;
+  // Don't add /api/ prefix here since path already includes it
+  const url = `${cleanBackendUrl}/${path.join('/')}`;
 
   console.log('[Proxy PUT]', url);
 
@@ -149,7 +152,8 @@ export async function PATCH(
   { params }: { params: Promise<{ path: string[] }> }
 ) {
   const { path } = await params;
-  const url = `${cleanBackendUrl}/api/${path.join('/')}`;
+  // Don't add /api/ prefix here since path already includes it
+  const url = `${cleanBackendUrl}/${path.join('/')}`;
 
   console.log('[Proxy PATCH]', url);
 
@@ -192,7 +196,8 @@ export async function DELETE(
   { params }: { params: Promise<{ path: string[] }> }
 ) {
   const { path } = await params;
-  const url = `${cleanBackendUrl}/api/${path.join('/')}`;
+  // Don't add /api/ prefix here since path already includes it
+  const url = `${cleanBackendUrl}/${path.join('/')}`;
 
   console.log('[Proxy DELETE]', url);
 
