@@ -1,7 +1,13 @@
 import axios from 'axios';
 
-// Get base URL and clean it (remove quotes if any)
+// Get base URL - use proxy in production to avoid mixed content issues
 const getBaseURL = () => {
+    // In production (Vercel), use internal proxy to avoid HTTPS/HTTP mixed content
+    if (typeof window !== 'undefined' && window.location.hostname !== 'localhost') {
+        return '/api/proxy';
+    }
+    
+    // In development, use direct backend URL
     const url = process.env.NEXT_PUBLIC_API_URL || 'http://103.186.0.127';
     // Remove any surrounding quotes that might be in env variable
     return url.replace(/^['"]|['"]$/g, '').trim();
@@ -12,6 +18,8 @@ const baseURL = getBaseURL();
 // Log for debugging (only in development)
 if (process.env.NODE_ENV === 'development') {
     console.log('🌐 API Base URL:', baseURL);
+} else {
+    console.log('🌐 Using API Proxy for production');
 }
 
 const axiosInstance = axios.create({
