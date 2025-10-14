@@ -66,7 +66,7 @@ export default function OnboardingPage() {
       // "Mahasiswa" → "mahasiswa" atau "student"
       // "Pelajar" → "pelajar" atau "student"
       const statusValue = answers['status'] || '';
-      let statusMapped = statusValue.toLowerCase(); // Default: lowercase
+      const statusMapped = statusValue.toLowerCase(); // Default: lowercase
       
       // Kemungkinan mapping lain jika lowercase tidak work:
       // statusMapped = statusValue === 'Mahasiswa' ? 'mahasiswa' : 'pelajar';

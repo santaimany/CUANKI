@@ -42,7 +42,7 @@ export const educationData: EducationItem[] = [
   {
     id: "basic-value-investing-2", 
     title: "Basic Value Investing",
-    image: "/assets/education/portfolio-analysis.jpg",
+    image: id1,
     description: "Learn the fundamental principles of value investing and how to identify undervalued stocks in the market. Master the art of financial analysis and portfolio management.",
     content: {
       introduction: "Take your value investing knowledge to the next level with advanced techniques and strategies. Learn how to identify undervalued stocks in the market and master the art of financial analysis and portfolio management through comprehensive lessons and practical examples.",
@@ -69,7 +69,7 @@ export const educationData: EducationItem[] = [
   {
     id: "advanced-portfolio-management",
     title: "Advanced Portfolio Management",
-    image: "/assets/education/advanced-portfolio.jpg", 
+    image: id1,
     description: "Discover advanced strategies for diversifying your investment portfolio and managing risk. Learn from professional fund managers and institutional investors.",
     content: {
       introduction: "Master the art of professional portfolio management with advanced strategies used by institutional investors and hedge funds. Discover sophisticated techniques for diversifying your investment portfolio, managing risk, and optimizing returns across different market conditions.",
@@ -100,7 +100,7 @@ export const educationData: EducationItem[] = [
   {
     id: "market-analysis-fundamentals",
     title: "Market Analysis Fundamentals",
-    image: "/assets/education/market-analysis.jpg",
+    image: id1,
     description: "Understanding market trends and economic indicators is crucial for successful investing. Learn technical and fundamental analysis techniques from industry experts.",
     content: {
       introduction: "Master the essential skills of market analysis with comprehensive training in both technical and fundamental analysis. Understanding market trends, economic indicators, and company valuations is crucial for successful investing. Learn proven techniques from industry experts and develop the analytical skills needed to make informed investment decisions.",

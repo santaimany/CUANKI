@@ -5,12 +5,6 @@ import { usePathname } from "next/navigation";
 import Navbar from "@/components/commons/Navbar";
 import Footer from "@/components/commons/Footer";
 import "./globals.css";
-import { Metadata } from "next";
-
-// export const metadata: Metadata = {
-//   title: "Cuanki - Smart Solution for Your Smart Financial",
-//   description: "Cuanki is a smart financial solution that helps you manage your finances effectively and efficiently.",
-// };
 
 const geistSans = Geist({
   variable: "--font-geist-sans",

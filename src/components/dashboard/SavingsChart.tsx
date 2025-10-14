@@ -8,7 +8,10 @@ import {
   PointElement,
   LineElement,
   Tooltip,
-  Filler, // <-- Impor Filler plugin untuk gradasi area
+  Filler,
+  type ChartType,
+  type TooltipItem,
+  type ScriptableContext,
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
 
@@ -29,10 +32,11 @@ const SavingsChart = () => {
   // 3. Plugin kustom untuk menggambar garis vertikal saat hover
   const verticalLinePlugin = {
     id: 'verticalLine',
-    afterDraw: (chart) => {
-      if (chart.tooltip?._active?.length) {
+    afterDraw: (chart: ChartJS) => {
+      const tooltip = chart.tooltip as unknown as { _active?: Array<{ element: { x: number } }> };
+      if (tooltip?._active?.length) {
         const ctx = chart.ctx;
-        const x = chart.tooltip._active[0].element.x;
+        const x = tooltip._active[0].element.x;
         const topY = chart.scales.y.top;
         const bottomY = chart.scales.y.bottom;
 
@@ -67,20 +71,20 @@ const SavingsChart = () => {
       legend: { display: false },
       tooltip: {
         enabled: true,
-        mode: 'index',
+        mode: 'index' as const,
         intersect: false,
         // Konfigurasi tampilan tooltip kustom
         backgroundColor: '#FFFFFF',
         titleColor: '#363256',
         bodyColor: '#363256',
-        titleFont: { weight: 'bold' },
-        bodyFont: { weight: 'bold' },
+        titleFont: { weight: 'bold' as const },
+        bodyFont: { weight: 'bold' as const },
         displayColors: false, // Sembunyikan kotak warna di tooltip
         padding: 10,
         cornerRadius: 12,
         // Format angka di tooltip
         callbacks: {
-          label: function (context) {
+          label: function (context: TooltipItem<'line'>) {
             let label = context.dataset.label || '';
             if (label) {
               label += ': ';
@@ -94,13 +98,13 @@ const SavingsChart = () => {
             }
             return label;
           },
-          title: () => null, // Sembunyikan title default (bulan)
+          title: () => '', // Sembunyikan title default (bulan)
         },
       },
     },
     // Efek hover
     interaction: {
-      mode: 'index',
+      mode: 'index' as const,
       intersect: false,
     },
   };
@@ -121,7 +125,7 @@ const SavingsChart = () => {
         pointBorderColor: '#fff',
         pointHoverBorderWidth: 2,
         // Membuat gradasi untuk area di bawah garis
-        backgroundColor: (context) => {
+        backgroundColor: (context: ScriptableContext<'line'>) => {
           const ctx = context.chart.ctx;
           const gradient = ctx.createLinearGradient(0, 0, 0, 200);
           gradient.addColorStop(0, 'rgba(0, 245, 160, 0.3)');

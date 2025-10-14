@@ -30,41 +30,9 @@ export default function GetStartedPage() {
       .to(leftCardRef.current, { x: '-50vw', duration: 0.8, ease: 'power3.out' }, '-=0.2')
       .to(rightCardRef.current, { x: '50vw', duration: 0.8, ease: 'power3.out' }, '-=0.8')
       .to(contentRef.current, { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' }, '-=0.4');
-
-    // --- LOGIKA BARU UNTUK EFEK HOVER YANG LEBIH UNIK ---
-    const buttonEl = buttonRef.current;
-
-    // const handleMouseEnter = () => {
-    //   gsap.to([leftCardRef.current, rightCardRef.current], {
-    //     scale: 1.05,
-    //     x: (index) => (index === 0 ? '-51vw' : '51vw'),
-    //     rotation: (index) => (index === 0 ? -5 : 5), // Efek miring
-    //     duration: 0.5,
-    //     ease: 'power3.out',
-    //   });
-    // };
-
-    // const handleMouseLeave = () => {
-    //   gsap.to([leftCardRef.current, rightCardRef.current], {
-    //     scale: 1,
-    //     x: (index) => (index === 0 ? '-50vw' : '50vw'),
-    //     rotation: 0, // Kembali lurus
-    //     duration: 0.5,
-    //     ease: 'power3.out',
-    //   });
-    // };
-
-    // if (buttonEl) {
-    //   buttonEl.addEventListener('mouseenter', handleMouseEnter);
-    //   buttonEl.addEventListener('mouseleave', handleMouseLeave);
-    // };
     
     return () => {
       tl.kill();
-      // if (buttonEl) {
-      //   buttonEl.removeEventListener('mouseenter', handleMouseEnter);
-      //   buttonEl.removeEventListener('mouseleave', handleMouseLeave);
-      // }
     };
   }, []);
 
@@ -107,7 +75,7 @@ export default function GetStartedPage() {
               disabled={isExiting}
               className="bg-[#50488A] hover:bg-black text-white px-6 sm:px-8 md:px-10 py-2 sm:py-3 rounded-full font-semibold text-sm sm:text-base transition-colors duration-200 shadow-lg hover:shadow-xl transform cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Let's get started!
+              Let&apos;s get started!
             </button>
           </div>
         </div>
