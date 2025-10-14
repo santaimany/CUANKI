@@ -1,15 +1,23 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-const BACKEND_URL = process.env.BACKEND_API_URL || 'http://103.186.0.127';
+// Get backend URL from environment variable
+const BACKEND_URL = process.env.BACKEND_API_URL || process.env.NEXT_PUBLIC_API_URL || 'http://103.186.0.127';
+
+// Clean URL (remove quotes if exists)
+const cleanBackendUrl = BACKEND_URL.replace(/['"]/g, '').replace(/\/$/, '');
+
+console.log('[Proxy] Backend URL:', cleanBackendUrl);
 
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ path: string[] }> }
 ) {
   const { path } = await params;
-  const url = `${BACKEND_URL}/api/${path.join('/')}`;
+  const url = `${cleanBackendUrl}/api/${path.join('/')}`;
   const searchParams = request.nextUrl.searchParams.toString();
   const fullUrl = searchParams ? `${url}?${searchParams}` : url;
+
+  console.log('[Proxy GET]', fullUrl);
 
   try {
     const token = request.headers.get('authorization');
@@ -20,15 +28,26 @@ export async function GET(
         'Content-Type': 'application/json',
         ...(token && { 'Authorization': token }),
       },
+      // Add timeout and signal for better error handling
+      signal: AbortSignal.timeout(10000), // 10 seconds timeout
     });
 
     const data = await response.json();
 
     return NextResponse.json(data, { status: response.status });
   } catch (error) {
-    console.error('Proxy GET error:', error);
+    console.error('[Proxy GET Error]:', {
+      url: fullUrl,
+      error: error instanceof Error ? error.message : 'Unknown error',
+      stack: error instanceof Error ? error.stack : undefined,
+    });
+    
     return NextResponse.json(
-      { error: 'Failed to fetch from backend' },
+      { 
+        error: 'Failed to fetch from backend',
+        details: error instanceof Error ? error.message : 'Unknown error',
+        url: fullUrl
+      },
       { status: 500 }
     );
   }
@@ -39,11 +58,15 @@ export async function POST(
   { params }: { params: Promise<{ path: string[] }> }
 ) {
   const { path } = await params;
-  const url = `${BACKEND_URL}/api/${path.join('/')}`;
+  const url = `${cleanBackendUrl}/api/${path.join('/')}`;
+
+  console.log('[Proxy POST]', url);
 
   try {
     const body = await request.json();
     const token = request.headers.get('authorization');
+
+    console.log('[Proxy POST Body]', JSON.stringify(body));
 
     const response = await fetch(url, {
       method: 'POST',
@@ -52,15 +75,27 @@ export async function POST(
         ...(token && { 'Authorization': token }),
       },
       body: JSON.stringify(body),
+      signal: AbortSignal.timeout(10000), // 10 seconds timeout
     });
+
+    console.log('[Proxy POST Response Status]', response.status);
 
     const data = await response.json();
 
     return NextResponse.json(data, { status: response.status });
   } catch (error) {
-    console.error('Proxy POST error:', error);
+    console.error('[Proxy POST Error]:', {
+      url,
+      error: error instanceof Error ? error.message : 'Unknown error',
+      stack: error instanceof Error ? error.stack : undefined,
+    });
+    
     return NextResponse.json(
-      { error: 'Failed to post to backend' },
+      { 
+        error: 'Failed to post to backend',
+        details: error instanceof Error ? error.message : 'Unknown error',
+        url
+      },
       { status: 500 }
     );
   }
@@ -71,7 +106,9 @@ export async function PUT(
   { params }: { params: Promise<{ path: string[] }> }
 ) {
   const { path } = await params;
-  const url = `${BACKEND_URL}/api/${path.join('/')}`;
+  const url = `${cleanBackendUrl}/api/${path.join('/')}`;
+
+  console.log('[Proxy PUT]', url);
 
   try {
     const body = await request.json();
@@ -84,15 +121,24 @@ export async function PUT(
         ...(token && { 'Authorization': token }),
       },
       body: JSON.stringify(body),
+      signal: AbortSignal.timeout(10000),
     });
 
     const data = await response.json();
 
     return NextResponse.json(data, { status: response.status });
   } catch (error) {
-    console.error('Proxy PUT error:', error);
+    console.error('[Proxy PUT Error]:', {
+      url,
+      error: error instanceof Error ? error.message : 'Unknown error',
+    });
+    
     return NextResponse.json(
-      { error: 'Failed to put to backend' },
+      { 
+        error: 'Failed to put to backend',
+        details: error instanceof Error ? error.message : 'Unknown error',
+        url
+      },
       { status: 500 }
     );
   }
@@ -103,7 +149,9 @@ export async function PATCH(
   { params }: { params: Promise<{ path: string[] }> }
 ) {
   const { path } = await params;
-  const url = `${BACKEND_URL}/api/${path.join('/')}`;
+  const url = `${cleanBackendUrl}/api/${path.join('/')}`;
+
+  console.log('[Proxy PATCH]', url);
 
   try {
     const body = await request.json();
@@ -116,15 +164,24 @@ export async function PATCH(
         ...(token && { 'Authorization': token }),
       },
       body: JSON.stringify(body),
+      signal: AbortSignal.timeout(10000),
     });
 
     const data = await response.json();
 
     return NextResponse.json(data, { status: response.status });
   } catch (error) {
-    console.error('Proxy PATCH error:', error);
+    console.error('[Proxy PATCH Error]:', {
+      url,
+      error: error instanceof Error ? error.message : 'Unknown error',
+    });
+    
     return NextResponse.json(
-      { error: 'Failed to patch to backend' },
+      { 
+        error: 'Failed to patch to backend',
+        details: error instanceof Error ? error.message : 'Unknown error',
+        url
+      },
       { status: 500 }
     );
   }
@@ -135,7 +192,9 @@ export async function DELETE(
   { params }: { params: Promise<{ path: string[] }> }
 ) {
   const { path } = await params;
-  const url = `${BACKEND_URL}/api/${path.join('/')}`;
+  const url = `${cleanBackendUrl}/api/${path.join('/')}`;
+
+  console.log('[Proxy DELETE]', url);
 
   try {
     const token = request.headers.get('authorization');
@@ -146,15 +205,24 @@ export async function DELETE(
         'Content-Type': 'application/json',
         ...(token && { 'Authorization': token }),
       },
+      signal: AbortSignal.timeout(10000),
     });
 
     const data = await response.json();
 
     return NextResponse.json(data, { status: response.status });
   } catch (error) {
-    console.error('Proxy DELETE error:', error);
+    console.error('[Proxy DELETE Error]:', {
+      url,
+      error: error instanceof Error ? error.message : 'Unknown error',
+    });
+    
     return NextResponse.json(
-      { error: 'Failed to delete from backend' },
+      { 
+        error: 'Failed to delete from backend',
+        details: error instanceof Error ? error.message : 'Unknown error',
+        url
+      },
       { status: 500 }
     );
   }
