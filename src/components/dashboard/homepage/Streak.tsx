@@ -5,7 +5,7 @@ const Streak = () => {
   return (
     <div className="bg-[#00F5A0] rounded-2xl p-6 text-black">
       <div className="flex justify-between items-center mb-2">
-        <h3 className="text-lg font-semibold">Streak</h3>
+        <h3 className="text-lg font-semibold">Strak</h3>
         <span className="text-sm font-medium">100%</span>
       </div>
       <div className="flex items-center gap-1">
