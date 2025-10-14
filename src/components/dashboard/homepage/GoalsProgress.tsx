@@ -1,20 +1,68 @@
 'use client';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { getGoalsProgress } from '@/lib/api/user';
+import { GoalsProgressResponse } from '@/types/api';
 
 const GoalsProgress = () => {
+  const [goalsData, setGoalsData] = useState<GoalsProgressResponse | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchGoalsProgress = async () => {
+      try {
+        const data = await getGoalsProgress();
+        setGoalsData(data);
+      } catch (error) {
+        console.error('Error fetching goals progress:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchGoalsProgress();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="bg-gradient-to-tl from-[#7971BC] to-[#373456/10] rounded-2xl p-6 text-white">
+        <div className="animate-pulse">
+          <div className="h-6 bg-white/20 rounded w-32 mb-4"></div>
+          <div className="h-3 bg-white/20 rounded w-full"></div>
+        </div>
+      </div>
+    );
+  }
+
+  const mainTarget = goalsData?.data?.main_saving_target;
+  
+  // Safely extract values
+  const progressPercentage = typeof mainTarget?.progress_percentage === 'number' 
+    ? mainTarget.progress_percentage 
+    : 0;
+  
+  const currentAmount = typeof mainTarget?.formatted_current === 'string'
+    ? mainTarget.formatted_current
+    : 'Rp 0';
+    
+  const targetAmount = typeof mainTarget?.formatted_amount === 'string'
+    ? mainTarget.formatted_amount
+    : 'Rp 0';
+
+  console.log('GoalsProgress data:', { mainTarget, progressPercentage, currentAmount, targetAmount });
+
   return (
-    // 1. Mengganti background gradasi menjadi warna ungu solid (#6F64A7)
     <div className="bg-gradient-to-tl from-[#7971BC] to-[#373456/10] rounded-2xl p-6 text-white">
       <div className="flex justify-between items-center mb-4">
-        {/* 2. Memperbesar ukuran font judul menjadi lebih tebal dan besar */}
         <h3 className="text-xl font-bold">Goals Progress</h3>
-        {/* 3. Menyesuaikan font progress value */}
-        <span className="text-base font-medium">15.000/1M</span>
+        <span className="text-base font-medium">
+          {currentAmount}/{targetAmount}
+        </span>
       </div>
-      {/* 4. Mengubah warna track progress bar dan mempertebalnya */}
       <div className="w-full bg-[#BDB7DC] rounded-full h-3">
-        {/* 5. Menyesuaikan ketebalan fill progress bar agar sama */}
-        <div className="bg-[#00F5A0] h-3 rounded-full" style={{ width: '15%' }}></div>
+        <div 
+          className="bg-[#00F5A0] h-3 rounded-full transition-all duration-500" 
+          style={{ width: `${progressPercentage}%` }}
+        ></div>
       </div>
     </div>
   );

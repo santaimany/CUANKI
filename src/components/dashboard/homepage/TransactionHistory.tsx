@@ -26,21 +26,21 @@ const TransactionItem: React.FC<TransactionItemProps> = ({ icon, category, descr
   const formattedAmount = new Intl.NumberFormat('id-ID').format(Math.abs(amount));
 
   return (
-    <div className="bg-[#50488A] flex items-center justify-between p-3 rounded-2xl">
-      <div className="flex items-center">
+    <div className="bg-[#50488A] flex items-center justify-between p-2 sm:p-2.5 md:p-3 rounded-xl sm:rounded-2xl">
+      <div className="flex items-center gap-2 sm:gap-3 md:gap-4 flex-1 min-w-0">
         {/* Lingkaran Ikon */}
-        <div className="bg-[#6F64A7] rounded-full p-3 flex items-center justify-center">
+        <div className="bg-[#6F64A7] rounded-full p-2 sm:p-2.5 md:p-3 flex items-center justify-center flex-shrink-0">
           {icon}
         </div>
         {/* Teks Kategori & Deskripsi */}
-        <div className="ml-4">
-          <p className="font-bold text-base">{category}</p>
-          <p className="text-sm text-white/70">{description}</p>
+        <div className="min-w-0 flex-1">
+          <p className="font-bold text-xs sm:text-sm md:text-base truncate">{category}</p>
+          <p className="text-xs sm:text-sm text-white/70 truncate">{description}</p>
         </div>
       </div>
 
       {/* Nominal Transaksi */}
-      <div className={`px-4 py-1 rounded-full text-sm font-bold ${isIncome ? 'bg-green-400 text-green-900' : 'bg-red-400 text-red-900'}`}>
+      <div className={`px-2 sm:px-3 md:px-4 py-0.5 sm:py-1 rounded-full text-xs sm:text-sm font-bold flex-shrink-0 ${isIncome ? 'bg-green-400 text-green-900' : 'bg-red-400 text-red-900'}`}>
         <span>{isIncome ? '+' : '-'}{formattedAmount}</span>
       </div>
     </div>
@@ -62,9 +62,9 @@ const TransactionHistoryList = () => {
   ];
 
   return (
-    <div className="bg-[#363256] p-6 rounded-2xl text-white w-full max-w-md mx-auto">
-      <h2 className="text-2xl font-bold mb-5">Riwayat transaksi</h2>
-      <div className="space-y-3">
+    <div className="bg-[#363256] p-3 sm:p-4 md:p-5 lg:p-6 rounded-xl sm:rounded-2xl text-white w-full max-w-md mx-auto">
+      <h2 className="text-lg sm:text-xl md:text-2xl font-bold mb-3 sm:mb-4 md:mb-5">Riwayat transaksi</h2>
+      <div className="space-y-2 sm:space-y-2.5 md:space-y-3">
         {sampleTransactions.map((transaction, index) => (
           <TransactionItem
             key={index}

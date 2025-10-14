@@ -36,35 +36,35 @@ const TransactionSummary: React.FC<TransactionSummaryProps> = ({
         onSubmit={handleSubmit}
       />
 
-      <div className="bg-gradient-to-tl from-[#7971BC]  to-[#373456] rounded-2xl p-6 text-white">
-        <h2 className="text-6xl font-semibold mb-6">Transaksi anda hari ini:</h2>
+      <div className="bg-gradient-to-tl from-[#7971BC]  to-[#373456] rounded-xl sm:rounded-2xl p-4 sm:p-6 text-white">
+        <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-6xl font-semibold mb-4 sm:mb-6">Transaksi anda hari ini:</h2>
         
         {/* Progress Bar */}
-        <div className="mb-4">
-          <div className="w-full bg-white/20 rounded-full h-3 overflow-hidden">
+        <div className="mb-3 sm:mb-4">
+          <div className="w-full bg-white/20 rounded-full h-2 sm:h-2.5 md:h-3 overflow-hidden">
             <div 
-              className="bg-gradient-to-r from-[#00F5A0] to-[#00E68F] h-3 rounded-full transition-all duration-300"
+              className="bg-gradient-to-r from-[#00F5A0] to-[#00E68F] h-2 sm:h-2.5 md:h-3 rounded-full transition-all duration-300"
               style={{ width: `${(income / (income + expense)) * 100}%` }}
             ></div>
           </div>
         </div>
         
         {/* Amount Display */}
-        <div className="text-right mb-6">
-          <span className="text-2xl font-bold">Rp {income.toLocaleString('id-ID')}/Rp {expense.toLocaleString('id-ID')}</span>
+        <div className="text-right mb-4 sm:mb-6">
+          <span className="text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl font-bold">Rp {income.toLocaleString('id-ID')}/Rp {expense.toLocaleString('id-ID')}</span>
         </div>
         
         {/* Action Buttons */}
-        <div className="flex gap-4 text-2xl">
+        <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 md:gap-4 text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl">
           <button 
             onClick={() => handleOpenModal('income')}
-            className="bg-gradient-to-r from-[#A3FFD6] to-[#0EFF95] border-b-2 border-white cursor-pointer text-black font-semibold py-4 px-6 rounded-3xl hover:bg-[#00E68F] transition-colors"
+            className="bg-gradient-to-r from-[#A3FFD6] to-[#0EFF95] border-b-2 border-white cursor-pointer text-black font-semibold py-3 sm:py-4 px-4 sm:px-6 rounded-2xl sm:rounded-3xl hover:bg-[#00E68F] transition-colors"
           >
             + pendapatan
           </button>
           <button 
             onClick={() => handleOpenModal('expense')}
-            className="bg-[#DF4000] text-white font-semibold py-4 px-6 rounded-3xl hover:bg-[#FF5530] transition-colors border-b-2 border-white cursor-pointer"
+            className="bg-[#DF4000] text-white font-semibold py-3 sm:py-4 px-4 sm:px-6 rounded-2xl sm:rounded-3xl hover:bg-[#FF5530] transition-colors border-b-2 border-white cursor-pointer"
           >
             - pengeluaran
           </button>

@@ -23,7 +23,12 @@ export interface AuthResponse {
             email: string;
             first_name: string;
             last_name: string;
-            has_completed_onboarding?: boolean; // flag untuk cek sudah isi data atau belum
+            username?: string | null;
+            age?: number | null;
+            origin_id?: number | null;
+            status?: string | null;
+            origin?: string | null;
+            has_completed_onboarding?: boolean; // Deprecated - use field checks instead
         };
     };
 }

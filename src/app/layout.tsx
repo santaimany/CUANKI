@@ -32,12 +32,32 @@ export default function RootLayout({
     pathname?.startsWith("/dashboard");
 
   return (
-    <html lang="en">
+    <html lang="id">
         <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        {/* PWA Meta Tags */}
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+        <meta name="application-name" content="Cuanki" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <meta name="apple-mobile-web-app-title" content="Cuanki" />
+        <meta name="description" content="Aplikasi manajemen keuangan pribadi untuk mengatur budget harian, tabungan, dan goals keuangan Anda" />
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="theme-color" content="#6F64A7" />
+        
+        {/* Manifest */}
+        <link rel="manifest" href="/manifest.json" />
+        
+        {/* Icons */}
         <link rel="icon" href="/favicon.ico" />
-        <link rel="apple-touch-icon" href="/favicon.scg" />
-        <link rel="shortcut icon" href="/favicon.svg" />
+        <link rel="apple-touch-icon" href="/icon-192x192.png" />
+        <link rel="apple-touch-icon" sizes="152x152" href="/icon-152x152.png" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/icon-192x192.png" />
+        <link rel="apple-touch-icon" sizes="192x192" href="/icon-192x192.png" />
+        
+        {/* Splash Screens for iOS */}
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <link rel="apple-touch-startup-image" href="/icon-512x512.png" />
         </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}

@@ -1,26 +1,63 @@
-import React from 'react';
-import AccountCard from './AccountCard'; // Sesuaikan path ke komponen Anda
+'use client';
+import React, { useEffect, useState } from 'react';
+import AccountCard from './AccountCard';
+import { getUserAccounts } from '@/lib/api/user';
+import { UserAccount } from '@/types/api';
 
 const MyAccounts = () => {
-  // Siapkan data akun dalam bentuk array of objects
-  const accounts = [
-    { name: 'BCA', balance: 7500, color: 'bg-[#00F5A0]' },
-    { name: 'BSI', balance: 15000, color: 'bg-[#15803d]' }, // Hijau tua
-    { name: 'BSI', balance: 100000, color: 'bg-[#6ee7b7]' }, // Hijau muda
-    { name: 'Cash', balance: 100000, color: 'bg-[#0d9488]' }, // Teal
-  ];
+  const [accounts, setAccounts] = useState<UserAccount[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchAccounts = async () => {
+      try {
+        const response = await getUserAccounts();
+        setAccounts(response.data.accounts);
+      } catch (error) {
+        console.error('Error fetching accounts:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAccounts();
+  }, []);
+
+  // Color mapping based on account type
+  const getColorByType = (type: string) => {
+    const colorMap: Record<string, string> = {
+      'Kebutuhan': 'bg-[#00F5A0]',
+      'Tabungan': 'bg-[#15803d]',
+      'Darurat': 'bg-[#6ee7b7]',
+      'default': 'bg-[#0d9488]'
+    };
+    return colorMap[type] || colorMap['default'];
+  };
+
+  if (loading) {
+    return (
+      <div className="p-8 bg-[#363256]">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          {[1, 2, 3, 4].map((i) => (
+            <div key={i} className="bg-white/10 rounded-2xl p-6 animate-pulse">
+              <div className="h-4 bg-white/20 rounded w-20 mb-2"></div>
+              <div className="h-6 bg-white/20 rounded w-32"></div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
 
   return (
-    // Container untuk grid
     <div className="p-8 bg-[#363256]">
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-        {/* Gunakan .map untuk membuat kartu dari setiap item data */}
         {accounts.map((account, index) => (
           <AccountCard
-            key={index}
-            accountName={account.name}
-            balance={account.balance}
-            color={account.color}
+            key={`${account.account_id}-${account.type}-${index}`}
+            accountName={`${account.account_name} - ${account.type}`}
+            balance={parseFloat(account.balance)}
+            color={getColorByType(account.type)}
           />
         ))}
       </div>
