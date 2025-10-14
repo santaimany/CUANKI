@@ -12,9 +12,8 @@ import TransactionHistoryList from '@/components/dashboard/homepage/TransactionH
 const DashboardPage = () => {
   return (
     <div className="pb-20 md:pb-0">
-      {/* Mobile Layout: Stack vertically */}
+      {/* Mobile Layout: Stack vertically - No UserProfile */}
       <div className="md:hidden flex flex-col gap-4">
-        <UserProfileHeader />
         <BalanceOverview />
         <GoalsProgress />
         <Streak />

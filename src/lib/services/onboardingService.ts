@@ -1,19 +1,17 @@
 import axiosInstance from '@/lib/axios';
 
-// Form User (Step 1)
+
 export interface FormUserRequest {
     username: string;
     age: number;
     origin_id: number;
-    status: string; // mahasiswa, pekerja, dll
+    status: string; 
 }
 
-// Form Account (Step 2)
 export interface FormAccountRequest {
     bank_id: number;
 }
 
-// Form Plan (Step 3)
 export interface FormPlanRequest {
     monthly_income: number;
     income_date: number; // tanggal 1-31
@@ -42,7 +40,6 @@ export interface ApiResponse {
     data?: Record<string, unknown>;
 }
 
-// Submit Form User
 export const submitFormUser = async (data: FormUserRequest): Promise<ApiResponse> => {
     try {
         const response = await axiosInstance.post('/api/form/user', data);
@@ -55,7 +52,6 @@ export const submitFormUser = async (data: FormUserRequest): Promise<ApiResponse
     }
 };
 
-// Submit Form Account
 export const submitFormAccount = async (data: FormAccountRequest): Promise<ApiResponse> => {
     try {
         const response = await axiosInstance.post('/api/form/account', data);
@@ -68,7 +64,6 @@ export const submitFormAccount = async (data: FormAccountRequest): Promise<ApiRe
     }
 };
 
-// Submit Form Plan
 export const submitFormPlan = async (data: FormPlanRequest): Promise<ApiResponse> => {
     try {
         const response = await axiosInstance.post('/api/form/plan', data);
@@ -94,7 +89,6 @@ export const getListBank = async (): Promise<Bank[]> => {
     }
 };
 
-// Get List Origin
 export const getListOrigin = async (): Promise<Origin[]> => {
     try {
         const response = await axiosInstance.get('/api/origins');

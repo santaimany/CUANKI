@@ -12,6 +12,7 @@ import HomeIcon from "@/assets/dashboard/icons/homepage-icon.svg";
 const TransaksiIcon = () => ( <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h6a1 1 0 110 2H4a1 1 0 01-1-1z" clipRule="evenodd" /></svg> );
 const TabunganIcon = () => ( <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 20 20" fill="currentColor"><path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z" /><path fillRule="evenodd" d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm3 0a1 1 0 011-1h1a1 1 0 110 2H8a1 1 0 01-1-1z" clipRule="evenodd" /></svg> );
 const GoalsIcon = () => ( <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM7 10a3 3 0 116 0 3 3 0 01-6 0z" clipRule="evenodd" /><path d="M10 11a1 1 0 100-2 1 1 0 000 2z" /></svg> );
+const ProfileIcon = () => ( <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" /></svg> );
 
 interface SidebarProps {
   className?: string;
@@ -30,6 +31,14 @@ const Sidebar: React.FC<SidebarProps> = ({ className = '' }) => {
     { name: 'Transaksi', path: '/dashboard/transaksi', icon: <TransaksiIcon/> },
     { name: 'Aset', path: '/dashboard/aset', icon: <TabunganIcon/> },
     { name: 'Goals', path: '/dashboard/goals', icon: <GoalsIcon/> },
+  ], []);
+
+  const mobileMenuItems = React.useMemo(() => [
+    { name: 'Homepage', path: '/dashboard', icon: <Image src={HomeIcon} alt="Homepage" width={24} height={24} /> },
+    { name: 'Transaksi', path: '/dashboard/transaksi', icon: <TransaksiIcon/> },
+    { name: 'Aset', path: '/dashboard/aset', icon: <TabunganIcon/> },
+    { name: 'Goals', path: '/dashboard/goals', icon: <GoalsIcon/> },
+    { name: 'Profile', path: '/dashboard/profile', icon: <ProfileIcon/> },
   ], []);
 
   // MODIFIKASI: useEffect kini memiliki logika berbeda untuk animasi awal
@@ -68,8 +77,9 @@ const Sidebar: React.FC<SidebarProps> = ({ className = '' }) => {
       {/* Mobile Bottom Navigation */}
       <div className="md:hidden fixed bottom-0 left-0 right-0 bg-[#50488A] border-t border-white/10 z-50">
         <div className="flex justify-around items-center py-3">
-          {menuItems.map((item) => {
+          {mobileMenuItems.map((item) => {
             const isActive = pathname === item.path;
+            
             return (
               <Link
                 key={item.path}
