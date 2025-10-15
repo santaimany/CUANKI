@@ -89,9 +89,9 @@ const AboutUsSection = () => {
     });
 };
     return (
-        <section className="relative bg-gradient-to-r from-[#363256] to-[#50488A] w-full px-[2vw] py-[4vw] sm:px-[3vw] sm:py-[5vw] md:px-[2.5vw] md:py-[4.5vw] lg:px-[2.2vw] lg:py-[4.2vw] xl:px-[2vw] xl:py-[4vw]">
+        <section className="relative bg-gradient-to-r from-[#363256] to-[#50488A] w-full px-4 py-8 sm:px-6 sm:py-10 md:px-8 md:py-12 lg:px-10 lg:py-14 xl:px-12 xl:py-16">
             <div className="relative max-w-7xl mx-auto">
-                <div className="relative z-30 rounded-[3vw] sm:rounded-[4vw] md:rounded-[3.5vw] lg:rounded-[3.2vw] xl:rounded-[3vw]">
+                <div className="relative z-30 rounded-2xl sm:rounded-3xl md:rounded-[2.5rem] lg:rounded-[3rem] xl:rounded-[3.5rem]">
                     <Image
                         src={greenBg}
                         alt="Background Placeholder"
@@ -107,13 +107,13 @@ const AboutUsSection = () => {
                         <Image src={whiteBg} alt="White Background - Solution" className="w-full h-auto object-cover" />
                     </div>
 
-                    <div ref={contentRef} className="absolute inset-0 flex items-start justify-start p-[3vw] sm:p-[4vw] md:p-[3.5vw] lg:p-[3.2vw] xl:p-[3vw]">
-                         <div className="relative z-10 max-w-[35vw] sm:max-w-[50vw] md:max-w-[45vw] lg:max-w-[40vw] xl:max-w-[35vw]">
-                            <div className="flex items-center gap-[11vw] mb-[2vw] -translate-y-1 sm:gap-[8vw] sm:mb-[2.8vw] md:gap-[9vw] md:mb-[2.4vw] lg:gap-[10vw] lg:mb-[2.2vw] xl:gap-[11vw] xl:mb-[2vw]">
+                    <div ref={contentRef} className="absolute inset-0 flex items-start justify-start p-6 sm:p-8 md:p-10 lg:p-12 xl:p-14">
+                         <div className="relative z-10 w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl">
+                            <div className="flex items-center gap-4 mb-6 -translate-y-1 sm:gap-6 sm:mb-8 md:gap-8 md:mb-10 lg:gap-10 lg:mb-12 xl:gap-4 xl:mb-8">
                                 <button
                                     data-tab-button="aboutus"
                                     onClick={() => handleTabSwitch("aboutus")}
-                                    className={`border-2 px-[2vw] py-[0.8vw] rounded-full font-semibold text-[1.2vw] transition-all duration-300 sm:px-[2.8vw] sm:py-[1.1vw] sm:text-[1.7vw] md:px-[2.4vw] md:py-[1vw] md:text-[1.4vw] lg:px-[2.2vw] lg:py-[0.9vw] lg:text-[1.3vw] xl:px-[2vw] xl:py-[0.8vw] xl:text-[1.2vw] ${
+                                    className={`border-2 px-4 py-2 rounded-full font-semibold text-sm transition-all duration-300 sm:px-5 sm:py-2.5 sm:text-base md:px-6 md:py-3 md:text-lg lg:px-7 lg:py-3.5 lg:text-xl xl:px-8 xl:py-4 xl:text-2xl ${
                                         activeTab === "aboutus" 
                                             ? "bg-transparent text-black border-[#4A4978]" 
                                             : "border-gray-600 border-2 bg-[#4A4978] hover:bg-[#4A4978] text-white hover:border-[#4A4978]"
@@ -123,11 +123,11 @@ const AboutUsSection = () => {
                                 </button>
                                 
                                 <div className="relative">
-                                    <div className="rounded-full px-[1.2vw] py-[0.4vw] sm:px-[1.7vw] sm:py-[0.6vw] md:px-[1.4vw] md:py-[0.5vw] lg:px-[1.3vw] lg:py-[0.45vw] xl:px-[1.2vw] xl:py-[0.4vw]">
+                                    <div className="rounded-full px-2 py-1 sm:px-3 sm:py-1.5 md:px-4 md:py-2 lg:px-5 lg:py-2.5 xl:px-6 xl:py-3">
                                         <button 
                                             data-tab-button="solution"
                                             onClick={() => handleTabSwitch("solution")}
-                                            className={`px-[1.2vw] py-[0.8vw] rounded-full font-semibold text-[1.2vw] transition-all duration-300 sm:px-[1.7vw] sm:py-[1.1vw] sm:text-[1.7vw] md:px-[1.4vw] md:py-[1vw] md:text-[1.4vw] lg:px-[1.3vw] lg:py-[0.9vw] lg:text-[1.3vw] xl:px-[1.2vw] xl:py-[0.8vw] xl:text-[1.2vw] ${
+                                            className={`px-4 py-2 rounded-full font-semibold text-sm transition-all duration-300 sm:px-5 sm:py-2.5 sm:text-base md:px-6 md:py-3 md:text-lg lg:px-7 lg:py-3.5 lg:text-xl xl:px-8 xl:py-4 xl:text-2xl ${
                                                 activeTab === "solution" 
                                                     ? "bg-transparent text-black border-2 border-[#4A4978]" 
                                                     : "bg-[#4A4978] text-[#ffffff]"
@@ -138,15 +138,15 @@ const AboutUsSection = () => {
                                     </div>
                                 </div>
                             </div>
-                            <h2 className={`text-[3.5vw] font-bold leading-tight mb-[2vw] transition-colors duration-500 sm:text-[4.9vw] sm:mb-[2.8vw] md:text-[4.2vw] md:mb-[2.4vw] lg:text-[3.8vw] lg:mb-[2.2vw] xl:text-[3.5vw] xl:mb-[2vw] ${
+                            <h2 className={`text-2xl font-bold leading-tight mb-4 transition-colors duration-500 sm:text-3xl sm:mb-6 md:text-4xl md:mb-8 lg:text-5xl lg:mb-10 xl:text-6xl xl:mb-12 ${
                                 activeTab === "aboutus" ? "text-[#2C3E50]" : "text-[#4A4978]"
                             }`}>
                                 {activeTab === "aboutus" ? (
                                     <>
-                                        <div className="font-medium mb-[0.5vw] sm:mb-[0.7vw] md:mb-[0.6vw] lg:mb-[0.55vw] xl:mb-[0.5vw]">
+                                        <div className="font-medium mb-1 sm:mb-2 md:mb-3 lg:mb-4 xl:mb-5">
                                             We <span className="font-black">deliver</span> you a
                                         </div>
-                                        <div className="font-black mb-[0.5vw] sm:mb-[0.7vw] md:mb-[0.6vw] lg:mb-[0.55vw] xl:mb-[0.5vw]">
+                                        <div className="font-black mb-1 sm:mb-2 md:mb-3 lg:mb-4 xl:mb-5">
                                             <span className="text-[#2C3E50]">milestone</span> to your
                                         </div>
                                         <div className="font-black">
@@ -155,10 +155,10 @@ const AboutUsSection = () => {
                                     </>
                                 ) : (
                                     <>
-                                        <div className="font-medium mb-[0.5vw] sm:mb-[0.7vw] md:mb-[0.6vw] lg:mb-[0.55vw] xl:mb-[0.5vw]">
+                                        <div className="font-medium mb-1 sm:mb-2 md:mb-3 lg:mb-4 xl:mb-5">
                                             Our <span className="font-black">innovative</span> solutions
                                         </div>
-                                        <div className="font-black mb-[0.5vw] sm:mb-[0.7vw] md:mb-[0.6vw] lg:mb-[0.55vw] xl:mb-[0.5vw]">
+                                        <div className="font-black mb-1 sm:mb-2 md:mb-3 lg:mb-4 xl:mb-5">
                                             <span className="text-[#4A4978]">streamline</span> your
                                         </div>
                                         <div className="font-black">
@@ -167,7 +167,7 @@ const AboutUsSection = () => {
                                     </>
                                 )}
                             </h2>
-                            <p className={`text-[1.4vw] leading-[2vw] max-w-[25vw] transition-colors duration-500 sm:text-[2vw] sm:leading-[2.8vw] sm:max-w-[35vw] md:text-[1.7vw] md:leading-[2.4vw] md:max-w-[30vw] lg:text-[1.5vw] lg:leading-[2.2vw] lg:max-w-[27vw] xl:text-[1.4vw] xl:leading-[2vw] xl:max-w-[25vw] ${
+                            <p className={`text-sm leading-relaxed max-w-xs transition-colors duration-500 sm:text-base sm:leading-relaxed sm:max-w-sm md:text-lg md:leading-relaxed md:max-w-md lg:text-xl lg:leading-relaxed lg:max-w-lg xl:text-2xl xl:leading-relaxed xl:max-w-xl ${
                                 activeTab === "aboutus" ? "text-[#2C3E50]" : "text-[#4A4978]"
                             }`}>
                                 {activeTab === "aboutus" ? (
