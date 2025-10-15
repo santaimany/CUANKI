@@ -16,36 +16,61 @@ const EducationSection = () => {
 
     useEffect(() => {
         const ctx = gsap.context(() => {
+            const isMobile = window.innerWidth < 1024;
 
-            gsap.set(cardsRef.current?.children || [], {
-                opacity: 1,
-                y: -150,
-                rotation: () => gsap.utils.random(-45, 45),
-                scale: 0.8,
-                transformOrigin: "top center"
-            });
+            if (isMobile) {
+                // Mobile animations
+                gsap.set(cardsRef.current?.children || [], {
+                    opacity: 0,
+                    y: 50,
+                    scale: 0.9
+                });
 
-       
-            gsap.to(cardsRef.current?.children || [], {
-                opacity: 1,
-                y: 0,
-                rotation: 0,
-                scale: 1,
-                duration: 1.5,
-                stagger: {
-                    each: 0.2,
-                    ease: "power2.out"
-                },
-                ease: "bounce.out",
-                scrollTrigger: {
-                    trigger: sectionRef.current,
-                    start: "top 50%",
-                    toggleActions: "play none none none"
-                }
-            });
+                gsap.to(cardsRef.current?.children || [], {
+                    opacity: 1,
+                    y: 0,
+                    scale: 1,
+                    duration: 0.6,
+                    stagger: 0.2,
+                    ease: "power2.out",
+                    scrollTrigger: {
+                        trigger: sectionRef.current,
+                        start: "top 60%",
+                        toggleActions: "play none none reverse"
+                    }
+                });
+            } else {
+                // Desktop animations
+                gsap.set(cardsRef.current?.children || [], {
+                    opacity: 1,
+                    y: -150,
+                    rotation: () => gsap.utils.random(-45, 45),
+                    scale: 0.8,
+                    transformOrigin: "top center"
+                });
+
+                gsap.to(cardsRef.current?.children || [], {
+                    opacity: 1,
+                    y: 0,
+                    rotation: 0,
+                    scale: 1,
+                    duration: 1.5,
+                    stagger: {
+                        each: 0.2,
+                        ease: "power2.out"
+                    },
+                    ease: "bounce.out",
+                    scrollTrigger: {
+                        trigger: sectionRef.current,
+                        start: "top 50%",
+                        toggleActions: "play none none none"
+                    }
+                });
+            }
 
         
-            if (cardsRef.current?.children) {
+            // Hover effects (desktop only)
+            if (!isMobile && cardsRef.current?.children) {
                 Array.from(cardsRef.current.children).forEach((card) => {
                     const cardElement = card as HTMLElement;
                     
@@ -78,7 +103,70 @@ const EducationSection = () => {
     return (
         <section ref={sectionRef} className="relative bg-gradient-to-r from-[#363256] to-[#50488A] py-[4vw] sm:py-[5vw] md:py-[4.5vw] lg:py-[5vw] xl:py-[6vw]">
          
-            <div className="relative w-full max-w-[90vw] mx-auto sm:max-w-[95vw] md:max-w-[92vw] lg:max-w-[91vw] xl:max-w-[90vw]">
+            {/* Mobile Layout */}
+            <div className="lg:hidden relative w-full px-4 py-12 overflow-hidden">
+                {/* Decorative graduation cap at top left - LARGER */}
+                <div className="absolute top-4 -left-8 w-48 h-48 z-30">
+                    <Image
+                        src={TopiToga}
+                        alt="Graduation decoration"
+                        width={192}
+                        height={192}
+                        className="w-full h-auto"
+                    />
+                </div>
+
+                {/* Header with Education badge - ABOVE whiteBg */}
+                <div className="relative z-20 mb-8 text-center pt-8">
+                    
+                    {/* White Background Container - BEHIND text only */}
+                    <div className="relative inline-block px-8 py-8">
+                        {/* White Background - LARGER */}
+                        <div className="absolute inset-0 -mx-4 -left-50 -my-4 z-0 ">
+                            <Image
+                                src={WhiteBg}
+                                alt="Education background shape"
+                                className="w-full h-full object-contain"
+                            />
+                        </div>
+                       
+                    
+                        {/* Text on top of background */}
+                        <h2 className="relative z-10 text-[#50488A] text-2xl font-medium leading-tight">
+                             <div className="inline-block bg-[#50488A]  text-white px-8 py-3 rounded-full text-base font-semibold mb-6 shadow-md">
+                        Education
+                    </div> <br/>
+                            <span className="font-black">Smart education</span>
+                            <br/>for your smart <span className="font-black">financial</span>
+                        </h2>
+                    </div>
+                </div>
+
+                {/* Vertical Education Cards */}
+                <div ref={cardsRef} className="relative z-10 flex flex-col items-center space-y-8 px-2">
+                    <div className="w-60 max-w-sm">
+                        <CardEducation 
+                            title="Financial Planning"
+                            description="Exposing your inventory to incidents is a thing of the past."
+                        />
+                    </div>
+                    <div className="w-60 max-w-sm">
+                        <CardEducation 
+                            title="Investment Basics"
+                            description="Exposing your inventory to incidents is a thing of the past."
+                        />
+                    </div>
+                    <div className="w-60 max-w-sm">
+                        <CardEducation 
+                            title="Budgeting Tips"
+                            description="Exposing your inventory to incidents is a thing of the past."
+                        />
+                    </div>
+                </div>
+            </div>
+
+            {/* Desktop Layout */}
+            <div className="hidden lg:block relative w-full max-w-[90vw] mx-auto sm:max-w-[95vw] md:max-w-[92vw] lg:max-w-[91vw] xl:max-w-[90vw]">
                 <div className="relative">
                     <Image
                         src={WhiteBg}

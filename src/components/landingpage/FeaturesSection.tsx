@@ -40,7 +40,49 @@ const FeaturesSection = () => {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // --- ANIMASI BAGIAN 1 (Tidak ada perubahan) ---
+      // --- ANIMASI MOBILE ---
+      const isMobile = window.innerWidth < 1024; // lg breakpoint
+      
+      if (isMobile) {
+        // Mobile animations
+        gsap.set(".mobile-coin-jar", { x: -100, autoAlpha: 0 });
+        gsap.set(".mobile-header", { y: -30, autoAlpha: 0 });
+        gsap.set(".mobile-feature-card", { scale: 0.8, autoAlpha: 0 });
+        gsap.set(".mobile-connector", { scaleY: 0, transformOrigin: "top" });
+        gsap.set(".mobile-text-box", { y: 50, autoAlpha: 0 });
+        gsap.set(".mobile-buttons", { y: 30, autoAlpha: 0 });
+
+        const tlMobile = gsap.timeline({
+          scrollTrigger: {
+            trigger: ".mobile-section",
+            start: "top 80%",
+            end: "bottom 20%",
+            toggleActions: "play none none reverse",
+          },
+        });
+
+        tlMobile
+          .to(".mobile-coin-jar", { x: 0, autoAlpha: 1, duration: 0.8, ease: "power2.out" })
+          .to(".mobile-header", { y: 0, autoAlpha: 1, duration: 0.6, ease: "power2.out" }, "-=0.4")
+          .to(".mobile-feature-card", { 
+            scale: 1, 
+            autoAlpha: 1, 
+            stagger: 0.15, 
+            duration: 0.5, 
+            ease: "back.out(1.7)" 
+          }, "-=0.3")
+          .to(".mobile-connector", { 
+            scaleY: 1, 
+            autoAlpha: 1, 
+            stagger: 0.15, 
+            duration: 0.4, 
+            ease: "power2.inOut" 
+          }, "-=0.8")
+          .to(".mobile-text-box", { y: 0, autoAlpha: 1, duration: 0.6, ease: "power2.out" }, "-=0.3")
+          .to(".mobile-buttons", { y: 0, autoAlpha: 1, duration: 0.5, ease: "power2.out" }, "-=0.3");
+      }
+
+      // --- ANIMASI DESKTOP BAGIAN 1 ---
       const tl1 = gsap.timeline({
         scrollTrigger: {
           trigger: section1Ref.current,
@@ -133,9 +175,113 @@ const FeaturesSection = () => {
       ref={mainRef}
       className="bg-gradient-to-r from-[#363256]  to-[#50488A]"
     >
+      {/* Mobile Layout */}
+      <section className="mobile-section lg:hidden relative min-h-screen flex flex-col py-8 px-6 overflow-hidden">
+        {/* Coin Jar decorative - positioned like in image */}
+        <div className="mobile-coin-jar absolute top-20 -left-8 z-0">
+          <Image
+            src={CoinJar}
+            alt="Coin Jar"
+            width={180}
+            height={180}
+            className="w-36 h-auto opacity-90"
+          />
+        </div>
+
+        {/* Header */}
+        <div className="mobile-header relative z-10 text-justify mb-12 pl-4">
+          <h2 className="text-white text-5xl ">
+            <span className="flex items-center gap-2 mb-1">
+              <Image
+                src={Clogo}
+                alt="Cuanki Logo"
+                width={32}
+                height={32}
+                className="w-14 h-14"
+              />
+              <span className="font-bold">heck</span>
+            </span>
+            <span className="block">Our</span>
+            <span className="text-[#0EFF95] font-bold block">Features</span>
+          </h2>
+        </div>
+
+        {/* Feature Flowchart - 2 Column Layout like in image */}
+        <div className="relative z-10 flex flex-col items-center mb-8 px-2">
+          {/* Row 1: AI Assistant (left) and Financial Edu (right) */}
+          <div className="w-full flex justify-center  mb-0">
+            {/* AI Assistant - Left */}
+            <div className="flex flex-col items-center">
+              <div className="mobile-feature-card bg-[#A3FFD6] rounded-3xl p-6 w-40 h-46 flex flex-col items-center justify-center shadow-lg">
+                <Image src={AiIcon} alt="AI Assistant" width={44} height={44} className="mb-3 w-11 h-11" />
+                <h4 className="text-[#453F76] text-sm font-bold text-center leading-tight">
+                  AI<br />Assistant
+                </h4>
+              </div>
+              <div className="mobile-connector w-5 h-20 bg-[#A3FFD6]"></div>
+            </div>
+
+            {/* Financial Edu - Right */}
+            <div className="flex flex-col items-center">
+              <div className="mobile-feature-card bg-[#A3FFD6] rounded-3xl p-6 w-40 h-46  flex flex-col items-center justify-center shadow-lg">
+                <Image src={EduIcon} alt="Financial Education" width={44} height={44} className="mb-3 w-11 h-11" />
+                <h4 className="text-[#453F76] text-sm font-bold text-center leading-tight">
+                  Financial<br />Edu
+                </h4>
+              </div>
+              <div className="mobile-connector w-5 h-20 bg-[#A3FFD6]"></div>
+            </div>
+          </div>
+
+          {/* Row 2: Money Manager (left) and Calendar Logs (right) */}
+          <div className="w-full flex justify-center mb-0">
+            {/* Money Manager - Left */}
+            <div className="flex flex-col items-center">
+              <div className="mobile-feature-card bg-[#A3FFD6] rounded-3xl p-6 w-40 h-46  flex flex-col items-center justify-center shadow-lg">
+                <Image src={MoneyIcon} alt="Money Manager" width={44} height={44} className="mb-3 w-11 h-11" />
+                <h4 className="text-[#453F76] text-sm font-bold text-center leading-tight">
+                  Money<br />Manager
+                </h4>
+              </div>
+              <div className="mobile-connector w-5 h-30 bg-[#A3FFD6]"></div>
+            </div>
+
+            {/* Calendar Logs - Right */}
+            <div className="flex flex-col items-center">
+              <div className="mobile-feature-card bg-[#A3FFD6] rounded-3xl p-6 w-40 h-46 flex flex-col items-center justify-center shadow-lg">
+                <Image src={CalendarIcon} alt="Calendar Logs" width={44} height={44} className="mb-3 w-11 h-11" />
+                <h4 className="text-[#453F76] text-sm font-bold text-center leading-tight">
+                  Calendar<br />Logs
+                </h4>
+              </div>
+              <div className="mobile-connector w-5 h-30 bg-[#A3FFD6]"></div>
+            </div>
+          </div>
+
+          {/* Bottom Text Box - Full Width */}
+          <div className="mobile-text-box bg-[#A3FFD6] rounded-3xl p-10 w-full shadow-lg">
+            <h3 className="text-[#50488A] text-2xl font-normal mb-4 leading-snug">
+              We <span className="font-bold">deliver</span> you a <span className="font-bold">milestone</span> to your <span className="font-bold">financial goal</span>
+            </h3>
+            <p className="text-[#50488A] text-sm leading-relaxed">
+              Exposing your inventory to incidents is a thing of the past. We have a professional insurance policy that protects all your items against damage and theft.
+            </p>
+          </div>
+        </div>
+
+        {/* Buttons */}
+        <div className="mobile-buttons relative z-10 flex justify-center items-center gap-4 mt-4">
+          <button className="bg-[#A3FFD6] text-[#1e1e1e] font-bold py-2.5 px-8 text-sm rounded-full  hover:bg-[#8FFFBF] transition-colors">
+             Explore <span className="text-lg">→</span>
+          </button>
+          
+        </div>
+      </section>
+
+      {/* Desktop Layout */}
       <section
         ref={section1Ref}
-        className="relative h-screen flex items-center"
+        className="hidden lg:flex relative h-screen items-center"
       >
         <div className="absolute bottom-[-15vw] z-10 coin-jar-anim sm:bottom-[-18vw] md:bottom-[-16vw] lg:bottom-[-15.5vw] xl:bottom-[-15vw]">
           <Image
@@ -238,10 +384,10 @@ const FeaturesSection = () => {
         </div>
       </section>
 
-      {/* BAGIAN 2: MILESTONE */}
+      {/* BAGIAN 2: MILESTONE - Desktop Only */}
       <section
         ref={section2Ref}
-        className="relative z-10 px-[2vw] overflow-hidden py-[4vw] sm:px-[3vw] sm:py-[5vw] md:px-[2.5vw] md:py-[4.5vw] lg:px-[2.2vw] lg:py-[4.2vw] xl:px-[2vw] xl:py-[4vw]"
+        className="hidden lg:block relative z-10 px-[2vw] overflow-hidden py-[4vw] sm:px-[3vw] sm:py-[5vw] md:px-[2.5vw] md:py-[4.5vw] lg:px-[2.2vw] lg:py-[4.2vw] xl:px-[2vw] xl:py-[4vw]"
       >
         <div className="relative">
           <div className="absolute inset-0 z-0">

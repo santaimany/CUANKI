@@ -5,12 +5,15 @@ import Image from "next/image";
 import { gsap } from "gsap";
 import greenBg from "@/assets/landingpage/background/green-aboutus-inverted.svg";
 import whiteBg from "@/assets/landingpage/background/white-solution-inverted.svg";
+import handImage from "@/assets/landingpage/image/image-tangan.png";
 
 const AboutUsSection = () => {
     const [activeTab, setActiveTab] = useState("aboutus");
     const greenBgContainerRef = useRef<HTMLDivElement>(null);
     const whiteBgContainerRef = useRef<HTMLDivElement>(null);
     const contentRef = useRef<HTMLDivElement>(null);
+    const contentMobileRef = useRef<HTMLDivElement>(null);
+    
     const tl = useRef<gsap.core.Timeline | null>(null);
 
     useEffect(() => {
@@ -23,9 +26,9 @@ const AboutUsSection = () => {
   const handleTabSwitch = (tab: "aboutus" | "solution") => {
     if (tab === activeTab || (tl.current && tl.current.isActive())) return;
 
-    if (!contentRef.current) return;
+    if (!contentRef.current && !contentMobileRef.current) return;
 
-    // Animasi latar belakang (tidak ada perubahan di sini)
+    // Animasi latar belakang (Desktop only)
     if (tl.current) {
         tl.current.kill();
     }
@@ -35,63 +38,147 @@ const AboutUsSection = () => {
     const layerToRecede = isSwitchingToSolution ? greenBgContainerRef.current : whiteBgContainerRef.current;
     const layerToAdvance = isSwitchingToSolution ? whiteBgContainerRef.current : greenBgContainerRef.current;
 
-    tl.current.to(layerToRecede, { scale: 0.95 }, 0)
-        .to(layerToAdvance, {
-            keyframes: [
-                { y: "-90%", scale: 1.05, duration: 0.6, ease: "sine.out" },
-                { y: "0%", scale: 1, duration: 0.5, ease: "sine.in" }
-            ]
-        }, 0)
-        .set(layerToAdvance, { zIndex: 3 }, 0.6)
-        .set(layerToAdvance, { zIndex: 2 })
-        .set(layerToRecede, { zIndex: 1 });
+    if (layerToRecede && layerToAdvance) {
+        tl.current.to(layerToRecede, { scale: 0.95 }, 0)
+            .to(layerToAdvance, {
+                keyframes: [
+                    { y: "-90%", scale: 1.05, duration: 0.6, ease: "sine.out" },
+                    { y: "0%", scale: 1, duration: 0.5, ease: "sine.in" }
+                ]
+            }, 0)
+            .set(layerToAdvance, { zIndex: 3 }, 0.6)
+            .set(layerToAdvance, { zIndex: 2 })
+            .set(layerToRecede, { zIndex: 1 });
+    }
 
 
-    // Animasi konten dan tombol
-    const clickedButton = contentRef.current.querySelector(`[data-tab-button="${tab}"]`);
-    const textContent = [
-        contentRef.current.querySelector('h2'),
-        contentRef.current.querySelector('p')
-    ];
+    // Animasi konten - Desktop
+    if (contentRef.current) {
+        const clickedButton = contentRef.current.querySelector(`[data-tab-button="${tab}"]`);
+        const textContent = [
+            contentRef.current.querySelector('h2'),
+            contentRef.current.querySelector('p')
+        ];
 
-    gsap.to([clickedButton, ...textContent], {
-      
-        autoAlpha: 0,
-        duration: 0.3,
-        ease: "power2.in",
-        stagger: 0.5,
-        onComplete: () => {
-            setActiveTab(tab);
+        gsap.to([clickedButton, ...textContent], {
+            autoAlpha: 0,
+            duration: 0.3,
+            ease: "power2.in",
+            stagger: 0.5,
+            onComplete: () => {
+                setActiveTab(tab);
 
-            gsap.delayedCall(0.5, () => {
-                if (!contentRef.current) return;
+                gsap.delayedCall(0.5, () => {
+                    if (!contentRef.current) return;
 
-                const newTextContent = [
-                   contentRef.current.querySelector('h2'),
-                   contentRef.current.querySelector('p')
-                ];
-                const newlyActiveButton = contentRef.current.querySelector(`[data-tab-button="${tab}"]`);
+                    const newTextContent = [
+                       contentRef.current.querySelector('h2'),
+                       contentRef.current.querySelector('p')
+                    ];
+                    const newlyActiveButton = contentRef.current.querySelector(`[data-tab-button="${tab}"]`);
 
-                gsap.fromTo([newlyActiveButton, ...newTextContent], 
-               
-                    { autoAlpha: 0}, 
-                    {
-                       
-                        autoAlpha: 1,
-                        y: 0,
-                        duration: 0.1,
-                        stagger: 0.1,
-                        ease: "power2.out"
-                    }
-                );
-            });
-        }
-    });
+                    gsap.fromTo([newlyActiveButton, ...newTextContent], 
+                        { autoAlpha: 0}, 
+                        {
+                            autoAlpha: 1,
+                            y: 0,
+                            duration: 0.1,
+                            stagger: 0.1,
+                            ease: "power2.out"
+                        }
+                    );
+                });
+            }
+        });
+    }
+    
+    // Animasi konten - Mobile (simple state change only)
+    if (contentMobileRef.current) {
+        setActiveTab(tab);
+    }
 };
     return (
         <section className="relative bg-gradient-to-r from-[#363256] to-[#50488A] w-full px-4 py-8 sm:px-6 sm:py-10 md:px-8 md:py-12 lg:px-10 lg:py-14 xl:px-12 xl:py-16">
             <div className="relative max-w-7xl mx-auto">
-                <div className="relative z-30 rounded-2xl sm:rounded-3xl md:rounded-[2.5rem] lg:rounded-[3rem] xl:rounded-[3.5rem]">
+                
+                {/* Mobile Layout */}
+                <div 
+                    ref={contentMobileRef}
+                    className={`lg:hidden relative rounded-[2rem] overflow-hidden min-h-[700px] transition-colors duration-500 ${
+                        activeTab === "aboutus" ? "bg-[#0EFF95]" : "bg-white"
+                    }`}
+                >
+                    {/* Content layer for mobile */}
+                    <div className="relative z-10 h-full flex flex-col p-6">
+                        {/* Buttons at top */}
+                        <div className="flex items-center gap-20 mb-8">
+                            <button
+                                data-tab-button-mobile="aboutus"
+                                onClick={() => handleTabSwitch("aboutus")}
+                                className={`border-2 px-6 py-2.5 rounded-full font-semibold text-sm transition-all duration-300 ${
+                                    activeTab === "aboutus" 
+                                        ? "bg-transparent text-[#363256] border-[#363256]" 
+                                        : "bg-[#4A4978] text-white border-[#4A4978] hover:bg-[#4A4978]/90"
+                                }`}
+                            >
+                                About Us
+                            </button>
+                            
+                            <button 
+                                data-tab-button-mobile="solution"
+                                onClick={() => handleTabSwitch("solution")}
+                                className={`px-6 py-2.5 rounded-full font-semibold text-sm transition-all duration-300 border-2 ${
+                                    activeTab === "solution" 
+                                        ? "bg-transparent text-[#4A4978] border-[#4A4978]" 
+                                        : "bg-[#4A4978] text-white border-[#4A4978] hover:bg-[#4A4978]/90"
+                                }`}
+                            >
+                                Solution
+                            </button>
+                        </div>
+
+                        {/* Content in center */}
+                        <div className="flex-1 flex flex-col justify-center text-center px-2">
+                            <h2 className={`text-3xl sm:text-4xl font-bold leading-tight mb-6 transition-colors duration-500 ${
+                                activeTab === "aboutus" ? "text-[#363256]" : "text-[#4A4978]"
+                            }`}>
+                                {activeTab === "aboutus" ? (
+                                    <>
+                                        We <span className="font-black">deliver</span> you a <span className="font-black">milestone</span> to your <span className="font-black">financial goal</span>
+                                    </>
+                                ) : (
+                                    <>
+                                        Our <span className="font-black">innovative</span> solutions <span className="font-black">streamline</span> your <span className="font-black">business growth</span>
+                                    </>
+                                )}
+                            </h2>
+                            <p className={`text-sm sm:text-base leading-relaxed transition-colors duration-500 ${
+                                activeTab === "aboutus" ? "text-[#363256]" : "text-[#4A4978]"
+                            }`}>
+                                {activeTab === "aboutus" ? (
+                                    "Exposing your inventory to incidents is a thing of the past. We have a professional insurance policy that protects all your items against damage and theft."
+                                ) : (
+                                    "From cutting-edge technology to bespoke services, we provide comprehensive solutions tailored to your unique needs, ensuring maximum efficiency and security."
+                                )}
+                            </p>
+                        </div>
+
+                        {/* Hand image at bottom */}
+                        <div className="relative h-[280px] -mb-6 -mx-6">
+                            <Image 
+                                src={handImage}
+                                alt="Hand with money"
+                                className="absolute -bottom-25 left-[30%] -translate-x-1/2 w-full max-w-[400px] h-auto object-contain"
+                                style={{ 
+                                    filter: "drop-shadow(0 -5px 20px rgba(0,0,0,0.1))"
+                                }}
+                            />
+                        </div>
+                    </div>
+                </div>
+
+                {/* Desktop Layout */}
+                <div className="hidden lg:block relative z-30 rounded-2xl sm:rounded-3xl md:rounded-[2.5rem] lg:rounded-[3rem] xl:rounded-[3.5rem]">
                     <Image
                         src={greenBg}
                         alt="Background Placeholder"
