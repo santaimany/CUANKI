@@ -52,7 +52,6 @@ export default function ProfilePage() {
   return (
     <div className="min-h-screen bg-[#363256] pb-20 md:pb-6">
       <div className="p-4 sm:p-6 md:p-8 max-w-4xl mx-auto">
-        {/* Header with Avatar */}
         <div className="bg-gradient-to-r from-[#0EFF95] to-[#00D9D9] rounded-3xl p-6 sm:p-8 flex items-center gap-4 sm:gap-6 mb-6">
           <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-full overflow-hidden border-4 border-white shadow-lg flex-shrink-0">
             <Image
