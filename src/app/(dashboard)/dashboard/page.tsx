@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import UserProfileHeader from '@/components/dashboard/UserProfile';
 import GoalsProgress from '@/components/dashboard/homepage/GoalsProgress';
-import Streak from '@/components/dashboard/homepage/Streak';
+import BudgetSisa from '@/components/dashboard/homepage/BudgetSisa';
 import BalanceOverview from '@/components/dashboard/homepage/BalanceOverview';
 import SpendingBreakdown from '@/components/dashboard/homepage/SpendingBreakdown';
 import SavingsChart from '@/components/dashboard/SavingsChart';
@@ -56,7 +56,7 @@ const DashboardPage = () => {
       <div className="md:hidden flex flex-col gap-4">
         <BalanceOverview userData={userData} />
         <GoalsProgress />
-        <Streak />
+        <BudgetSisa />
         <MyAccounts />
         <CalendarView />
         <SpendingBreakdown />
@@ -88,7 +88,7 @@ const DashboardPage = () => {
 
         {/* Streak: Baris 3, Kolom 3 */}
         <div className="col-start-3 row-start-3">
-          <Streak />
+          <BudgetSisa/>
         </div>
 
         {/* CalendarView: Baris 4-5, Kolom 1 */}

@@ -14,7 +14,7 @@ import {
  */
 export async function getUserGreeting(): Promise<GreetingUsersResponse> {
   try {
-    const response = await axiosInstance.get<GreetingUsersResponse>('/api/greeting-users');
+    const response = await axiosInstance.get<GreetingUsersResponse>('/api/greeting-user');
     return response.data;
   } catch (error) {
     console.error('Failed to fetch user greeting:', error);

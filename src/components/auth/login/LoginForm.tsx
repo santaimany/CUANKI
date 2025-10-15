@@ -1,6 +1,7 @@
 'use client';
 import { useState } from 'react';
-import { loginUser } from '@/lib/services/authService';
+import { loginUser, initiateGoogleLogin } from '@/lib/services/authService';
+import Link from 'next/link';
 
 const LoginForm = () => {
     const [focusedField, setFocusedField] = useState<string | null>(null);
@@ -156,6 +157,7 @@ const LoginForm = () => {
                 {/* Google Login Button */}
                 <button
                     type="button"
+                    onClick={initiateGoogleLogin}
                     className="w-full bg-white text-gray-600 py-4 sm:py-5 rounded-2xl text-lg sm:text-xl font-medium border border-gray-200 hover:bg-gray-50 transition-colors duration-300 flex items-center justify-center space-x-3"
                 >
                     <svg className="w-6 h-6 sm:w-7 sm:h-7" viewBox="0 0 24 24">
@@ -171,9 +173,9 @@ const LoginForm = () => {
             {/* Sign Up Link */}
             <div className="text-center mt-6 sm:mt-8">
                 <span className="text-[#363256] opacity-70 text-sm sm:text-base">Don&apos;t have an account? </span>
-                <a href="register" className="text-[#363256] font-semibold hover:underline text-sm sm:text-base">
+                <Link href="register" className="text-[#363256] font-semibold hover:underline text-sm sm:text-base">
                     Sign up
-                </a>
+                </Link>
             </div>
         </div>
     );

@@ -157,3 +157,26 @@ export interface UpdateAccountBalanceResponse {
   type: string;
   balance_per_type: number;
 }
+
+// Daily Saving Types
+export interface DailySavingBudget {
+  current_daily_budget: number;
+  initial_daily_budget: number;
+  difference: number;
+  is_reduced: boolean;
+}
+
+export interface DailySavingResponse {
+  status: string;
+  data: {
+    daily_saving: number;
+    budget: DailySavingBudget;
+    budget_records_count: number;
+    formatted: {
+      daily_saving: string;
+      current_daily_budget: string;
+      initial_daily_budget: string;
+      budget_difference: string;
+    };
+  };
+}

@@ -118,3 +118,25 @@ export const loginUser = async (data: LoginRequest): Promise<AuthResponse> => {
 export const logout = () => {
     localStorage.removeItem('token');
 };
+
+// Helper function to get base URL
+const getBaseURL = (): string => {
+    if (typeof window !== 'undefined' && window.location.hostname !== 'localhost') {
+        return '/api/proxy'; // Production (Vercel) - use proxy
+    }
+    return process.env.NEXT_PUBLIC_API_URL || 'http://103.186.0.127'; // Development
+};
+
+/**
+ * Initiate Google OAuth login flow
+ * Redirects user to backend Google OAuth endpoint
+ */
+export const initiateGoogleLogin = (): void => {
+    const baseURL = getBaseURL();
+    const googleAuthUrl = `${baseURL}/api/auth/google`;
+    
+    console.log('🔐 Initiating Google OAuth login:', googleAuthUrl);
+    
+    // Redirect to Google OAuth
+    window.location.href = googleAuthUrl;
+};
