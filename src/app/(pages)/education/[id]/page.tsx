@@ -7,6 +7,7 @@ import ReadOthers from '@/components/education/ReadOthers';
 import cKiri from '@/assets/education/icons/c-kiri-readothers.svg';
 import cTengah from '@/assets/education/icons/c-tengah-readothers.svg';
 import cKanan from '@/assets/education/icons/c-kanan-readothers.svg';
+import HeaderMobile from '@/assets/education/background/header-detail-mobile.svg';
 
 interface PageProps {
   params: {
@@ -23,10 +24,34 @@ export default function EducationDetailPage({ params }: PageProps) {
 
   return (
     <main className="min-h-screen bg-gradient-to-r from-[#363256] to-[#50488A]">
-      {/* Header Section (z-index tengah: 20) */}
-      <section className="relative px-4 sm:px-6 lg:px-12 py-12 sm:py-16 lg:py-20 xl:py-32">
+      {/* Mobile Header */}
+      <section className="lg:hidden relative px-6 pt-24 pb-8">
+        <div className="max-w-sm mx-auto relative">
+          {/* Mobile Header Background */}
+          <div className="absolute inset-0 -mx-10 -my-15 z-20">
+            <Image
+              src={HeaderMobile}
+              alt="Education header background"
+              className="w-full h-full object-contain"
+              priority
+            />
+          </div>
+          
+          <div className="relative z-20 space-y-2">
+            <p className="text-[#50488A] text-2xl">
+              <span className='font-plus-jakarta-bold'>Fin</span>Tech
+            </p>
+            <h1 className="text-[#50488A] text-sm font-semibold leading-tight">
+              {educationItem.title}
+            </h1>
+          </div>
+        </div>
+      </section>
+
+      {/* Desktop Header */}
+      <section className="hidden lg:block relative px-4 sm:px-6 lg:px-12 py-12 sm:py-16 lg:py-20 xl:py-32">
         <div className="max-w-full sm:max-w-[90vw] lg:max-w-[80vw] xl:max-w-[65vw] mx-auto relative">
-          <div className="absolute inset-0 -mx-4 sm:-mx-6 lg:-mx-12 -my-12 sm:-my-16 lg:-my-20 xl:-my-32 z-20">
+          <div className="absolute inset-0 -mx-4 sm:-mx-2 lg:-mx-12 -my-12 sm:-my-16 lg:-my-20 xl:-my-32 z-20">
             <Image
               src={HeaderBackground}
               alt="Education header background"
@@ -38,20 +63,60 @@ export default function EducationDetailPage({ params }: PageProps) {
           
           <div className="relative z-20">
             <div className="max-w-sm sm:max-w-md lg:max-w-xl space-y-2 sm:space-y-3">
-              <p className="inline-block  text-[#50488A] rounded-full text-xl sm:text-7xl ">
+              <p className="inline-block text-[#50488A] rounded-full text-xl sm:text-7xl">
                <span className='font-plus-jakarta-bold'>Fin</span>Tech
               </p>
-              <h1 className="text-[#50488A] text-xl sm:text-xl lg:text-2xl xl:text-3xl  leading-tight">
+              <h1 className="text-[#50488A] text-xl sm:text-xl lg:text-2xl xl:text-3xl leading-tight">
                 {educationItem.title}
               </h1>
-           
             </div>
           </div>
         </div>
       </section>
 
-      {/* Main Content Section */}
-      <section className="px-4 sm:px-6 lg:px-12 -mt-20 sm:-mt-32 lg:-mt-20 xl:-mt-30 relative">
+      {/* Mobile Main Content */}
+      <section className="lg:hidden px-1 -mt-4 relative">
+        <div className="max-w-md mx-auto">
+          <div className="bg-white rounded-3xl shadow-xl overflow-hidden p-6 space-y-6">
+            {/* Image */}
+            {educationItem.image && (
+              <div className="relative h-48 rounded-2xl overflow-hidden bg-gradient-to-br from-yellow-300 to-yellow-500">
+                <Image
+                  src={educationItem.image}
+                  alt={educationItem.title}
+                  className="w-full h-full object-cover"
+                  fill
+                />
+              </div>
+            )}
+
+            {/* Title */}
+            <h2 className="text-[#50488A] text-xl font-bold leading-tight">
+              {educationItem.title}
+            </h2>
+
+            {/* Introduction */}
+            <p className="text-[#50488A] text-sm leading-relaxed">
+              {educationItem.content?.introduction || educationItem.description}
+            </p>
+
+            {/* Sections */}
+            {educationItem.content?.sections.map((section, index) => (
+              <div key={index} className="space-y-2">
+                <h3 className="text-[#50488A] text-base font-bold">
+                  {index + 1}. {section.title}
+                </h3>
+                <p className="text-[#50488A] text-sm leading-relaxed">
+                  {section.content}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Desktop Main Content */}
+      <section className="hidden lg:block px-4 sm:px-6 lg:px-12 -mt-20 sm:-mt-32 lg:-mt-20 xl:-mt-30 relative">
         <div className="max-w-full sm:max-w-[90vw] lg:max-w-[87vw] xl:max-w-[70vw] mx-auto">
           
           <div className="bg-transparent rounded-xl sm:rounded-2xl shadow-xl overflow-hidden relative">

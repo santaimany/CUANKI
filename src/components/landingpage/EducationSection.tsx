@@ -8,6 +8,7 @@ import TopiToga from "@/assets/landingpage/image/topitogawithcoin-image.svg";
 import WhiteBg from "@/assets/landingpage/background/green-education-inverted.svg";
 import CardEducation from "./CardEducation";
 
+
 gsap.registerPlugin(ScrollTrigger);
 
 const EducationSection = () => {

@@ -34,7 +34,7 @@ const EducationCard: React.FC<EducationCardProps> = ({
       className="relative w-full aspect-[5/5] rounded-3xl overflow-hidden transform transition-all duration-300 cursor-pointer"
       onClick={onClick}
     >
-      {/* Background Image */}
+      {/* Background Image - Same for both mobile and desktop */}
       <Image
         src={getCardImage()}
         alt={`Education Card ${cardNumber}`}
@@ -42,13 +42,13 @@ const EducationCard: React.FC<EducationCardProps> = ({
         className="object-contain"
       />
       
-      {/* Content - Centered */}
-      <div className="absolute inset-0 p-6 flex flex-col justify-center items-center ">
-        <div className="max-w-xl ">
-          <h3 className="text-4xl font-bold mb-4 leading-tight text-[#363256]">
+      {/* Content - Responsive sizing */}
+      <div className="absolute inset-0 p-4 lg:p-6 flex flex-col justify-center items-center">
+        <div className="max-w-xl">
+          <h3 className="text-xl lg:text-4xl font-bold mb-2 lg:mb-4 leading-tight text-[#363256]">
             {educationItem.title}
           </h3>
-          <p className="text-xl leading-relaxed text-justify text-[#363256] opacity-80">
+          <p className="text-sm lg:text-xl leading-relaxed text-justify text-[#363256] opacity-80">
             {educationItem.description}
           </p>
         </div>

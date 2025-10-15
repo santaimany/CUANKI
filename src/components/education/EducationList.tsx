@@ -38,18 +38,35 @@ const EducationList = () => {
   };
 
   return (
-    <section className="relative bg-gradient-to-r from-[#363256] to-[#50488A]  pb-80 px-8 lg:px-16 overflow-hidden">
+    <>
+      {/* Mobile Layout */}
+      <section className="lg:hidden relative bg-gradient-to-r from-[#363256] to-[#50488A] py-12 px-6 overflow-hidden">
+        <div className="space-y-6 max-w-md mx-auto">
+          {educationData.map((item, index) => (
+            <div key={item.id} className="relative">
+              <EducationCard 
+                educationItem={item}
+                cardNumber={(index + 1) as 1 | 2 | 3 | 4}
+                onClick={() => handleCardClick(item.id)}
+              />
+              {/* Button Selanjutnya overlay */}
+       
+            </div>
+          ))}
+        </div>
+      </section>
 
-     
-      <div className="absolute top-[15vw] left-[12vw] transform  z-0">
-        <Image
-          src={cKiriAtas}
-          alt="C decoration behind card 1"
-          width={60}
-          height={60}
-          className="w-12 h-12 lg:w-full lg:h-auto "
-        />
-      </div>
+      {/* Desktop Layout */}
+      <section className="hidden lg:block relative bg-gradient-to-r from-[#363256] to-[#50488A] pb-80 px-8 lg:px-16 overflow-hidden">
+        <div className="absolute top-[15vw] left-[12vw] transform  z-0">
+          <Image
+            src={cKiriAtas}
+            alt="C decoration behind card 1"
+            width={60}
+            height={60}
+            className="w-12 h-12 lg:w-full lg:h-auto "
+          />
+        </div>
 
       
       <div className="absolute top-[20vw] right-[16vw] transform translate-x-1/2 z-0">
@@ -168,7 +185,8 @@ const EducationList = () => {
           </div>
         </div>
       </div>
-    </section>
+      </section>
+    </>
   );
 };
 
