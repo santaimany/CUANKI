@@ -56,10 +56,21 @@ export const registerUser = async (data: RegisterRequest): Promise<AuthResponse>
         
         return response.data;
     } catch (error: unknown) {
+        // Extract error message from backend response (Axios error structure)
+        if (typeof error === 'object' && error !== null && 'response' in error) {
+            const axiosError = error as { response?: { data?: { message?: string; error?: string } } };
+            const backendMessage = axiosError.response?.data?.message || axiosError.response?.data?.error;
+            
+            if (backendMessage) {
+                throw new Error(backendMessage);
+            }
+        }
+        
         if (error instanceof Error) {
             throw error;
         }
-        throw new Error('Registration failed');
+        
+        throw new Error('Registration failed. Please try again.');
     }
 };
 
@@ -86,10 +97,21 @@ export const loginUser = async (data: LoginRequest): Promise<AuthResponse> => {
         
         return response.data;
     } catch (error: unknown) {
+        // Extract error message from backend response (Axios error structure)
+        if (typeof error === 'object' && error !== null && 'response' in error) {
+            const axiosError = error as { response?: { data?: { message?: string; error?: string } } };
+            const backendMessage = axiosError.response?.data?.message || axiosError.response?.data?.error;
+            
+            if (backendMessage) {
+                throw new Error(backendMessage);
+            }
+        }
+        
         if (error instanceof Error) {
             throw error;
         }
-        throw new Error('Login failed');
+        
+        throw new Error('Login failed. Please try again.');
     }
 };
 
