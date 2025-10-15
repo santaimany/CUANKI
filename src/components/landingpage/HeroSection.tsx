@@ -8,6 +8,18 @@ import smileBg from '@/assets/landingpage/background/smile-bg.svg';
 
 gsap.registerPlugin(ScrollTrigger);
 
+// PWA Install Prompt Types
+interface BeforeInstallPromptEvent extends Event {
+  prompt: () => Promise<void>;
+  userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>;
+}
+
+declare global {
+  interface Window {
+    deferredPrompt?: BeforeInstallPromptEvent;
+  }
+}
+
 const HeroSection = () => {
   const sectionRef = useRef<HTMLElement>(null);
   const imageRef = useRef<HTMLDivElement>(null);
@@ -169,7 +181,7 @@ const HeroSection = () => {
       </div>
 
       {/* Mobile Layout - Center Aligned */}
-      <div className="lg:hidden relative z-10 w-full flex flex-col items-center justify-center text-center pt-24 pb-12 space-y-6">
+      <div className="lg:hidden relative z-10 w-full flex flex-col items-center justify-center text-center  pb-12 mb-20 space-y-6">
         
         {/* Image with floating animation */}
         <div ref={imageRef} className="w-full max-w-sm animate-float">
@@ -192,14 +204,14 @@ const HeroSection = () => {
             // Check if PWA can be installed
             if ('serviceWorker' in navigator) {
               // Trigger PWA install prompt
-              const installPrompt = (window as any).deferredPrompt;
+              const installPrompt = window.deferredPrompt;
               if (installPrompt) {
                 installPrompt.prompt();
-                installPrompt.userChoice.then((choiceResult: any) => {
+                installPrompt.userChoice.then((choiceResult) => {
                   if (choiceResult.outcome === 'accepted') {
                     console.log('User accepted the install prompt');
                   }
-                  (window as any).deferredPrompt = null;
+                  window.deferredPrompt = undefined;
                 });
               } else {
                 // Fallback: show instructions or redirect to download page
