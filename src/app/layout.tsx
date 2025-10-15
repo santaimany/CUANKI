@@ -65,6 +65,23 @@ export default function RootLayout({
         {!isNoNavbarFooterPage && <Navbar />}
         {children}
         {!isNoNavbarFooterPage && <Footer />}
+        
+        {/* PWA Install Handler */}
+        <script dangerouslySetInnerHTML={{
+          __html: `
+            let deferredPrompt;
+            window.addEventListener('beforeinstallprompt', (e) => {
+              e.preventDefault();
+              deferredPrompt = e;
+              window.deferredPrompt = e;
+            });
+            
+            window.addEventListener('appinstalled', () => {
+              console.log('PWA was installed');
+              window.deferredPrompt = null;
+            });
+          `
+        }} />
       </body>
     </html>
   );

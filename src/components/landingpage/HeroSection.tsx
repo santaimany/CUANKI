@@ -154,10 +154,10 @@ const HeroSection = () => {
   }, []);
 
   return (
-    <section ref={sectionRef} className="bg-gradient-to-r from-[#363256] to-[#50488A] w-full min-h-screen flex items-center relative" style={{ padding: "0 2vw" }}>
+    <section ref={sectionRef} className="bg-gradient-to-r from-[#363256] to-[#50488A] w-full min-h-screen flex items-center relative px-4 lg:px-8">
       
-      {/* Smile Background Asset - Large on Left Side */}
-      <div className="absolute -left-[25vw] top-1/2 -translate-y-1/2 z-10">
+      {/* Smile Background Asset - Hidden on mobile, visible on desktop */}
+      <div className="hidden lg:block absolute -left-[25vw] top-1/2 -translate-y-1/2 z-10">
         <Image
           src={smileBg}
           alt="Smile Background"
@@ -168,8 +168,77 @@ const HeroSection = () => {
         />
       </div>
 
-      <div className="relative z-10 w-full max-w-screen-2xl mx-auto flex flex-col lg:flex-row items-center justify-center" style={{ gap: "3vw" }}>
+      {/* Mobile Layout - Center Aligned */}
+      <div className="lg:hidden relative z-10 w-full flex flex-col items-center justify-center text-center pt-24 pb-12 space-y-6">
         
+        {/* Image with floating animation */}
+        <div ref={imageRef} className="w-full max-w-sm animate-float">
+          <div className="relative">
+            <Image
+              src={heroImage}
+              alt="Smart Financial Solution"
+              width={400} 
+              height={400} 
+              className="object-contain relative z-10 w-full h-auto drop-shadow-2xl"
+              priority
+            />
+          </div>
+        </div>
+
+        {/* Install Button with PWA functionality */}
+        <button 
+          ref={buttonRef}
+          onClick={() => {
+            // Check if PWA can be installed
+            if ('serviceWorker' in navigator) {
+              // Trigger PWA install prompt
+              const installPrompt = (window as any).deferredPrompt;
+              if (installPrompt) {
+                installPrompt.prompt();
+                installPrompt.userChoice.then((choiceResult: any) => {
+                  if (choiceResult.outcome === 'accepted') {
+                    console.log('User accepted the install prompt');
+                  }
+                  (window as any).deferredPrompt = null;
+                });
+              } else {
+                // Fallback: show instructions or redirect to download page
+                alert('To install, click the share button and select "Add to Home Screen"');
+              }
+            }
+          }}
+          className="border-2 border-[#0EFF95] text-[#0EFF95] font-bold rounded-full 
+                     hover:bg-[#0EFF95] hover:text-[#363256] hover:scale-105
+                     active:scale-95
+                     transition-all duration-300 ease-in-out relative overflow-hidden
+                     px-12 py-3 text-lg shadow-lg shadow-[#0EFF95]/30
+                     before:absolute before:inset-0 before:bg-[#0EFF95] before:opacity-0 
+                     before:transition-opacity before:duration-300 hover:before:opacity-20"
+        >
+          <span className="relative z-10">Install</span>
+        </button>
+
+        {/* Heading with glow effect */}
+        <h1 ref={headlineRef} className="leading-tight text-white relative text-4xl sm:text-5xl font-bold">
+          <span className="text-[#0EFF95] relative drop-shadow-[0_0_20px_rgba(14,255,149,0.6)]">
+            Smart
+          </span>{' '}
+          <span className="font-light">solution</span>
+          <br />
+          <span className="font-light">for your smart</span>{' '}
+          <span className="text-[#0EFF95] relative drop-shadow-[0_0_20px_rgba(14,255,149,0.6)]">
+            financial
+          </span>
+        </h1>
+
+        {/* Description */}
+        <p ref={paragraphRef} className="text-gray-300 text-base sm:text-lg max-w-md px-4">
+          Track your spending, set budgets, and achieve financial goals with ease.
+        </p>
+      </div>
+
+      {/* Desktop Layout - Original */}
+      <div className="hidden lg:flex relative z-10 w-full max-w-screen-2xl mx-auto flex-row items-center justify-center" style={{ gap: "3vw" }}>
         
         <div ref={imageRef} className="w-full lg:w-1/2 flex items-center justify-center relative">
           <div className="relative">
@@ -182,14 +251,12 @@ const HeroSection = () => {
               className="object-contain relative z-10"
               priority
             />
-          
           </div>
         </div>
 
-        
         <div className="w-full lg:w-1/2 flex flex-col items-center lg:items-end text-center lg:text-right">
           <div className="flex flex-col items-center lg:items-end lg:max-w-none" style={{ gap: "2vw", maxWidth: "40vw" }}>
-              <button ref={buttonRef}
+            <button ref={buttonRef}
               className="border-2 border-[#0EFF95] text-[#0EFF95] font-bold rounded-full 
                          hover:bg-[#0EFF95] hover:text-[#1e1e1e] 
                          transition-all duration-300 ease-in-out relative overflow-hidden
@@ -226,8 +293,6 @@ const HeroSection = () => {
             >
               Exposing your inventory to incidents is a thing of the past. We have a professional insurance policy that protects all your items.
             </p>
-            
-          
           </div>
         </div>
       </div>
