@@ -24,7 +24,7 @@ const BudgetSisa = () => {
       } catch (err) {
         console.error('Failed to fetch daily saving:', err);
         setError(err instanceof Error ? err.message : 'Failed to load data');
-        setDailySaving('Rp 0'); // Fallback value
+        setDailySaving('Rp 0'); 
       } finally {
         setIsLoading(false);
       }

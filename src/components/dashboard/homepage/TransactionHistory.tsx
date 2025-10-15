@@ -1,5 +1,7 @@
 'use client';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { getReceiptToday } from '@/lib/services/dashboardService';
+import type { Transaction } from '@/types/api';
 
 // --- Kumpulan Ikon (sebagai komponen React) ---
 // Anda bisa mengganti ini dengan file SVG atau library ikon Anda sendiri
@@ -48,32 +50,90 @@ const TransactionItem: React.FC<TransactionItemProps> = ({ icon, category, descr
 };
 
 
+// Helper function to get icon based on category
+const getCategoryIcon = (categoryName: string) => {
+  const category = categoryName.toLowerCase();
+  
+  if (category.includes('makan') || category.includes('food')) return <FoodIcon />;
+  if (category.includes('bensin') || category.includes('gas')) return <GasIcon />;
+  if (category.includes('laundry') || category.includes('loundry')) return <LaundryIcon />;
+  if (category.includes('kopi') || category.includes('coffee') || category.includes('ngopi')) return <CoffeeIcon />;
+  if (category.includes('parkir') || category.includes('parking')) return <ParkingIcon />;
+  
+  // Default icon
+  return <WalletIcon />;
+};
+
 // --- Komponen Utama: Daftar Riwayat Transaksi ---
 const TransactionHistoryList = () => {
-  // Contoh data, ini bisa Anda dapatkan dari API
-  const sampleTransactions = [
-    { icon: <FoodIcon />, category: 'Makanan', description: 'Ayam tukiran', amount: -10000 },
-    { icon: <WalletIcon />, category: 'Saku bulanan', description: 'Oktober', amount: 10000 },
-    { icon: <GasIcon />, category: 'Bensin', description: 'Minggu 1', amount: -10000 },
-    { icon: <LaundryIcon />, category: 'Loundry', description: 'Hari selasa', amount: -10000 }, // Typo diperbaiki
-    { icon: <CoffeeIcon />, category: 'Ngopi', description: 'Ramahjiwa', amount: -10000 },
-    { icon: <ParkingIcon />, category: 'Parkir', description: 'Ramahjiwa', amount: -10000 },
-    { icon: <ParkingIcon />, category: 'Parkir', description: 'Ramahjiwa', amount: -10000 },
-  ];
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [totalExpenses, setTotalExpenses] = useState('Rp 0');
+  const [formattedDate, setFormattedDate] = useState('');
+
+  useEffect(() => {
+    const fetchTransactions = async () => {
+      try {
+        setIsLoading(true);
+        const response = await getReceiptToday();
+        setTransactions(response.data.transactions);
+        setTotalExpenses(response.data.formatted_total_expenses);
+        setFormattedDate(response.data.formatted_date);
+      } catch (error) {
+        console.error('Failed to fetch transactions:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchTransactions();
+  }, []);
+
+  if (isLoading) {
+    return (
+      <div className="bg-[#363256] p-3 sm:p-4 md:p-5 lg:p-6 rounded-xl sm:rounded-2xl text-white w-full max-w-md mx-auto">
+        <h2 className="text-lg sm:text-xl md:text-2xl font-bold mb-3 sm:mb-4 md:mb-5">Riwayat transaksi</h2>
+        <div className="text-center py-8 text-white/60">Loading transactions...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-[#363256] p-3 sm:p-4 md:p-5 lg:p-6 rounded-xl sm:rounded-2xl text-white w-full max-w-md mx-auto">
-      <h2 className="text-lg sm:text-xl md:text-2xl font-bold mb-3 sm:mb-4 md:mb-5">Riwayat transaksi</h2>
+      <div className="flex justify-between items-center mb-3 sm:mb-4 md:mb-5">
+        <h2 className="text-lg sm:text-xl md:text-2xl font-bold">Riwayat transaksi</h2>
+        {formattedDate && (
+          <span className="text-xs sm:text-sm text-white/70">{formattedDate}</span>
+        )}
+      </div>
+
+      {/* Total Expenses Summary */}
+      {transactions.length > 0 && (
+        <div className="bg-[#50488A] p-3 rounded-xl mb-3 sm:mb-4">
+          <div className="flex justify-between items-center">
+            <span className="text-sm text-white/70">Total Pengeluaran Hari Ini:</span>
+            <span className="text-lg font-bold text-red-400">{totalExpenses}</span>
+          </div>
+        </div>
+      )}
+
+      {/* Transaction List */}
       <div className="space-y-2 sm:space-y-2.5 md:space-y-3">
-        {sampleTransactions.map((transaction, index) => (
-          <TransactionItem
-            key={index}
-            icon={transaction.icon}
-            category={transaction.category}
-            description={transaction.description}
-            amount={transaction.amount}
-          />
-        ))}
+        {transactions.length === 0 ? (
+          <div className="text-center py-8 text-white/60">
+            <p>Belum ada transaksi hari ini</p>
+          </div>
+        ) : (
+          transactions.map((transaction) => (
+            <TransactionItem
+              key={transaction.id}
+              icon={getCategoryIcon(transaction.category_name)}
+              category={transaction.category_name}
+              description={transaction.note}
+              amount={parseFloat(transaction.amount) * (transaction.is_income ? 1 : -1)}
+            />
+          ))
+        )}
       </div>
     </div>
   );

@@ -24,6 +24,7 @@ export interface DailyBudget {
   budget_records_count: number;
 }
 
+
 export interface GreetingUsersResponse {
   status: string;
   message: string;
@@ -124,6 +125,7 @@ export interface UserAccount {
   type: string;
   balance: string;
   formatted_balance: string;
+
 }
 
 export interface UserAccountsResponse {
@@ -178,5 +180,84 @@ export interface DailySavingResponse {
       initial_daily_budget: string;
       budget_difference: string;
     };
+  };
+}
+
+// Calendar Status Types
+export interface CalendarDate {
+  date: string;
+  day: number;
+  day_name: string;
+  is_today: boolean;
+  is_past: boolean;
+  is_future: boolean;
+  status: 'no-budget' | 'under-budget' | 'overbudget' | 'today-normal' | 'today-overbudget' | 'future';
+  daily_budget: number;
+  daily_expenses: number;
+  remaining_budget: number;
+  over_budget_amount: number;
+  is_over_budget: boolean;
+  expense_count: number;
+  formatted: {
+    date: string;
+    daily_budget: string;
+    daily_expenses: string;
+    remaining_budget: string;
+    over_budget_amount: string;
+  };
+}
+
+export interface CalendarSummary {
+  total_month_initial_budget: number;
+  total_month_current_budget: number;
+  total_month_expenses: number;
+  remaining_month_budget: number;
+  over_budget_days_count: number;
+  days_with_expenses: number;
+  average_daily_expenses: number;
+  formatted: {
+    month_year: string;
+    total_month_initial_budget: string;
+    total_month_current_budget: string;
+    total_month_expenses: string;
+    remaining_month_budget: string;
+    over_budget_days: string;
+    days_with_expenses: string;
+  };
+}
+
+export interface CalendarStatusResponse {
+  status: string;
+  data: {
+    month: number;
+    year: number;
+    month_name: string;
+    days_in_month: number;
+    calendar_dates: CalendarDate[];
+    summary: CalendarSummary;
+  };
+}
+
+// Receipt Today Types
+export interface Transaction {
+  id: number;
+  category_name: string;
+  note: string;
+  amount: string;
+  is_income: boolean;
+  expense_time: string;
+  expense_date_raw: string;
+  formatted_amount: string;
+}
+
+export interface ReceiptTodayResponse {
+  status: string;
+  data: {
+    date: string;
+    total_expenses: number;
+    total_transactions: number;
+    formatted_date: string;
+    formatted_total_expenses: string;
+    transactions: Transaction[];
   };
 }

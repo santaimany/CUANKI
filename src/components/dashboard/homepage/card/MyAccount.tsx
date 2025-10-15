@@ -49,10 +49,14 @@ const MyAccounts = () => {
     );
   }
 
+  // Show only first 4 accounts
+  const displayAccounts = accounts.slice(0, 4);
+  const hasMore = accounts.length > 4;
+
   return (
-    <div className="p-8 bg-[#363256]">
+    <div className="p-8 bg-[#363256] h-full flex flex-col">
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-        {accounts.map((account, index) => (
+        {displayAccounts.map((account, index) => (
           <AccountCard
             key={`${account.account_id}-${account.type}-${index}`}
             accountName={`${account.account_name} - ${account.type}`}
@@ -61,6 +65,17 @@ const MyAccounts = () => {
           />
         ))}
       </div>
+      
+      {hasMore && (
+        <div className="mt-6 text-center">
+          <a 
+            href="/dashboard/aset"
+            className="inline-block px-6 py-2 bg-[#00F5A0] text-[#363256] rounded-xl font-semibold hover:bg-[#00D68F] transition-colors"
+          >
+            See All ({accounts.length} accounts)
+          </a>
+        </div>
+      )}
     </div>
   );
 };

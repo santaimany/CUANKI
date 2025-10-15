@@ -4,9 +4,9 @@ import UserProfileHeader from '@/components/dashboard/UserProfile';
 import GoalsProgress from '@/components/dashboard/homepage/GoalsProgress';
 import BudgetSisa from '@/components/dashboard/homepage/BudgetSisa';
 import BalanceOverview from '@/components/dashboard/homepage/BalanceOverview';
-import SpendingBreakdown from '@/components/dashboard/homepage/SpendingBreakdown';
 import SavingsChart from '@/components/dashboard/SavingsChart';
 import CalendarView from '@/components/dashboard/homepage/CalendarView'; 
+import DailyExpenseSummary from '@/components/dashboard/homepage/DailyExpenseSummary';
 import MyAccounts from '@/components/dashboard/homepage/card/MyAccount';
 import TransactionHistoryList from '@/components/dashboard/homepage/TransactionHistory';
 import { GreetingUsersResponse } from '@/types/api';
@@ -58,8 +58,13 @@ const DashboardPage = () => {
         <GoalsProgress />
         <BudgetSisa />
         <MyAccounts />
-        <CalendarView />
-        <SpendingBreakdown />
+        
+        {/* Calendar and Daily Expense side by side on mobile */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <CalendarView />
+          <DailyExpenseSummary />
+        </div>
+        
         <SavingsChart />
         <TransactionHistoryList />
       </div>
@@ -91,15 +96,18 @@ const DashboardPage = () => {
           <BudgetSisa/>
         </div>
 
-        {/* CalendarView: Baris 4-5, Kolom 1 */}
-        <div className="row-start-4 row-span-2 col-start-1">
-          <CalendarView />
-        </div>
+          {/* CalendarView: Left side */}
+          <div className="col-span-1">
+            <CalendarView />
+          </div>
+          
+          {/* DailyExpenseSummary: Right side */}
+          <div className="col-span-2">
+            <DailyExpenseSummary />
+          </div>
+     
 
-        {/* SpendingBreakdown: Baris 4-5, Kolom 2-3 */}
-        <div className="row-start-4 row-span-2 col-start-2 col-span-2">
-          <SpendingBreakdown />
-        </div>
+      
 
         {/* TransactionHistoryList: Baris 4-6, Kolom 4 */}
         <div className="col-start-4 row-start-4 row-span-3">
