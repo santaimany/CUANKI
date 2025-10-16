@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 // 1. Impor semua yang dibutuhkan dari chart.js dan wrapper-nya
 import {
   Chart as ChartJS,
@@ -13,8 +13,7 @@ import {
   type ScriptableContext,
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
-
-import { GoalsProgressResponse } from '@/types/api';
+import axiosInstance from '@/lib/axios';
 
 // 2. Registrasi semua elemen yang akan digunakan
 ChartJS.register(
@@ -26,23 +25,67 @@ ChartJS.register(
   Filler // <-- Registrasi Filler plugin
 );
 
-interface SavingsChartProps {
-  goalsData?: GoalsProgressResponse | null;
+// Interface untuk response API
+interface ChartDataPoint {
+  x: string;
+  y: number;
+  date: string;
+  month_name: string;
+  formatted_value: string;
 }
 
-const SavingsChart: React.FC<SavingsChartProps> = ({ goalsData }) => {
-  // Default data jika tidak ada data dari API
-  const labels = ['Jan', 'Feb', 'Mei', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Des'];
-  const dataPoints = [20000, 35000, 30000, 45000, 40000, 50000, 65000, 70000, 85000, 80000];
-  
-  // Informasi dari API untuk ditampilkan di chart
-  const currentAmount = goalsData?.data?.main_saving_target?.current_amount || 0;
-  const targetAmount = goalsData?.data?.main_saving_target?.amount || 0;
-  const monthlySavingTarget = goalsData?.data?.finance_plan?.monthly_saving_target || 0;
-  
-  // TODO: Bisa dikembangkan untuk menggunakan data historis dari backend
-  // Saat ini menggunakan mock data untuk visualisasi
-  console.log('Chart Data:', { currentAmount, targetAmount, monthlySavingTarget });
+interface GoalGraphicRateResponse {
+  status: string;
+  message: string;
+  data: {
+    period: string;
+    chart_data: ChartDataPoint[];
+    summary: {
+      current_balance: number;
+      formatted: {
+        current_balance: string;
+        growth_percentage: string;
+      };
+    };
+  };
+}
+
+interface SavingsChartProps {
+  period?: '7days' | '30days' | '3months' | '6months' | '12months';
+}
+
+const SavingsChart: React.FC<SavingsChartProps> = ({ period = '12months' }) => {
+  const [chartData, setChartData] = useState<GoalGraphicRateResponse | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  // Fetch data dari API
+  useEffect(() => {
+    const fetchChartData = async () => {
+      try {
+        setIsLoading(true);
+        const response = await axiosInstance.get<GoalGraphicRateResponse>(
+          `/api/goal-graphic-rate?period=${period}`
+        );
+        
+        setChartData(response.data);
+        setError(null);
+      } catch (err) {
+        console.error('Error fetching chart data:', err);
+        setError(err instanceof Error ? err.message : 'Unknown error');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchChartData();
+  }, [period]);
+
+  // Extract data untuk chart
+  const labels = chartData?.data?.chart_data?.map(item => item.x) || [];
+  const dataPoints = chartData?.data?.chart_data?.map(item => item.y) || [];
+  const formattedBalance = chartData?.data?.summary?.formatted?.current_balance || 'Rp 0';
+  const growthPercentage = chartData?.data?.summary?.formatted?.growth_percentage || '+0%';
 
   // 3. Plugin kustom untuk menggambar garis vertikal saat hover
   const verticalLinePlugin = {
@@ -151,10 +194,52 @@ const SavingsChart: React.FC<SavingsChartProps> = ({ goalsData }) => {
     ],
   };
 
+  // Loading state
+  if (isLoading) {
+    return (
+      <div className="bg-[#50488A] rounded-2xl p-6 text-white">
+        <div className="flex h-64 items-center justify-center">
+          <div className="text-center">
+            <div className="mx-auto mb-4 h-8 w-8 animate-spin rounded-full border-4 border-white border-t-transparent"></div>
+            <p className="text-sm text-white">Memuat data...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Error state
+  if (error) {
+    return (
+      <div className="bg-[#50488A] rounded-2xl p-6 text-white">
+        <div className="flex h-64 items-center justify-center">
+          <div className="text-center">
+            <p className="mb-2 text-sm text-red-300">Gagal memuat data</p>
+            <p className="text-xs text-white/60">{error}</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Empty state
+  if (!chartData || labels.length === 0) {
+    return (
+      <div className="bg-[#50488A] rounded-2xl p-6 text-white">
+        <div className="flex h-64 items-center justify-center">
+          <p className="text-sm text-white/60">Tidak ada data tersedia</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="bg-[#50488A] rounded-2xl p-6 text-white">
       <h3 className="text-sm font-medium text-white/80">Saldo saat ini</h3>
-      <p className="text-4xl font-bold mb-4">Rp70.000,00</p>
+      <p className="text-4xl font-bold mb-4">{formattedBalance}</p>
+      <div className="flex items-baseline gap-2 mb-4">
+        <span className="text-sm text-green-400">{growthPercentage}</span>
+      </div>
       
       <div className="relative h-48">
         <Line options={options} data={data} plugins={[verticalLinePlugin]} />

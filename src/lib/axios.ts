@@ -41,6 +41,12 @@ axiosInstance.interceptors.request.use(
         } else {
             console.warn(`⚠️ Request to ${config.url} without token`);
         }
+        
+        // Log request body for debugging
+        if (config.data) {
+            console.log(`📦 Request body:`, config.data);
+        }
+        
         return config;
     },
     (error) => {

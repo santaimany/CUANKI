@@ -1,7 +1,7 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import { UserAccount } from '@/types/api';
-import { updateAccountBalance } from '@/lib/api/user';
+import { updateAccountAllocation } from '@/lib/api/user';
 
 interface EditAccountModalProps {
   isOpen: boolean;
@@ -38,19 +38,100 @@ const EditAccountModal: React.FC<EditAccountModalProps> = ({
     setError(null);
 
     try {
-      await updateAccountBalance({
+      console.log('🔍 Full account object:', account);
+      console.log('🔍 Available fields in account:', Object.keys(account));
+      console.log('🔍 Current account data:', {
         account_id: account.account_id,
-        type: accountType,
-        balance_per_type: parseFloat(balance),
+        account_allocation_id: account.account_allocation_id,
+        account_name: account.account_name,
+        current_type: account.type,
+        current_balance: account.balance,
+        new_type: accountType,
+        new_balance: balance,
       });
+
+      // Cari allocation_id dari berbagai kemungkinan field name
+      const allocationId = account.account_allocation_id 
+        || (account as any).allocation_id 
+        || (account as any).id
+        || (account as any).value; // value bisa jadi ID string
+      
+      console.log('🔍 Detected allocation ID:', allocationId, 'Type:', typeof allocationId);
+      
+      if (!allocationId) {
+        console.error('❌ Cannot find allocation ID in any field!');
+        console.error('📋 Account object keys:', Object.keys(account));
+        console.error('📋 Account values:', Object.values(account));
+        setError('ID alokasi tidak ditemukan. Data akun: ' + JSON.stringify(Object.keys(account)));
+        setLoading(false);
+        return;
+      }
+
+      // Build request data
+      const requestData: {
+        account_allocation_id: number;
+        new_type?: string;
+        new_balance?: string;
+      } = {
+        account_allocation_id: typeof allocationId === 'string' ? parseInt(allocationId) : allocationId,
+      };
+
+      // Only include type if it changed
+      if (accountType !== account.type) {
+        requestData.new_type = accountType;
+      }
+
+      // Only include balance if it changed (compare raw numbers)
+      const currentBalance = account.balance.toString();
+      const newBalance = balance.toString();
+      if (newBalance !== currentBalance) {
+        requestData.new_balance = newBalance;
+      }
+
+      // Check if anything actually changed
+      if (!requestData.new_type && !requestData.new_balance) {
+        setError('Tidak ada perubahan yang dibuat.');
+        setLoading(false);
+        return;
+      }
+
+      console.log('📤 Sending request data:', requestData);
+
+      const response = await updateAccountAllocation(requestData);
+      
+      console.log('✅ Update successful:', response);
+      console.log('📊 Change summary:', response.data.change_summary);
+      console.log('🏦 Updated accounts:', response.data.updated_accounts);
 
       onSuccess();
       onClose();
       setBalance('');
       setAccountType('');
     } catch (err) {
-      setError('Gagal mengupdate saldo. Silakan coba lagi.');
-      console.error('Error updating balance:', err);
+      console.error('❌ Error updating account allocation:', err);
+      
+      // Type guard for axios error
+      if (err && typeof err === 'object' && 'response' in err) {
+        const axiosError = err as { response?: { data?: { message?: string; error?: string; errors?: Record<string, string[]> } } };
+        console.error('📋 Error response:', axiosError.response?.data);
+        console.error('📋 Validation errors:', axiosError.response?.data?.errors);
+        
+        // Build error message with validation details
+        let errorMessage = axiosError.response?.data?.message || 'Gagal mengupdate akun.';
+        
+        // Add validation errors if available
+        const validationErrors = axiosError.response?.data?.errors;
+        if (validationErrors) {
+          const errorDetails = Object.entries(validationErrors)
+            .map(([field, messages]) => `${field}: ${(messages as string[]).join(', ')}`)
+            .join('\n');
+          errorMessage += '\n\nDetail:\n' + errorDetails;
+        }
+        
+        setError(errorMessage);
+      } else {
+        setError('Gagal mengupdate akun. Silakan coba lagi.');
+      }
     } finally {
       setLoading(false);
     }

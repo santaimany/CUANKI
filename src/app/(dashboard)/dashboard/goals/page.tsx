@@ -53,7 +53,7 @@ export default function GoalsPage() {
           />
 
           {/* Savings Chart */}
-          <SavingsChart goalsData={goalsData} />
+          <SavingsChart />
 
           {/* Action Buttons */}
           <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">

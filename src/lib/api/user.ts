@@ -5,7 +5,9 @@ import {
   UserAccountsResponse,
   ExpenseCategoriesResponse,
   UpdateAccountBalanceRequest,
-  UpdateAccountBalanceResponse
+  UpdateAccountBalanceResponse,
+  UpdateAccountAllocationRequest,
+  UpdateAccountAllocationResponse
 } from '@/types/api';
 
 /**
@@ -81,6 +83,42 @@ export async function updateAccountBalance(
     return response.data;
   } catch (error) {
     console.error('Failed to update account balance:', error);
+    throw error;
+  }
+}
+
+/**
+ * Updates account allocation (type and/or balance)
+ * Can update only type, only balance, or both
+ * Requires authentication token
+ */
+export async function updateAccountAllocation(
+  data: UpdateAccountAllocationRequest
+): Promise<UpdateAccountAllocationResponse> {
+  try {
+    const response = await axiosInstance.put<UpdateAccountAllocationResponse>(
+      '/api/update-account-allocation',
+      data
+    );
+    return response.data;
+  } catch (error) {
+    console.error('Failed to update account allocation:', error);
+    throw error;
+  }
+}
+
+/**
+ * Deletes a bank account by account_id
+ * Requires authentication token
+ */
+export async function deleteAccount(accountId: number): Promise<{ status: string; message: string }> {
+  try {
+    const response = await axiosInstance.delete<{ status: string; message: string }>(
+      `/api/account/${accountId}`
+    );
+    return response.data;
+  } catch (error) {
+    console.error('Failed to delete account:', error);
     throw error;
   }
 }

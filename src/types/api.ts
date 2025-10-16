@@ -121,6 +121,7 @@ export interface UserAccount {
   value: string;
   label: string;
   account_id: number;
+  account_allocation_id: number;
   account_name: string;
   type: string;
   balance: string;
@@ -158,6 +159,66 @@ export interface UpdateAccountBalanceResponse {
   account_id: number;
   type: string;
   balance_per_type: number;
+}
+
+// Update Account Allocation Types
+export interface UpdateAccountAllocationRequest {
+  account_allocation_id: number;  // Required - ID dari allocation yang mau diupdate
+  new_type?: string;              // Optional - Type baru
+  new_balance?: string;           // Optional - Balance baru
+}
+
+export interface AccountAllocation {
+  allocation_id: number;
+  type: string;
+  balance_per_type: string;
+  formatted_balance: string;
+}
+
+export interface UpdatedAccount {
+  account_id: number;
+  bank_name: string;
+  current_balance: string;
+  allocations: AccountAllocation[];
+  formatted_balance: string;
+}
+
+export interface ChangeSummary {
+  allocation_id: number;
+  changes_made: {
+    type_changed: boolean;
+    balance_changed: boolean;
+  };
+  original_values: {
+    type: string;
+    balance: string;
+  };
+  new_values: {
+    type: string;
+    balance: string;
+  };
+  total_banks: number;
+  change_log: {
+    balance_change?: {
+      old_balance: string;
+      new_balance: string;
+      balance_change: number;
+    };
+    type_change?: {
+      old_type: string;
+      new_type: string;
+    };
+  };
+}
+
+export interface UpdateAccountAllocationResponse {
+  status: string;
+  message: string;
+  data: {
+    change_summary: ChangeSummary;
+    updated_accounts: UpdatedAccount[];
+    budget_tracking: null | Record<string, unknown>;
+  };
 }
 
 // Daily Saving Types

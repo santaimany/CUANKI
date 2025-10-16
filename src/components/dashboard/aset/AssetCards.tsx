@@ -1,8 +1,9 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import { getUserAccounts } from '@/lib/api/user';
+import { getUserAccounts, deleteAccount } from '@/lib/api/user';
 import { UserAccount } from '@/types/api';
 import EditAccountModal from './EditAccountModal';
+import AddAccountModal from './AddAccountModal';
 
 interface AssetCardsProps {
   showButtons?: boolean;
@@ -15,11 +16,16 @@ const AssetCards: React.FC<AssetCardsProps> = ({ showButtons = true, onAccountsC
   const [loading, setLoading] = useState(true);
   const [selectedAccount, setSelectedAccount] = useState<UserAccount | null>(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [deletingAccountId, setDeletingAccountId] = useState<number | null>(null);
 
   const fetchAccounts = async () => {
     setLoading(true);
     try {
       const response = await getUserAccounts();
+      console.log('📊 Full API Response:', response);
+      console.log('📊 Accounts data:', response.data.accounts);
+      console.log('📊 First account structure:', response.data.accounts[0]);
       setAccounts(response.data.accounts);
       if (onAccountsChange) {
         onAccountsChange(response.data.accounts);
@@ -57,6 +63,57 @@ const AssetCards: React.FC<AssetCardsProps> = ({ showButtons = true, onAccountsC
     
     // Kembalikan ke halaman yang sama setelah refresh
     setCurrentPage(currentPageBeforeUpdate);
+  };
+
+  const handleAddAccount = () => {
+    setIsAddModalOpen(true);
+  };
+
+  const handleAddSuccess = async () => {
+    await fetchAccounts();
+  };
+
+  const handleDeleteAccount = async (accountId: number, accountName: string) => {
+    const confirmed = window.confirm(`Apakah Anda yakin ingin menghapus akun ${accountName}?`);
+    
+    if (!confirmed) return;
+
+    setDeletingAccountId(accountId);
+    
+    try {
+      console.log('🗑️ Deleting account ID:', accountId);
+      console.log('🗑️ DELETE URL:', `/api/account/${accountId}`);
+      
+      const response = await deleteAccount(accountId);
+      console.log('✅ Delete response:', response);
+      
+      // Refresh data setelah delete
+      await fetchAccounts();
+      
+      // Reset ke halaman 1 jika halaman saat ini tidak ada data lagi
+      const newTotalPages = Math.ceil((accounts.length - 1) / 4);
+      if (currentPage > newTotalPages && newTotalPages > 0) {
+        setCurrentPage(newTotalPages);
+      }
+      
+      alert(`Akun ${accountName} berhasil dihapus!`);
+    } catch (error) {
+      console.error('❌ Error deleting account:', error);
+      
+      // Type guard for axios error
+      if (error && typeof error === 'object' && 'response' in error) {
+        const axiosError = error as { response?: { data?: { message?: string }; status?: number } };
+        console.error('❌ Error response:', axiosError.response?.data);
+        console.error('❌ Error status:', axiosError.response?.status);
+        
+        const errorMessage = axiosError.response?.data?.message || 'Gagal menghapus akun. Silakan coba lagi.';
+        alert(errorMessage);
+      } else {
+        alert('Gagal menghapus akun. Silakan coba lagi.');
+      }
+    } finally {
+      setDeletingAccountId(null);
+    }
   };
 
   const getColorByType = (type: string) => {
@@ -118,21 +175,59 @@ const AssetCards: React.FC<AssetCardsProps> = ({ showButtons = true, onAccountsC
               <p className="text-center text-xs sm:text-sm text-[#363256]/70 mt-1">
                 {account.type}
               </p>
-              {/* Edit Icon */}
-              <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                <svg
-                  className="w-5 h-5 text-[#363256]"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
+              {/* Action Icons */}
+              <div className="absolute top-2 right-2 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                {/* Edit Icon */}
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleEditAccount(account);
+                  }}
+                  className="w-8 h-8 flex items-center justify-center rounded-full bg-white/80 hover:bg-white shadow-md transition-all"
+                  title="Edit"
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
-                  />
-                </svg>
+                  <svg
+                    className="w-4 h-4 text-[#363256]"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+                    />
+                  </svg>
+                </button>
+                {/* Delete Icon */}
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleDeleteAccount(account.account_id, account.account_name);
+                  }}
+                  disabled={deletingAccountId === account.account_id}
+                  className="w-8 h-8 flex items-center justify-center rounded-full bg-red-500/80 hover:bg-red-500 shadow-md transition-all disabled:opacity-50"
+                  title="Delete"
+                >
+                  {deletingAccountId === account.account_id ? (
+                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                  ) : (
+                    <svg
+                      className="w-4 h-4 text-white"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                      />
+                    </svg>
+                  )}
+                </button>
               </div>
             </div>
 
@@ -149,11 +244,11 @@ const AssetCards: React.FC<AssetCardsProps> = ({ showButtons = true, onAccountsC
       {/* Action Buttons - Only show if showButtons is true */}
       {showButtons && (
         <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 mb-4 sm:mb-6">
-          <button className="flex-1 bg-[#00F5A0] text-black font-bold py-3 sm:py-4 text-sm sm:text-base rounded-2xl sm:rounded-3xl hover:shadow-lg transition-all">
+          <button 
+            onClick={handleAddAccount}
+            className="flex-1 bg-[#00F5A0] text-black font-bold py-3 sm:py-4 text-sm sm:text-base rounded-2xl sm:rounded-3xl hover:shadow-lg transition-all"
+          >
             + Tambah aset
-          </button>
-          <button className="flex-1 bg-gradient-to-r from-[#FF6B6B] to-[#FF8E53] text-white font-bold py-3 sm:py-4 text-sm sm:text-base rounded-2xl sm:rounded-3xl hover:shadow-lg transition-all">
-            - Hapus aset
           </button>
         </div>
       )}
@@ -206,6 +301,13 @@ const AssetCards: React.FC<AssetCardsProps> = ({ showButtons = true, onAccountsC
         onClose={() => setIsEditModalOpen(false)}
         account={selectedAccount}
         onSuccess={handleEditSuccess}
+      />
+
+      {/* Add Account Modal */}
+      <AddAccountModal
+        isOpen={isAddModalOpen}
+        onClose={() => setIsAddModalOpen(false)}
+        onSuccess={handleAddSuccess}
       />
     </div>
   );

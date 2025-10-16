@@ -27,37 +27,17 @@ export default function AsetPage() {
           {/* Asset Summary with Pie Chart */}
           <AssetSummary accounts={accounts} />
 
-          {/* Asset Cards with Pagination */}
-          <AssetCards showButtons={false} onAccountsChange={handleAccountsChange} />
-
-          {/* Action Buttons - Show on mobile */}
-          <div className="flex flex-col sm:flex-row lg:hidden gap-2 sm:gap-3">
-            <button className="w-full bg-gradient-to-r from-[#A3FFD6] to-[#0EFF95] border-b-2 border-white text-black font-bold py-3 sm:py-4 text-sm sm:text-base rounded-2xl sm:rounded-3xl hover:shadow-lg transition-all">
-              + Tambah aset
-            </button>
-            <button className="w-full bg-[#DF4000] border-b-2 border-[#8B2800] text-white font-bold py-3 sm:py-4 text-sm sm:text-base rounded-2xl sm:rounded-3xl hover:shadow-lg transition-all">
-              - Hapus aset
-            </button>
-          </div>
+          {/* Asset Cards with Pagination and Action Buttons */}
+          <AssetCards showButtons={true} onAccountsChange={handleAccountsChange} />
 
           {/* Saving Progress */}
           <AssetProgress />
         </div>
 
-        {/* Right Column - User Profile, AI Reminder & Buttons - Hidden on mobile, shown on lg+ */}
+        {/* Right Column - User Profile & AI Reminder - Hidden on mobile, shown on lg+ */}
         <div className="hidden lg:flex lg:col-span-1 flex-col gap-6">
           <UserProfile />
           <AIReminder />
-          
-          {/* Action Buttons */}
-          <div className="flex flex-col bg-[#50488A] p-4 sm:p-6 rounded-2xl sm:rounded-4xl gap-2 sm:gap-3">
-            <button className="w-full bg-gradient-to-r from-[#A3FFD6] to-[#0EFF95] border-b-2 border-white text-black font-bold py-3 sm:py-4 text-sm sm:text-base rounded-2xl sm:rounded-3xl hover:shadow-lg transition-all">
-              + Tambah aset
-            </button>
-            <button className="w-full bg-[#DF4000] border-b-2 border-[#8B2800] text-white font-bold py-3 sm:py-4 text-sm sm:text-base rounded-2xl sm:rounded-3xl hover:shadow-lg transition-all">
-              - Hapus aset
-            </button>
-          </div>
         </div>
       </div>
     </div>
