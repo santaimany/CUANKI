@@ -115,8 +115,23 @@ export const loginUser = async (data: LoginRequest): Promise<AuthResponse> => {
     }
 };
 
-export const logout = () => {
+export const logout = (showNotification = true) => {
+    // Clear all auth-related data
     localStorage.removeItem('token');
+    localStorage.removeItem('refresh_token');
+    localStorage.removeItem('onboarding_completed');
+    
+    if (showNotification && typeof window !== 'undefined') {
+        // Import toast dynamically to avoid SSR issues
+        import('react-hot-toast').then(({ default: toast }) => {
+            toast.success('Anda telah logout');
+        });
+        
+        // Redirect to login page after a brief delay
+        setTimeout(() => {
+            window.location.href = '/login';
+        }, 1000);
+    }
 };
 
 // Helper function to get base URL

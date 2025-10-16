@@ -11,6 +11,7 @@ import Avatar from '@/assets/getstarted/image/avatar-logo.svg';
 import AvatarRight from '@/assets/getstarted/image/right-logo.svg';
 import { QUESTIONS } from '@/data/questionData';
 import { submitFormUser, submitFormAccount, submitFormPlan, getListBank, getListOrigin, type Bank, type Origin } from '@/lib/services/onboardingService';
+import { useToast } from '@/context/ToastContext';
 
 
 export default function OnboardingPage() {
@@ -21,6 +22,7 @@ export default function OnboardingPage() {
   const [banks, setBanks] = useState<Bank[]>([]);
   const [isLoadingData, setIsLoadingData] = useState(true);
   const router = useRouter();
+  const { showError, showSuccess } = useToast();
 
   type Message = { kind: 'bot' | 'user'; text: string; qId?: string };
   const [messages, setMessages] = useState<Message[]>([{ kind: 'bot', text: QUESTIONS[0].text, qId: QUESTIONS[0].id }]);
@@ -53,8 +55,8 @@ export default function OnboardingPage() {
     try {
       const token = localStorage.getItem('token');
       if (!token) {
-        alert('Please register or login first');
-        window.location.href = '/register';
+        showError('Silakan daftar atau login terlebih dahulu');
+        globalThis.location.href = '/register';
         return;
       }
 
@@ -84,9 +86,10 @@ export default function OnboardingPage() {
       console.log('📝 Selected origin:', selectedOrigin);
       await submitFormUser(userData);
       console.log('✅ User data submitted successfully');
+      showSuccess('Data pengguna berhasil disimpan!');
     } catch (error) {
       console.error('❌ Error submitting user data:', error);
-      alert('Failed to submit user data. Please try again.');
+      showError('Gagal menyimpan data pengguna. Silakan coba lagi.');
       throw error;
     }
   }
@@ -125,7 +128,7 @@ export default function OnboardingPage() {
       }
     } catch (error) {
       console.error('❌ Error submitting bank data:', error);
-      alert('Failed to submit bank data. Please try again.');
+      showError('Gagal menyimpan data bank. Silakan coba lagi.');
       throw error;
     }
   }
@@ -146,7 +149,7 @@ export default function OnboardingPage() {
       console.log('🎉 All onboarding data submitted successfully!');
     } catch (error) {
       console.error('❌ Error submitting plan data:', error);
-      alert('Failed to submit plan data. Please try again.');
+      showError('Gagal menyimpan data rencana. Silakan coba lagi.');
       throw error;
     }
   }

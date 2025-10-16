@@ -3,8 +3,9 @@
 import React, { useRef, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { gsap } from 'gsap';
+import { useAuth } from '@/hooks/useAuthActions';
 
 import CuankiLogo from "@/assets/landingpage/logo/cuanki-logo.svg";
 import HomeIcon from "@/assets/dashboard/icons/homepage-icon.svg";
@@ -20,7 +21,7 @@ interface SidebarProps {
 
 const Sidebar: React.FC<SidebarProps> = ({ className = '' }) => {
   const pathname = usePathname();
-  const router = useRouter();
+  const { logout } = useAuth();
 
   const indicatorRef = useRef<HTMLDivElement>(null);
   const itemsRef = useRef<(HTMLLIElement | null)[]>([]);
@@ -28,12 +29,7 @@ const Sidebar: React.FC<SidebarProps> = ({ className = '' }) => {
   const isInitialLoad = useRef(true);
 
   const handleLogout = () => {
-    // Clear token from localStorage
-    localStorage.removeItem('token');
-    localStorage.removeItem('refresh_token');
-    
-    // Redirect to login
-    router.push('/login');
+    logout();
   };
 
   const menuItems = React.useMemo(() => [

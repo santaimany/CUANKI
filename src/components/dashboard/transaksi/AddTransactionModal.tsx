@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { getExpenseCategories } from '@/lib/api/user';
 import { ExpenseCategory } from '@/types/api';
+import { useToast } from '@/context/ToastContext';
 
 interface AddTransactionModalProps {
   isOpen: boolean;
@@ -35,6 +36,7 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
 
   const [expenseCategories, setExpenseCategories] = useState<ExpenseCategory[]>([]);
   const [loadingCategories, setLoadingCategories] = useState(false);
+  const { showError, showSuccess } = useToast();
 
   useEffect(() => {
     if (isOpen && type === 'expense') {
@@ -45,26 +47,56 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
           setExpenseCategories(categories);
         } catch (error) {
           console.error('Error fetching categories:', error);
+          showError('Gagal memuat kategori pengeluaran');
         } finally {
           setLoadingCategories(false);
         }
       };
       fetchCategories();
     }
-  }, [isOpen, type]);
+  }, [isOpen, type, showError]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit(formData);
-    // Reset form
-    setFormData({
-      date: new Date().toISOString().split('T')[0],
-      category: '',
-      amount: 0,
-      notes: '',
-      source: '',
-    });
-    onClose();
+    
+    // Validation
+    if (!formData.amount || formData.amount <= 0) {
+      showError('Jumlah harus lebih besar dari 0');
+      return;
+    }
+    
+    if (!formData.notes.trim()) {
+      showError('Deskripsi tidak boleh kosong');
+      return;
+    }
+    
+    if (!formData.source.trim()) {
+      showError('Sumber tidak boleh kosong');
+      return;
+    }
+    
+    if (type === 'expense' && !formData.category) {
+      showError('Kategori harus dipilih');
+      return;
+    }
+    
+    try {
+      onSubmit(formData);
+      showSuccess(`${type === 'income' ? 'Pendapatan' : 'Pengeluaran'} berhasil ditambahkan`);
+      
+      // Reset form
+      setFormData({
+        date: new Date().toISOString().split('T')[0],
+        category: '',
+        amount: 0,
+        notes: '',
+        source: '',
+      });
+      onClose();
+    } catch (error) {
+      console.error('Error saving transaction:', error);
+      showError('Gagal menyimpan transaksi');
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -72,7 +104,7 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
     
     setFormData((prev) => ({
       ...prev,
-      [name]: name === 'amount' ? parseFloat(value) || 0 : value,
+      [name]: name === 'amount' ? Number.parseFloat(value) || 0 : value,
     }));
   };
 

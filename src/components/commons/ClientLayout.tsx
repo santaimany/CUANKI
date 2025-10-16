@@ -3,8 +3,9 @@
 import { usePathname } from "next/navigation";
 import Navbar from "@/components/commons/Navbar";
 import Footer from "@/components/commons/Footer";
+import { ToastProvider } from "@/context/ToastContext";
 
-export default function ClientLayout({ children }: { children: React.ReactNode }) {
+export default function ClientLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   const pathname = usePathname();
 
   // Logika untuk menentukan halaman mana yang tidak butuh Navbar/Footer
@@ -18,10 +19,10 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
     pathname?.startsWith("/dashboard");
 
   return (
-    <>
+    <ToastProvider>
       {!isNoNavbarFooterPage && <Navbar />}
       <main>{children}</main> {/* Tampilkan konten halaman di sini */}
       {!isNoNavbarFooterPage && <Footer />}
-    </>
+    </ToastProvider>
   );
 }

@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { loginUser, initiateGoogleLogin } from '@/lib/services/authService';
 import Link from 'next/link';
+import { useToast } from '@/context/ToastContext';
 
 const LoginForm = () => {
     const [focusedField, setFocusedField] = useState<string | null>(null);
@@ -10,7 +11,7 @@ const LoginForm = () => {
         password: '',
     });
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
+    const { showError, showSuccess, showLoading } = useToast();
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -22,8 +23,9 @@ const LoginForm = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        setError(null);
         setIsLoading(true);
+
+        showLoading('Sedang login...');
 
         try {
             const response = await loginUser(formData);
@@ -45,16 +47,20 @@ const LoginForm = () => {
                 user?.origin !== null
             );
             
-            if (hasCompleted) {
-                // Redirect to dashboard
-                window.location.href = '/dashboard';
-            } else {
-                // Redirect to onboarding
-                window.location.href = '/onboarding';
-            }
+            showSuccess('Login berhasil! Mengarahkan...');
+            
+            setTimeout(() => {
+                if (hasCompleted) {
+                    // Redirect to dashboard
+                    globalThis.location.href = '/dashboard';
+                } else {
+                    // Redirect to onboarding
+                    globalThis.location.href = '/onboarding';
+                }
+            }, 1000);
         } catch (err) {
             const errorMessage = err instanceof Error ? err.message : 'Login failed. Please check your credentials.';
-            setError(errorMessage);
+            showError(errorMessage);
             console.error('Login error:', err);
         } finally {
             setIsLoading(false);
@@ -82,13 +88,6 @@ const LoginForm = () => {
             </p>
 
             <form onSubmit={handleSubmit} className="space-y-6">
-                {/* Error Message */}
-                {error && (
-                    <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-2xl text-sm">
-                        {error}
-                    </div>
-                )}
-
                 {/* Email Input */}
                 <div>
                     <input

@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { registerUser, initiateGoogleLogin } from '@/lib/services/authService';
+import { useToast } from '@/context/ToastContext';
 
 const RegisterForm = () => {
     const [focusedField, setFocusedField] = useState<string | null>(null);
@@ -13,8 +14,7 @@ const RegisterForm = () => {
         password_confirmation: '',
     });
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
-    const [success, setSuccess] = useState(false);
+    const { showError, showSuccess, showLoading } = useToast();
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -26,13 +26,12 @@ const RegisterForm = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        setError(null);
-        setSuccess(false);
         setIsLoading(true);
+
+        showLoading('Membuat akun...');
 
         try {
             const response = await registerUser(formData);
-            setSuccess(true);
             console.log('Registration successful:', response);
             
             // Verify token is saved
@@ -44,13 +43,15 @@ const RegisterForm = () => {
                 // Still redirect but user will need to login
             }
             
+            showSuccess('Akun berhasil dibuat! Mengarahkan...');
+            
             // Redirect ke get-started setelah 1 detik
             setTimeout(() => {
-                window.location.href = '/get-started';
+                globalThis.location.href = '/get-started';
             }, 1000);
         } catch (err) {
             const errorMessage = err instanceof Error ? err.message : 'Registration failed. Please try again.';
-            setError(errorMessage);
+            showError(errorMessage);
             console.error('Registration error:', err);
         } finally {
             setIsLoading(false);
@@ -77,20 +78,6 @@ const RegisterForm = () => {
             </p>
 
             <form onSubmit={handleSubmit} className="space-y-6">
-                {/* Error Message */}
-                {error && (
-                    <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-2xl">
-                        {error}
-                    </div>
-                )}
-
-                {/* Success Message */}
-                {success && (
-                    <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-2xl">
-                        Registration successful! Redirecting...
-                    </div>
-                )}
-
                 {/* First Name & Last Name */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>

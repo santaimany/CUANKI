@@ -1,4 +1,5 @@
 import axios from 'axios';
+import toast from 'react-hot-toast';
 
 // Get base URL - use proxy in production to avoid mixed content issues
 const getBaseURL = () => {
@@ -62,6 +63,38 @@ axiosInstance.interceptors.response.use(
     (error) => {
         // Handle error responses
         if (error.response) {
+            const { status } = error.response;
+            
+            // Handle unauthorized (401) error
+            if (status === 401) {
+                console.warn('🔐 Unauthorized access detected - redirecting to login');
+                
+                // Show toast notification
+                toast.error('Sesi Anda telah berakhir. Silakan login kembali.', {
+                    duration: 3000,
+                });
+                
+                // Clear token from localStorage
+                localStorage.removeItem('token');
+                localStorage.removeItem('refresh_token');
+                localStorage.removeItem('onboarding_completed');
+                
+                // Only redirect if we're in browser environment
+                if (globalThis.window !== undefined) {
+                    // Check if we're not already on login/register pages to avoid infinite redirect
+                    const currentPath = globalThis.window.location.pathname;
+                    const authPaths = ['/login', '/register', '/auth/google/callback'];
+                    
+                    if (!authPaths.some(path => currentPath.startsWith(path))) {
+                        console.log('🔄 Redirecting to login page...');
+                        // Delay redirect slightly to show toast
+                        setTimeout(() => {
+                            globalThis.window.location.href = '/login';
+                        }, 1500);
+                    }
+                }
+            }
+            
             // Server responded with error status
             console.error('Response Error:', error.response.data);
         } else if (error.request) {

@@ -1,15 +1,14 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
 import { GreetingUsersResponse } from '@/types/api';
 import { getUserGreeting } from '@/lib/api/user';
-import { logout } from '@/lib/services/authService';
+import { useAuth } from '@/hooks/useAuthActions';
 
 export default function ProfilePage() {
-  const router = useRouter();
   const [userData, setUserData] = useState<GreetingUsersResponse | null>(null);
   const [loading, setLoading] = useState(true);
+  const { logout } = useAuth();
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -28,13 +27,7 @@ export default function ProfilePage() {
 
   const handleLogout = () => {
     if (confirm('Apakah Anda yakin ingin keluar?')) {
-      try {
-        logout();
-        router.push('/login');
-      } catch (error) {
-        console.error('Logout error:', error);
-        alert('Gagal logout. Silakan coba lagi.');
-      }
+      logout();
     }
   };
 
