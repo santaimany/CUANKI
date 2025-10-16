@@ -116,7 +116,9 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
       onClick={onClose}
     >
       <div 
-        className="bg-[#5B4E96] rounded-3xl p-6 w-full max-w-sm shadow-2xl"
+        className="bg-[#5B4E96] rounded-3xl p-4 sm:p-6 w-full max-w-sm shadow-2xl 
+                   max-h-[90vh] overflow-y-auto modal-content
+                   mx-auto my-auto"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
@@ -148,7 +150,15 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
                   date: e.target.value,
                 }));
               }}
-              className="w-full bg-white rounded-xl px-4 py-3 text-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-[#00F5A0] cursor-pointer"
+              className="w-full bg-white rounded-xl px-4 py-3 text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#00F5A0] cursor-pointer mobile-input
+                         [&::-webkit-datetime-edit]:text-gray-800
+                         [&::-webkit-datetime-edit-fields-wrapper]:text-gray-800
+                         [&::-webkit-datetime-edit-text]:text-gray-800
+                         [&::-webkit-datetime-edit-month-field]:text-gray-800
+                         [&::-webkit-datetime-edit-day-field]:text-gray-800
+                         [&::-webkit-datetime-edit-year-field]:text-gray-800
+                         [&::-webkit-calendar-picker-indicator]:opacity-60
+                         [&::-webkit-calendar-picker-indicator]:cursor-pointer"
             />
           </div>
 
@@ -159,7 +169,7 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
                 name="category"
                 value={formData.category}
                 onChange={handleChange}
-                className="w-full bg-white rounded-xl px-4 py-3 pr-16 text-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-[#00F5A0] appearance-none"
+                className="w-full bg-white rounded-xl px-4 py-3 pr-16 text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#00F5A0] mobile-input"
                 required
                 disabled={loadingCategories}
               >
@@ -194,7 +204,7 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
             value={formData.amount || ''}
             onChange={handleChange}
             placeholder="Rp 10.000,00"
-            className="w-full bg-white rounded-xl px-4 py-3 text-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-[#00F5A0]"
+            className="w-full bg-white rounded-xl px-4 py-3 text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#00F5A0] mobile-input"
             required
             min="0"
             step="0.01"
@@ -207,7 +217,7 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
             value={formData.notes}
             onChange={handleChange}
             placeholder={type === 'income' ? 'Minggu 1' : 'Deskripsi'}
-            className="w-full bg-white rounded-xl px-4 py-3 text-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-[#00F5A0]"
+            className="w-full bg-white rounded-xl px-4 py-3 text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#00F5A0] mobile-input"
             required
           />
 
@@ -218,7 +228,7 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
             value={formData.source}
             onChange={handleChange}
             placeholder="BCA - Kebutuhan"
-            className="w-full bg-white rounded-xl px-4 py-3 text-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-[#00F5A0]"
+            className="w-full bg-white rounded-xl px-4 py-3 text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#00F5A0] mobile-input"
             required
           />
 

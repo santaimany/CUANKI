@@ -232,3 +232,93 @@ body {
 .animation-delay-200 {
   animation-delay: 0.2s;
 }
+
+/* iOS Date Input Fix */
+@supports (-webkit-touch-callout: none) {
+  /* iOS Safari specific styles */
+  input[type="date"] {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    min-height: 44px; /* iOS minimum touch target */
+    font-size: 16px; /* Prevent zoom on iOS */
+    padding: 12px 16px;
+    border-radius: 12px;
+    background-color: white;
+    color: #374151;
+    border: none;
+    outline: none;
+    cursor: pointer;
+  }
+  
+  input[type="date"]::-webkit-datetime-edit {
+    color: #374151;
+  }
+  
+  input[type="date"]::-webkit-datetime-edit-fields-wrapper {
+    color: #374151;
+  }
+  
+  input[type="date"]::-webkit-datetime-edit-text {
+    color: #374151;
+    padding: 0 2px;
+  }
+  
+  input[type="date"]::-webkit-datetime-edit-month-field,
+  input[type="date"]::-webkit-datetime-edit-day-field,
+  input[type="date"]::-webkit-datetime-edit-year-field {
+    color: #374151;
+    background: transparent;
+    border: none;
+    padding: 0;
+  }
+  
+  input[type="date"]::-webkit-calendar-picker-indicator {
+    opacity: 0.6;
+    cursor: pointer;
+    color: #6B7280;
+    width: 20px;
+    height: 20px;
+    margin-left: 8px;
+  }
+  
+  input[type="date"]:focus {
+    box-shadow: 0 0 0 2px #00F5A0;
+  }
+  
+  /* Prevent iOS zoom when focusing input */
+  @media screen and (-webkit-min-device-pixel-ratio: 0) {
+    input[type="date"] {
+      font-size: 16px !important;
+    }
+  }
+}
+
+/* Android specific fixes */
+@media screen and (max-width: 768px) {
+  input[type="date"] {
+    font-size: 16px; /* Prevent zoom on mobile */
+  }
+}
+
+/* Utility classes for consistent mobile-friendly inputs */
+.mobile-input {
+  min-height: 44px; /* iOS minimum touch target */
+  font-size: 16px; /* Prevent zoom on iOS */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+@media (min-width: 640px) {
+  .mobile-input {
+    font-size: 0.875rem; /* sm:text-sm */
+  }
+}
+
+/* Fix for iOS date picker in modal */
+@supports (-webkit-touch-callout: none) {
+  .modal-content {
+    -webkit-overflow-scrolling: touch;
+  }
+}
