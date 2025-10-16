@@ -29,8 +29,7 @@ const LoginForm = () => {
 
         try {
             const response = await loginUser(formData);
-            console.log('Login successful:', response);
-
+         
             // Save token to localStorage (should be done in authService)
             if (response.data?.token) {
                 localStorage.setItem('token', response.data.token);
@@ -59,7 +58,30 @@ const LoginForm = () => {
                 }
             }, 1000);
         } catch (err) {
-            const errorMessage = err instanceof Error ? err.message : 'Login failed. Please check your credentials.';
+            let errorMessage = 'Terjadi kesalahan saat login. Silakan coba lagi.';
+            
+            if (err instanceof Error) {
+                const message = err.message.toLowerCase();
+                
+                // Handle specific error types
+                if (message.includes('401') || message.includes('invalid') || 
+                    message.includes('incorrect') || message.includes('unauthorized')) {
+                    errorMessage = 'Email atau password salah. Silakan periksa kembali data Anda.';
+                } else if (message.includes('timeout') || message.includes('exceeded')) {
+                    errorMessage = 'Koneksi timeout. Periksa koneksi internet Anda dan coba lagi.';
+                } else if (message.includes('network') || message.includes('fetch')) {
+                    errorMessage = 'Gagal terhubung ke server. Periksa koneksi internet Anda.';
+                } else if (message.includes('500')) {
+                    errorMessage = 'Server sedang bermasalah. Silakan coba beberapa saat lagi.';
+                } else if (message.includes('400')) {
+                    errorMessage = 'Data yang dikirim tidak valid. Periksa kembali form Anda.';
+                } else if (message.includes('403')) {
+                    errorMessage = 'Akses ditolak. Silakan hubungi administrator.';
+                } else if (err.message && !message.includes('failed to fetch')) {
+                    errorMessage = err.message;
+                }
+            }
+            
             showError(errorMessage);
             console.error('Login error:', err);
         } finally {

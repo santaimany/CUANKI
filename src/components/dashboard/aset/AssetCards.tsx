@@ -4,6 +4,7 @@ import { getUserAccounts, deleteAccount } from '@/lib/api/user';
 import { UserAccount } from '@/types/api';
 import EditAccountModal from './EditAccountModal';
 import AddAccountModal from './AddAccountModal';
+import { useToast } from '@/context/ToastContext';
 
 interface AssetCardsProps {
   showButtons?: boolean;
@@ -18,6 +19,10 @@ const AssetCards: React.FC<AssetCardsProps> = ({ showButtons = true, onAccountsC
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [deletingAccountId, setDeletingAccountId] = useState<number | null>(null);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [accountToDelete, setAccountToDelete] = useState<{ id: number; name: string } | null>(null);
+  
+  const { showError, showSuccess, showLoading } = useToast();
 
   const fetchAccounts = async () => {
     setLoading(true);
@@ -32,6 +37,7 @@ const AssetCards: React.FC<AssetCardsProps> = ({ showButtons = true, onAccountsC
       }
     } catch (error) {
       console.error('Error fetching accounts:', error);
+      showError('Gagal memuat data akun. Silakan coba lagi.');
     } finally {
       setLoading(false);
     }
@@ -63,6 +69,8 @@ const AssetCards: React.FC<AssetCardsProps> = ({ showButtons = true, onAccountsC
     
     // Kembalikan ke halaman yang sama setelah refresh
     setCurrentPage(currentPageBeforeUpdate);
+    
+    showSuccess('Akun berhasil diperbarui!');
   };
 
   const handleAddAccount = () => {
@@ -71,20 +79,27 @@ const AssetCards: React.FC<AssetCardsProps> = ({ showButtons = true, onAccountsC
 
   const handleAddSuccess = async () => {
     await fetchAccounts();
+    showSuccess('Akun berhasil ditambahkan!');
   };
 
-  const handleDeleteAccount = async (accountId: number, accountName: string) => {
-    const confirmed = window.confirm(`Apakah Anda yakin ingin menghapus akun ${accountName}?`);
-    
-    if (!confirmed) return;
+  const handleDeleteAccount = (accountId: number, accountName: string) => {
+    setAccountToDelete({ id: accountId, name: accountName });
+    setShowDeleteConfirm(true);
+  };
 
-    setDeletingAccountId(accountId);
+  const confirmDeleteAccount = async () => {
+    if (!accountToDelete) return;
+
+    setDeletingAccountId(accountToDelete.id);
+    setShowDeleteConfirm(false);
+    
+    showLoading(`Menghapus akun ${accountToDelete.name}...`);
     
     try {
-      console.log('🗑️ Deleting account ID:', accountId);
-      console.log('🗑️ DELETE URL:', `/api/account/${accountId}`);
+      console.log('🗑️ Deleting account ID:', accountToDelete.id);
+      console.log('🗑️ DELETE URL:', `/api/account/${accountToDelete.id}`);
       
-      const response = await deleteAccount(accountId);
+      const response = await deleteAccount(accountToDelete.id);
       console.log('✅ Delete response:', response);
       
       // Refresh data setelah delete
@@ -96,7 +111,7 @@ const AssetCards: React.FC<AssetCardsProps> = ({ showButtons = true, onAccountsC
         setCurrentPage(newTotalPages);
       }
       
-      alert(`Akun ${accountName} berhasil dihapus!`);
+      showSuccess(`Akun ${accountToDelete.name} berhasil dihapus!`);
     } catch (error) {
       console.error('❌ Error deleting account:', error);
       
@@ -107,12 +122,13 @@ const AssetCards: React.FC<AssetCardsProps> = ({ showButtons = true, onAccountsC
         console.error('❌ Error status:', axiosError.response?.status);
         
         const errorMessage = axiosError.response?.data?.message || 'Gagal menghapus akun. Silakan coba lagi.';
-        alert(errorMessage);
+        showError(errorMessage);
       } else {
-        alert('Gagal menghapus akun. Silakan coba lagi.');
+        showError('Gagal menghapus akun. Silakan coba lagi.');
       }
     } finally {
       setDeletingAccountId(null);
+      setAccountToDelete(null);
     }
   };
 
@@ -309,6 +325,54 @@ const AssetCards: React.FC<AssetCardsProps> = ({ showButtons = true, onAccountsC
         onClose={() => setIsAddModalOpen(false)}
         onSuccess={handleAddSuccess}
       />
+
+      {/* Delete Confirmation Modal */}
+      {showDeleteConfirm && accountToDelete && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl p-6 max-w-md w-full shadow-2xl">
+            {/* Header */}
+            <div className="flex items-center justify-center mb-4">
+              <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
+                <svg className="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
+              </div>
+            </div>
+
+            {/* Title */}
+            <h3 className="text-lg font-semibold text-gray-900 text-center mb-2">
+              Hapus Akun
+            </h3>
+
+            {/* Message */}
+            <p className="text-gray-600 text-center mb-6">
+              Apakah Anda yakin ingin menghapus akun <span className="font-semibold text-gray-900">{accountToDelete.name}</span>? 
+              <br />
+              <span className="text-sm text-red-600 mt-1 block">Tindakan ini tidak dapat dibatalkan.</span>
+            </p>
+
+            {/* Buttons */}
+            <div className="flex gap-3">
+              <button
+                onClick={() => {
+                  setShowDeleteConfirm(false);
+                  setAccountToDelete(null);
+                }}
+                className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium py-2.5 px-4 rounded-xl transition-colors"
+              >
+                Batal
+              </button>
+              <button
+                onClick={confirmDeleteAccount}
+                disabled={deletingAccountId !== null}
+                className="flex-1 bg-red-500 hover:bg-red-600 text-white font-medium py-2.5 px-4 rounded-xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {deletingAccountId === accountToDelete.id ? 'Menghapus...' : 'Ya, Hapus'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

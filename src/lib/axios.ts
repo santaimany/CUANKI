@@ -25,7 +25,7 @@ if (process.env.NODE_ENV === 'development') {
 
 const axiosInstance = axios.create({
     baseURL: baseURL,
-    timeout: 10000,
+    timeout: 15000, // 15 seconds timeout
     headers: {
         'Content-Type': 'application/json',
     },
@@ -67,30 +67,40 @@ axiosInstance.interceptors.response.use(
             
             // Handle unauthorized (401) error
             if (status === 401) {
-                console.warn('🔐 Unauthorized access detected - redirecting to login');
+                // Check if this is a login request - if so, don't show session expired message
+                const isLoginRequest = error.config?.url?.includes('/login') || 
+                                     error.config?.url?.includes('/api/login');
                 
-                // Show toast notification
-                toast.error('Sesi Anda telah berakhir. Silakan login kembali.', {
-                    duration: 3000,
-                });
-                
-                // Clear token from localStorage
-                localStorage.removeItem('token');
-                localStorage.removeItem('refresh_token');
-                localStorage.removeItem('onboarding_completed');
-                
-                // Only redirect if we're in browser environment
-                if (globalThis.window !== undefined) {
-                    // Check if we're not already on login/register pages to avoid infinite redirect
-                    const currentPath = globalThis.window.location.pathname;
-                    const authPaths = ['/login', '/register', '/auth/google/callback'];
+                if (isLoginRequest) {
+                    // For login requests, just let the error bubble up to be handled by the login form
+                    console.warn('🔐 Login failed - invalid credentials');
+                } else {
+                    // For other requests, show session expired message and redirect
+                    console.warn('🔐 Unauthorized access detected - redirecting to login');
                     
-                    if (!authPaths.some(path => currentPath.startsWith(path))) {
-                        console.log('🔄 Redirecting to login page...');
-                        // Delay redirect slightly to show toast
-                        setTimeout(() => {
-                            globalThis.window.location.href = '/login';
-                        }, 1500);
+                    // Show toast notification for session expired
+                    toast.error('Sesi Anda telah berakhir. Silakan login kembali.', {
+                        duration: 3000,
+                    });
+                    
+                    // Clear token from localStorage
+                    localStorage.removeItem('token');
+                    localStorage.removeItem('refresh_token');
+                    localStorage.removeItem('onboarding_completed');
+                    
+                    // Only redirect if we're in browser environment
+                    if (globalThis.window !== undefined) {
+                        // Check if we're not already on login/register pages to avoid infinite redirect
+                        const currentPath = globalThis.window.location.pathname;
+                        const authPaths = ['/login', '/register', '/auth/google/callback'];
+                        
+                        if (!authPaths.some(path => currentPath.startsWith(path))) {
+                            console.log('🔄 Redirecting to login page...');
+                            // Delay redirect slightly to show toast
+                            setTimeout(() => {
+                                globalThis.window.location.href = '/login';
+                            }, 1500);
+                        }
                     }
                 }
             }
@@ -98,8 +108,23 @@ axiosInstance.interceptors.response.use(
             // Server responded with error status
             console.error('Response Error:', error.response.data);
         } else if (error.request) {
-            // Request made but no response
+            // Request made but no response - likely timeout or network error
             console.error('Request Error:', error.request);
+            
+            // Check if it's a timeout error
+            if (error.code === 'ECONNABORTED' || error.message.includes('timeout')) {
+                console.warn('⏰ Request timeout detected');
+                // Create a more descriptive error for timeout
+                const timeoutError = new Error('Koneksi timeout. Periksa koneksi internet Anda dan coba lagi.');
+                timeoutError.name = 'TimeoutError';
+                return Promise.reject(timeoutError);
+            } else if (error.message.includes('Network Error')) {
+                console.warn('🌐 Network error detected');
+                // Create a more descriptive error for network issues
+                const networkError = new Error('Gagal terhubung ke server. Periksa koneksi internet Anda.');
+                networkError.name = 'NetworkError';
+                return Promise.reject(networkError);
+            }
         } else {
             // Something else happened
             console.error('Error:', error.message);

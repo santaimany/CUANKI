@@ -50,7 +50,30 @@ const RegisterForm = () => {
                 globalThis.location.href = '/get-started';
             }, 1000);
         } catch (err) {
-            const errorMessage = err instanceof Error ? err.message : 'Registration failed. Please try again.';
+            let errorMessage = 'Terjadi kesalahan saat mendaftar. Silakan coba lagi.';
+            
+            if (err instanceof Error) {
+                const message = err.message.toLowerCase();
+                
+                // Handle specific error types
+                if (message.includes('409') || message.includes('already exists') || 
+                    message.includes('email already registered')) {
+                    errorMessage = 'Email sudah terdaftar. Silakan gunakan email lain atau login.';
+                } else if (message.includes('timeout') || message.includes('exceeded')) {
+                    errorMessage = 'Koneksi timeout. Periksa koneksi internet Anda dan coba lagi.';
+                } else if (message.includes('network') || message.includes('fetch')) {
+                    errorMessage = 'Gagal terhubung ke server. Periksa koneksi internet Anda.';
+                } else if (message.includes('500')) {
+                    errorMessage = 'Server sedang bermasalah. Silakan coba beberapa saat lagi.';
+                } else if (message.includes('400')) {
+                    errorMessage = 'Data yang dikirim tidak valid. Periksa kembali form Anda.';
+                } else if (message.includes('weak password')) {
+                    errorMessage = 'Password terlalu lemah. Gunakan minimal 8 karakter dengan kombinasi huruf dan angka.';
+                } else if (err.message && !message.includes('failed to fetch')) {
+                    errorMessage = err.message;
+                }
+            }
+            
             showError(errorMessage);
             console.error('Registration error:', err);
         } finally {
