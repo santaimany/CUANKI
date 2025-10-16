@@ -1,11 +1,8 @@
-'use client';
 import HeroSection from "@/components/education/HeroSection";
 import EducationList from "@/components/education/EducationList";
 import EducationSection2 from "@/components/education/EducationSection2";
 
-
-
-const EducationPage = () => {
+export default function EducationPage() {
     return (
         <div>
             <HeroSection />
@@ -14,6 +11,4 @@ const EducationPage = () => {
         </div>
     );
 }
-
-export default EducationPage;
    
