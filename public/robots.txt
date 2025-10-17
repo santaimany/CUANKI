@@ -1,0 +1,22 @@
+User-agent: *
+Allow: /
+
+# Public pages that should be indexed
+Allow: /login
+Allow: /register
+Allow: /
+
+# Private pages that should not be indexed
+Disallow: /dashboard*
+Disallow: /onboarding*
+Disallow: /complete-on-boarding*
+Disallow: /get-started*
+Disallow: /api/*
+Disallow: /_next/*
+Disallow: /static/*
+
+# Sitemap location
+Sitemap: https://cuanki.vercel.app/sitemap.xml
+
+# Crawl delay (optional)
+Crawl-delay: 1
