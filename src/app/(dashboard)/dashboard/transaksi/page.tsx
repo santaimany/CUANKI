@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import UserProfileHeader from '@/components/dashboard/UserProfile';
 import AIReminder from '@/components/dashboard/AIReminder';
 import TransactionSummary from '@/components/dashboard/transaksi/TransactionSummary';
@@ -8,11 +8,43 @@ import TransactionTabs from '@/components/dashboard/transaksi/TransactionTabs';
 import SearchAndFilter from '@/components/dashboard/transaksi/SearchAndFilter';
 import TransactionList from '@/components/dashboard/transaksi/TransactionList';
 import MonthlyExpensesSummary from '@/components/dashboard/transaksi/MonthlyExpensesSummary';
+import { GreetingUsersResponse, UserProfileResponse } from '@/types/api';
+import { getUserGreeting, getUserProfile } from '@/lib/api/user';
+import { useToast } from '@/context/ToastContext';
 
 const TransaksiPage = () => {
   const [transactionType, setTransactionType] = useState<'expense' | 'income'>('expense');
   const [searchQuery, setSearchQuery] = useState('');
   const [refreshKey, setRefreshKey] = useState(0); // Key untuk trigger refresh
+  const [userData, setUserData] = useState<GreetingUsersResponse | null>(null);
+  const [userProfile, setUserProfile] = useState<UserProfileResponse | null>(null);
+  const [loading, setLoading] = useState(true);
+  const { showError } = useToast();
+
+  // Fetch user data
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const [greetingData, profileData] = await Promise.all([
+          getUserGreeting(),
+          getUserProfile()
+        ]);
+        setUserData(greetingData);
+        setUserProfile(profileData);
+      } catch (error) {
+        console.error('Failed to fetch user data:', error);
+        if (error instanceof Error) {
+          showError(error.message);
+        } else {
+          showError('Gagal memuat data user');
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUserData();
+  }, [showError]);
 
   // Function untuk refresh semua komponen transaction
   const handleRefreshTransactions = () => {
@@ -45,7 +77,7 @@ const TransaksiPage = () => {
         />
       </div> 
       <div className="hidden lg:flex lg:col-span-1 flex-col gap-6">
-        <UserProfileHeader />
+        <UserProfileHeader userData={userData} userProfile={userProfile} />
         <AIReminder page="transaction" />
         <MonthlyExpensesSummary />
       </div>

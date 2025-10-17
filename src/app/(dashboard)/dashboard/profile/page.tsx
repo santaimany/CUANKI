@@ -1,30 +1,43 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { GreetingUsersResponse } from '@/types/api';
-import { getUserGreeting } from '@/lib/api/user';
+import { GreetingUsersResponse, UserProfileResponse } from '@/types/api';
+import { getUserGreeting, getUserProfile } from '@/lib/api/user';
 import { useAuth } from '@/hooks/useAuthActions';
 import LoadingScreen from '@/components/commons/LoadingScreen';
+import { useToast } from '@/context/ToastContext';
 
 export default function ProfilePage() {
   const [userData, setUserData] = useState<GreetingUsersResponse | null>(null);
+  const [userProfile, setUserProfile] = useState<UserProfileResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const { logout } = useAuth();
+  const { showError } = useToast();
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const data = await getUserGreeting();
-        setUserData(data);
+        setLoading(true);
+        const [greetingData, profileData] = await Promise.all([
+          getUserGreeting(),
+          getUserProfile()
+        ]);
+        setUserData(greetingData);
+        setUserProfile(profileData);
       } catch (error) {
         console.error('Failed to fetch user data:', error);
+        if (error instanceof Error) {
+          showError(error.message);
+        } else {
+          showError('Gagal memuat data profile');
+        }
       } finally {
         setLoading(false);
       }
     };
 
     fetchUserData();
-  }, []);
+  }, [showError]);
 
   const handleLogout = () => {
     if (confirm('Apakah Anda yakin ingin keluar?')) {
@@ -40,25 +53,33 @@ export default function ProfilePage() {
     );
   }
 
-  const fullName = userData?.data?.user?.name || 'User';
-  const username = userData?.data?.user?.username || 'user';
+  // Prioritize userProfile data over userData
+  const profileData = userProfile?.data;
+  const fullName = profileData?.name || userData?.data?.user?.name || 'User';
+  const username = profileData?.username || userData?.data?.user?.username || 'user';
+  const email = profileData?.email || 'Email tidak tersedia';
+  const age = profileData?.age || null;
+  const status = profileData?.status || 'Status tidak tersedia';
+  const profilePicture = profileData?.profile_picture;
 
   return (
     <div className="min-h-screen bg-[#363256] pb-20 md:pb-6">
       <div className="p-4 sm:p-6 md:p-8 max-w-4xl mx-auto">
         <div className="bg-gradient-to-r from-[#0EFF95] to-[#00D9D9] rounded-3xl p-6 sm:p-8 flex items-center gap-4 sm:gap-6 mb-6">
           <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-full overflow-hidden border-4 border-white shadow-lg flex-shrink-0">
-            <Image
-              src="/assets/avatar-placeholder.png"
-              alt="Profile"
-              fill
-              className="object-cover"
-              onError={(e) => {
-                // Fallback to gradient background if image fails
-                e.currentTarget.style.display = 'none';
-              }}
-            />
-            <div className="absolute inset-0 bg-gradient-to-br from-purple-400 to-pink-400" />
+            {profilePicture ? (
+              <Image
+                src={profilePicture}
+                alt="Profile"
+                fill
+                sizes="(max-width: 640px) 64px, 80px"
+                className="object-cover"
+              />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#00F5A0] to-[#00D4AA] text-white font-bold text-xl">
+                {fullName.charAt(0).toUpperCase()}
+              </div>
+            )}
           </div>
           <div className="flex-1 min-w-0">
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#363256]">{fullName}</h2>
@@ -91,12 +112,12 @@ export default function ProfilePage() {
               />
             </div>
 
-            {/* Asal */}
+            {/* Origin ID */}
             <div>
-              <label className="block text-white text-sm sm:text-base font-medium mb-2">Asal</label>
+              <label className="block text-white text-sm sm:text-base font-medium mb-2">Origin ID</label>
               <input
                 type="text"
-                value="Malang"
+                value={profileData?.origin_id || 'Tidak tersedia'}
                 readOnly
                 className="w-full bg-white text-[#363256] px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0EFF95] text-sm sm:text-base"
               />
@@ -107,7 +128,7 @@ export default function ProfilePage() {
               <label className="block text-white text-sm sm:text-base font-medium mb-2">Umur</label>
               <input
                 type="text"
-                value="20"
+                value={age ? age.toString() : 'Tidak tersedia'}
                 readOnly
                 className="w-full bg-white text-[#363256] px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0EFF95] text-sm sm:text-base"
               />
@@ -118,7 +139,7 @@ export default function ProfilePage() {
               <label className="block text-white text-sm sm:text-base font-medium mb-2">Status</label>
               <input
                 type="text"
-                value="Pelajar"
+                value={status}
                 readOnly
                 className="w-full bg-white text-[#363256] px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0EFF95] text-sm sm:text-base"
               />
@@ -129,7 +150,7 @@ export default function ProfilePage() {
               <label className="block text-white text-sm sm:text-base font-medium mb-2">Email</label>
               <input
                 type="email"
-                value="Andrian@gmail.com"
+                value={email}
                 readOnly
                 className="w-full bg-white text-[#363256] px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0EFF95] text-sm sm:text-base"
               />

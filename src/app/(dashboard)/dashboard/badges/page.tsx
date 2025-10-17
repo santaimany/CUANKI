@@ -4,6 +4,8 @@ import { BadgeHeader, BadgeList } from '@/components/dashboard/badges';
 import UserProfile from '@/components/dashboard/UserProfile';
 import AIReminder from '@/components/dashboard/AIReminder';
 import { getBadges, type Badge, type BadgesData } from '@/lib/services/badgesService';
+import { GreetingUsersResponse, UserProfileResponse } from '@/types/api';
+import { getUserGreeting, getUserProfile } from '@/lib/api/user';
 import { useToast } from '@/context/ToastContext';
 import LoadingScreen from '@/components/commons/LoadingScreen';
 
@@ -11,6 +13,8 @@ export default function BadgesPage() {
   const [badges, setBadges] = useState<Badge[]>([]);
   const [badgesData, setBadgesData] = useState<BadgesData | null>(null);
   const [loading, setLoading] = useState(true);
+  const [userData, setUserData] = useState<GreetingUsersResponse | null>(null);
+  const [userProfile, setUserProfile] = useState<UserProfileResponse | null>(null);
   const { showError } = useToast();
 
   const fetchBadges = React.useCallback(async () => {
@@ -27,9 +31,24 @@ export default function BadgesPage() {
     }
   }, [showError]);
 
+  const fetchUserData = React.useCallback(async () => {
+    try {
+      const [greetingData, profileData] = await Promise.all([
+        getUserGreeting(),
+        getUserProfile()
+      ]);
+      setUserData(greetingData);
+      setUserProfile(profileData);
+    } catch (error) {
+      console.error('Failed to fetch user data:', error);
+      // Don't show error for user data as it's not critical
+    }
+  }, []);
+
   useEffect(() => {
     fetchBadges();
-  }, [fetchBadges]);
+    fetchUserData();
+  }, [fetchBadges, fetchUserData]);
 
   const handleRefresh = () => {
     fetchBadges();
@@ -84,7 +103,7 @@ export default function BadgesPage() {
 
         {/* Right Column - User Profile & AI Reminder - Hidden on mobile, shown on lg+ */}
         <div className="hidden lg:flex lg:col-span-1 flex-col gap-6">
-          <UserProfile />
+          <UserProfile userData={userData} userProfile={userProfile} />
           <AIReminder page="goals" />
         </div>
         

@@ -9,13 +9,14 @@ import CalendarView from '@/components/dashboard/homepage/CalendarView';
 import DailyExpenseSummary from '@/components/dashboard/homepage/DailyExpenseSummary';
 import MyAccounts from '@/components/dashboard/homepage/card/MyAccount';
 import TransactionHistoryList from '@/components/dashboard/homepage/TransactionHistory';
-import { GreetingUsersResponse } from '@/types/api';
-import { getUserGreeting } from '@/lib/api/user';
+import { GreetingUsersResponse, UserProfileResponse } from '@/types/api';
+import { getUserGreeting, getUserProfile } from '@/lib/api/user';
 import Loading from '@/app/loading';
 import LoadingScreen from '@/components/commons/LoadingScreen';
 
 const DashboardPage = () => {
   const [userData, setUserData] = useState<GreetingUsersResponse | null>(null);
+  const [userProfile, setUserProfile] = useState<UserProfileResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [refreshTransactions, setRefreshTransactions] = useState(0);
@@ -37,13 +38,27 @@ const DashboardPage = () => {
     }
   };
 
+  const fetchUserProfile = async () => {
+    try {
+      const data = await getUserProfile();
+      console.log('Dashboard - getUserProfile response:', data);
+      setUserProfile(data);
+    } catch (error) {
+      console.error('Dashboard - Error fetching user profile:', error);
+      // Don't set error for profile as it's not critical
+    }
+  };
+
   useEffect(() => {
     const fetchInitialData = async () => {
       try {
         setLoading(true);
-        await fetchGreeting();
+        await Promise.all([
+          fetchGreeting(),
+          fetchUserProfile()
+        ]);
       } catch (error) {
-        console.error('Error fetching greeting:', error);
+        console.error('Error fetching initial data:', error);
         setError('Failed to load dashboard data');
       } finally {
         setLoading(false);
@@ -96,8 +111,8 @@ const DashboardPage = () => {
         </div>
 
         {/* UserProfileHeader: Baris 1, Kolom 4 */}
-        <div className="col-start-4 row-start-1">
-          <UserProfileHeader userData={userData} />
+        <div className="col-span-1 row-span-1">
+          <UserProfileHeader userData={userData} userProfile={userProfile} />
         </div>
 
         {/* MyAccounts: Baris 2-3, Kolom 4 */}

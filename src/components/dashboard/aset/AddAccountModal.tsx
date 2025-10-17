@@ -153,7 +153,7 @@ const AddAccountModal: React.FC<AddAccountModalProps> = ({
               <option value="">-- Pilih Bank --</option>
               {banks.map((bank) => (
                 <option key={bank.id} value={bank.id}>
-                  {bank.bank_name}
+                  {bank.code_name}
                 </option>
               ))}
             </select>

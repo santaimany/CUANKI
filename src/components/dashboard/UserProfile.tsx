@@ -1,8 +1,10 @@
 'use client';
 import React, { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import ProfileModal from './ProfileModal';
-import { GreetingUsersResponse, StreakData } from '@/types/api';
+import { GreetingUsersResponse, StreakData, UserProfileResponse } from '@/types/api';
+import { getUserProfile } from '@/lib/api/user';
 import { getStreak } from '@/lib/services/dashboardService';
 import { useToast } from '@/context/ToastContext';
 
@@ -12,15 +14,54 @@ const FIRE_INACTIVE_ANIMATION = "https://lottie.host/992cfa87-8aba-4f6b-8b35-167
 
 interface UserProfileHeaderProps {
   userData?: GreetingUsersResponse | null;
+  userProfile?: UserProfileResponse | null;
 }
 
-const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({ userData }) => {
+const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({ userData, userProfile: propUserProfile }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [streakData, setStreakData] = useState<StreakData | null>(null);
+  const [userProfile, setUserProfile] = useState<UserProfileResponse | null>(propUserProfile || null);
   const [loadingStreak, setLoadingStreak] = useState(false);
+  const [loadingProfile, setLoadingProfile] = useState(false);
   const { showError } = useToast();
   
-  const username = userData?.data?.user?.username || 'User';
+  // Prioritaskan data dari userProfile, fallback ke userData
+  const username = userProfile?.data?.username || userData?.data?.user?.username || 'User';
+  const name = userProfile?.data?.name || username;
+  const profilePicture = userProfile?.data?.profile_picture;
+
+  console.log('UserProfileHeader - propUserProfile:', propUserProfile);
+  console.log('UserProfileHeader - userProfile state:', userProfile);
+  console.log('UserProfileHeader - userData:', userData);
+
+  // Fetch user profile data
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      if (!propUserProfile) { // Only fetch if not provided as prop
+        console.log('UserProfileHeader - Fetching user profile...');
+        setLoadingProfile(true);
+        try {
+          const response = await getUserProfile();
+          console.log('UserProfileHeader - getUserProfile response:', response);
+          setUserProfile(response);
+        } catch (error) {
+          console.error('UserProfileHeader - Error fetching user profile:', error);
+          if (error instanceof Error) {
+            showError(error.message);
+          } else {
+            showError('Gagal memuat data profile');
+          }
+        } finally {
+          setLoadingProfile(false);
+        }
+      } else {
+        console.log('UserProfileHeader - Using propUserProfile:', propUserProfile);
+        setUserProfile(propUserProfile);
+      }
+    };
+
+    fetchUserProfile();
+  }, [propUserProfile, showError]);
 
   // Fetch streak data
   useEffect(() => {
@@ -101,17 +142,29 @@ const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({ userData }) => {
         >
         {/* Gambar Avatar */}
         <div className="relative w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-full bg-teal-300 flex items-center justify-center overflow-hidden">
-          {/* <Image
-            src={UserAvatar} // Pastikan path ini benar
-            alt="User Avatar"
-            layout="fill" // Mengisi div parent
-            objectFit="cover" // Memastikan gambar terlihat baik
-            className="rounded-full"
-          /> */}
+          {profilePicture ? (
+            <Image
+              src={profilePicture}
+              alt="User Avatar"
+              fill
+              sizes="(max-width: 768px) 32px, (max-width: 1024px) 40px, 48px"
+              className="object-cover rounded-full"
+            />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#00F5A0] to-[#00D4AA] text-white font-semibold text-xs sm:text-sm">
+              {name.charAt(0).toUpperCase()}
+            </div>
+          )}
         </div>
         
         {/* Nama Pengguna */}
-        <span className="text-sm sm:text-base md:text-lg lg:text-xl font-semibold">{username}</span>
+        <span className="text-sm sm:text-base md:text-lg lg:text-xl font-semibold">
+          {loadingProfile ? (
+            <div className="w-16 h-4 bg-white/20 rounded animate-pulse"></div>
+          ) : (
+            name
+          )}
+        </span>
 
         {/* Ikon Dropdown */}
         <svg
@@ -131,7 +184,11 @@ const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({ userData }) => {
       </button>
     </div>
 
-      <ProfileModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      <ProfileModal 
+        isOpen={isModalOpen} 
+        onClose={() => setIsModalOpen(false)} 
+        userProfile={userProfile}
+      />
     </>
   );
 };

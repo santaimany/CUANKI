@@ -7,7 +7,8 @@ import {
   UpdateAccountBalanceRequest,
   UpdateAccountBalanceResponse,
   UpdateAccountAllocationRequest,
-  UpdateAccountAllocationResponse
+  UpdateAccountAllocationResponse,
+  UserProfileResponse,
 } from '@/types/api';
 
 /**
@@ -121,4 +122,14 @@ export async function deleteAccount(accountId: number): Promise<{ status: string
     console.error('Failed to delete account:', error);
     throw error;
   }
+}
+
+export async function getUserProfile(): Promise<UserProfileResponse> {
+  try {
+    const response = await axiosInstance.get<UserProfileResponse>('/api/profile');
+    return response.data;
+  } catch (error) {
+    console.error('Failed to fetch user profile:', error);
+    throw error;
+  } 
 }

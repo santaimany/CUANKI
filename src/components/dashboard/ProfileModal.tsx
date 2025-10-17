@@ -1,14 +1,62 @@
 'use client';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
+import { UserProfileResponse } from '@/types/api';
+import { getUserProfile } from '@/lib/api/user';
+import { useToast } from '@/context/ToastContext';
 
 interface ProfileModalProps {
   isOpen: boolean;
   onClose: () => void;
+  userProfile?: UserProfileResponse | null;
 }
 
-const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose }) => {
+const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose, userProfile: propUserProfile }) => {
+  const [userProfile, setUserProfile] = useState<UserProfileResponse | null>(propUserProfile || null);
+  const [loading, setLoading] = useState(false);
+  const { showError } = useToast();
+
+  // Update userProfile when propUserProfile changes
+  useEffect(() => {
+    if (propUserProfile) {
+      setUserProfile(propUserProfile);
+    }
+  }, [propUserProfile]);
+
+  // Fetch user profile if not provided as prop
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      if (!propUserProfile && isOpen) {
+        setLoading(true);
+        try {
+          const response = await getUserProfile();
+          console.log('ProfileModal - getUserProfile response:', response);
+          setUserProfile(response);
+        } catch (error) {
+          console.error('ProfileModal - Error fetching user profile:', error);
+          if (error instanceof Error) {
+            showError(error.message);
+          } else {
+            showError('Gagal memuat data profile');
+          }
+        } finally {
+          setLoading(false);
+        }
+      } else if (propUserProfile) {
+        console.log('ProfileModal - Using propUserProfile:', propUserProfile);
+        setUserProfile(propUserProfile);
+      }
+    };
+
+    fetchUserProfile();
+  }, [propUserProfile, isOpen, showError]);
+
   if (!isOpen) return null;
+
+  const profileData = userProfile?.data;
+  console.log('ProfileModal - profileData:', profileData);
+  console.log('ProfileModal - loading:', loading);
+  console.log('ProfileModal - propUserProfile:', propUserProfile);
 
   return (
     <>
@@ -24,21 +72,36 @@ const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose }) => {
           {/* Header with Avatar */}
           <div className="bg-gradient-to-r from-[#0EFF95] to-[#00D9D9] p-6 sm:p-8 flex items-center gap-4 sm:gap-6">
             <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-full overflow-hidden border-4 border-white shadow-lg flex-shrink-0">
-              <Image
-                src="/assets/avatar-placeholder.png"
-                alt="Profile"
-                fill
-                className="object-cover"
-                onError={(e) => {
-                  // Fallback to gradient background if image fails
-                  e.currentTarget.style.display = 'none';
-                }}
-              />
-              <div className="absolute inset-0 bg-gradient-to-br from-purple-400 to-pink-400" />
+              {profileData?.profile_picture ? (
+                <Image
+                  src={profileData.profile_picture}
+                  alt="Profile"
+                  fill
+                  sizes="(max-width: 640px) 64px, 80px"
+                  className="object-cover"
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#00F5A0] to-[#00D4AA] text-white font-bold text-xl">
+                  {loading ? '...' : (profileData?.name?.charAt(0)?.toUpperCase() || profileData?.username?.charAt(0)?.toUpperCase() || 'U')}
+                </div>
+              )}
             </div>
             <div className="flex-1 min-w-0">
-              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#363256]">Andrian Faikha</h2>
-              <p className="text-base sm:text-lg md:text-xl text-[#363256]/80">Pelajar</p>
+              {loading ? (
+                <div className="animate-pulse">
+                  <div className="h-8 bg-[#363256]/20 rounded-lg mb-2"></div>
+                  <div className="h-6 bg-[#363256]/20 rounded-lg w-2/3"></div>
+                </div>
+              ) : (
+                <>
+                  <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#363256]">
+                    {profileData?.name || profileData?.username || 'User'}
+                  </h2>
+                  <p className="text-base sm:text-lg md:text-xl text-[#363256]/80">
+                    {profileData?.status || 'Status tidak tersedia'}
+                  </p>
+                </>
+              )}
             </div>
           </div>
 
@@ -47,21 +110,23 @@ const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose }) => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
               {/* Full Name */}
               <div>
-                <label className="block text-white text-sm sm:text-base font-medium mb-2">Full Name</label>
+                <label htmlFor="fullName" className="block text-white text-sm sm:text-base font-medium mb-2">Full Name</label>
                 <input
+                  id="fullName"
                   type="text"
-                  value="Andrian Faikha"
+                  value={loading ? 'Loading...' : (profileData?.name || 'Tidak tersedia')}
                   readOnly
                   className="w-full bg-white text-[#363256] px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0EFF95] text-sm sm:text-base"
                 />
               </div>
 
-              {/* Asal */}
+              {/* Username */}
               <div>
-                <label className="block text-white text-sm sm:text-base font-medium mb-2">Asal</label>
+                <label htmlFor="username" className="block text-white text-sm sm:text-base font-medium mb-2">Username</label>
                 <input
+                  id="username"
                   type="text"
-                  value="Malang"
+                  value={loading ? 'Loading...' : (profileData?.username || 'Tidak tersedia')}
                   readOnly
                   className="w-full bg-white text-[#363256] px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0EFF95] text-sm sm:text-base"
                 />
@@ -69,10 +134,11 @@ const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose }) => {
 
               {/* Umur */}
               <div>
-                <label className="block text-white text-sm sm:text-base font-medium mb-2">Umur</label>
+                <label htmlFor="age" className="block text-white text-sm sm:text-base font-medium mb-2">Umur</label>
                 <input
+                  id="age"
                   type="text"
-                  value="20"
+                  value={loading ? 'Loading...' : (profileData?.age?.toString() || 'Tidak tersedia')}
                   readOnly
                   className="w-full bg-white text-[#363256] px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0EFF95] text-sm sm:text-base"
                 />
@@ -80,10 +146,11 @@ const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose }) => {
 
               {/* Status */}
               <div>
-                <label className="block text-white text-sm sm:text-base font-medium mb-2">Status</label>
+                <label htmlFor="status" className="block text-white text-sm sm:text-base font-medium mb-2">Status</label>
                 <input
+                  id="status"
                   type="text"
-                  value="Pelajar"
+                  value={loading ? 'Loading...' : (profileData?.status || 'Tidak tersedia')}
                   readOnly
                   className="w-full bg-white text-[#363256] px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0EFF95] text-sm sm:text-base"
                 />
@@ -91,21 +158,23 @@ const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose }) => {
 
               {/* Email */}
               <div>
-                <label className="block text-white text-sm sm:text-base font-medium mb-2">Email</label>
+                <label htmlFor="email" className="block text-white text-sm sm:text-base font-medium mb-2">Email</label>
                 <input
+                  id="email"
                   type="email"
-                  value="Andrian@gmail.com"
+                  value={loading ? 'Loading...' : (profileData?.email || 'Tidak tersedia')}
                   readOnly
                   className="w-full bg-white text-[#363256] px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0EFF95] text-sm sm:text-base"
                 />
               </div>
 
-              {/* Password */}
+              {/* Origin ID */}
               <div>
-                <label className="block text-white text-sm sm:text-base font-medium mb-2">Password</label>
+                <label htmlFor="originId" className="block text-white text-sm sm:text-base font-medium mb-2">Origin ID</label>
                 <input
-                  type="password"
-                  value="GantiPassword"
+                  id="originId"
+                  type="text"
+                  value={loading ? 'Loading...' : (profileData?.origin_id || 'Tidak tersedia')}
                   readOnly
                   className="w-full bg-white text-[#363256] px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0EFF95] text-sm sm:text-base"
                 />

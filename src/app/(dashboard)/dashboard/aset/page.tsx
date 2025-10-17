@@ -5,19 +5,36 @@ import AssetCards from '@/components/dashboard/aset/AssetCards';
 import AssetProgress from '@/components/dashboard/aset/AssetProgress';
 import UserProfile from '@/components/dashboard/UserProfile';
 import AIReminder from '@/components/dashboard/AIReminder';
-import { UserAccount } from '@/types/api';
+import { UserAccount, GreetingUsersResponse, UserProfileResponse } from '@/types/api';
+import { getUserGreeting, getUserProfile } from '@/lib/api/user';
 import LoadingScreen from '@/components/commons/LoadingScreen';
 
 export default function AsetPage() {
   const [accounts, setAccounts] = useState<UserAccount[]>([]);
   const [loading, setLoading] = useState(true);
+  const [userData, setUserData] = useState<GreetingUsersResponse | null>(null);
+  const [userProfile, setUserProfile] = useState<UserProfileResponse | null>(null);
   
     useEffect(() => {
-      // Simulate loading delay
-      const timer = setTimeout(() => {
-        setLoading(false);
-      }, 2000);
-      return () => clearTimeout(timer);
+      const fetchData = async () => {
+        try {
+          const [greetingData, profileData] = await Promise.all([
+            getUserGreeting(),
+            getUserProfile()
+          ]);
+          setUserData(greetingData);
+          setUserProfile(profileData);
+        } catch (error) {
+          console.error('Failed to fetch user data:', error);
+        } finally {
+          // Simulate loading delay for now
+          setTimeout(() => {
+            setLoading(false);
+          }, 1000);
+        }
+      };
+
+      fetchData();
     }, []);
 
  
@@ -56,7 +73,7 @@ export default function AsetPage() {
 
         {/* Right Column - User Profile & AI Reminder - Hidden on mobile, shown on lg+ */}
         <div className="hidden lg:flex lg:col-span-1 flex-col gap-6">
-          <UserProfile />
+          <UserProfile userData={userData} userProfile={userProfile} />
           <AIReminder page="asset" />
         </div>
         

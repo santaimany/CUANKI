@@ -626,3 +626,20 @@ export interface UsageBarsResponse {
   success: boolean;
   data: UsageBar; 
 }
+
+
+export interface UserProfile {
+  name: string;
+  username: string; 
+  email: string;
+  age: number ;
+  status: string;
+  origin_id: string;
+  profile_picture: string | null;
+}
+
+export interface UserProfileResponse {
+  status: string;
+  message: string;
+  data: UserProfile;
+}

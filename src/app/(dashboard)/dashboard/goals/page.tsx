@@ -4,6 +4,8 @@ import { GoalHeader, GoalList } from '@/components/dashboard/goals';
 import SavingsChart from '@/components/dashboard/SavingsChart';
 import UserProfile from '@/components/dashboard/UserProfile';
 import AIReminder from '@/components/dashboard/AIReminder';
+import { GreetingUsersResponse, UserProfileResponse } from '@/types/api';
+import { getUserGreeting, getUserProfile } from '@/lib/api/user';
 import AddEditGoalModal from '@/components/dashboard/goals/AddEditGoalModal';
 import DeleteConfirmModal from '@/components/dashboard/goals/DeleteConfirmModal';
 import { 
@@ -23,6 +25,8 @@ export default function GoalsPage() {
   const [goals, setGoals] = useState<Goal[]>([]);
   const [summary, setSummary] = useState<GoalsSummary | null>(null);
   const [loading, setLoading] = useState(true);
+  const [userData, setUserData] = useState<GreetingUsersResponse | null>(null);
+  const [userProfile, setUserProfile] = useState<UserProfileResponse | null>(null);
   
   // Modal states
   const [showAddEditModal, setShowAddEditModal] = useState(false);
@@ -46,9 +50,24 @@ export default function GoalsPage() {
     }
   }, [showError]);
 
+  const fetchUserData = React.useCallback(async () => {
+    try {
+      const [greetingData, profileData] = await Promise.all([
+        getUserGreeting(),
+        getUserProfile()
+      ]);
+      setUserData(greetingData);
+      setUserProfile(profileData);
+    } catch (error) {
+      console.error('Failed to fetch user data:', error);
+      // Don't show error for user data as it's not critical for goals page
+    }
+  }, []);
+
   useEffect(() => {
     fetchGoals();
-  }, [fetchGoals]);
+    fetchUserData();
+  }, [fetchGoals, fetchUserData]);
 
   const handleRefresh = () => {
     fetchGoals();
@@ -183,7 +202,7 @@ export default function GoalsPage() {
 
         {/* Right Column - User Profile & AI Reminder - Hidden on mobile, shown on lg+ */}
         <div className="hidden lg:flex lg:col-span-1 flex-col gap-6">
-          <UserProfile />
+          <UserProfile userData={userData} userProfile={userProfile} />
           <AIReminder page="goals" />
         </div>
         
