@@ -322,3 +322,253 @@ export interface ReceiptTodayResponse {
     transactions: Transaction[];
   };
 }
+
+// User Accounts Types
+export interface UserAccount {
+  value: string;
+  label: string;
+  account_id: number;
+  account_allocation_id: number;
+  account_name: string;
+  type: string;
+  balance: string;
+  formatted_balance: string;
+}
+
+export interface UserAccountsResponse {
+  status: string;
+  data: {
+    accounts: UserAccount[];
+    total_options: number;
+  };
+}
+
+// Transaction Add Types
+export interface AddExpenseRequest {
+  tanggal: string;
+  total: number;
+  notes: string;
+  kategori: number;
+  bank_allocation_id: number;
+}
+
+export interface AddIncomeRequest {
+  tanggal: string;
+  total: number;
+  notes: string;
+  bank_allocation_id: number;
+}
+
+export interface TransactionResponse {
+  status: string;
+  message: string;
+  data?: Record<string, unknown>;
+}
+
+// Expense Detail Receipt Types
+export interface ExpenseItem {
+  expense_id: number;
+  category: {
+    id: number;
+    name: string;
+    note: string | null;
+  };
+  note: string;
+  amount: string;
+  expense_date: string;
+  expense_time: string;
+  expense_type: string;
+  is_monthly_expense: boolean;
+  frequency: string;
+  from_bank: {
+    code_name: string;
+    bank_name: string;
+    account_id: number;
+  };
+  timestamps: {
+    created_at: string;
+    expense_date_full: string;
+  };
+  formatted: {
+    amount: string;
+    expense_date: string;
+    expense_time: string;
+    expense_datetime: string;
+    expense_type: string;
+  };
+}
+
+export interface ExpenseDetailResponse {
+  status: string;
+  message: string;
+  data: {
+    target_date: string;
+    date_info: {
+      date: string;
+      day_name: string;
+      formatted_date: string;
+      is_today: boolean;
+      is_past: boolean;
+      is_future: boolean;
+    };
+    summary: {
+      total_expenses: number;
+      expense_count: number;
+      average_per_expense: number;
+      formatted: {
+        total_expenses: string;
+        expense_count: string;
+        average_per_expense: string;
+      };
+    };
+    expenses: ExpenseItem[];
+    navigation: {
+      previous_date: string | null;
+      next_date: string | null;
+      has_previous: boolean;
+      has_next: boolean;
+      formatted: {
+        previous_date: string | null;
+        next_date: string | null;
+      };
+    };
+    debug_info: {
+      requested_date: string;
+      target_date: string;
+      query_date_start: string;
+      query_date_end: string;
+      timezone: string;
+    };
+  };
+}
+
+// Income Detail Receipt Types
+export interface IncomeItem {
+  income_id: number;
+  income_source: string;
+  note: string;
+  amount: string;
+  actual_amount: string | null;
+  received_date: string;
+  received_time: string;
+  frequency: string;
+  confirmation_status: string;
+  is_manual: boolean;
+  to_bank: {
+    code_name: string;
+    bank_name: string;
+    account_id: number;
+  };
+  timestamps: {
+    created_at: string;
+    received_date_full: string;
+  };
+  formatted: {
+    amount: string;
+    actual_amount: string | null;
+    received_date: string;
+    received_time: string;
+    received_datetime: string;
+    confirmation_status: string;
+    frequency: string;
+    income_source: string;
+  };
+}
+
+export interface IncomeDetailResponse {
+  status: string;
+  message: string;
+  data: {
+    target_date: string;
+    date_info: {
+      date: string;
+      day_name: string;
+      formatted_date: string;
+      is_today: boolean;
+      is_past: boolean;
+      is_future: boolean;
+    };
+    summary: {
+      total_incomes: number;
+      income_count: number;
+      average_per_income: number;
+      confirmed_incomes: number;
+      pending_incomes: number;
+      manual_incomes: number;
+      formatted: {
+        total_incomes: string;
+        income_count: string;
+        average_per_income: string;
+        confirmed_incomes: string;
+        pending_incomes: string;
+      };
+    };
+    incomes: IncomeItem[];
+    navigation: {
+      previous_date: string | null;
+      next_date: string | null;
+      has_previous: boolean;
+      has_next: boolean;
+      formatted: {
+        previous_date: string | null;
+        next_date: string | null;
+      };
+    };
+    debug_info: {
+      requested_date: string;
+      target_date: string;
+      query_date_start: string;
+      query_date_end: string;
+      timezone: string;
+    };
+  };
+}
+
+// Monthly Expenses Types
+export interface MonthlyExpenseItem {
+  id: number;
+  category: {
+    id: number;
+    name: string;
+    icon: string | null;
+  };
+  total_amount: string;
+  current_amount: string;
+  used_amount: string;
+  usage_percentage: number;
+  is_over_budget: boolean;
+  month: number;
+  year: number;
+  note: string;
+  formatted: {
+    total_amount: string;
+    current_amount: string;
+    used_amount: string;
+    usage_percentage: string;
+  };
+  created_at: string;
+}
+
+export interface MonthlyExpensesResponse {
+  status: string;
+  data: {
+    monthly_expenses: MonthlyExpenseItem[];
+    total_budget: number;
+    total_used: number;
+    total_remaining: number;
+    month: number;
+    year: number;
+    month_name: string;
+  };
+}
+
+export interface CreateMonthlyExpenseRequest {
+  expense_category_id: number;
+  total_amount: number;
+  note: string;
+}
+
+export interface UpdateMonthlyExpenseRequest {
+  total_amount: number;
+  note: string;
+}

@@ -1,13 +1,13 @@
 'use client';
 
 import React, { createContext, useContext, useMemo } from 'react';
-import toast, { Toaster, ToastPosition } from 'react-hot-toast';
+import toast, { Toaster, ToastPosition, type ToastOptions } from 'react-hot-toast';
 
 // Toast types for better organization
 type ToastType = 'success' | 'error' | 'loading' | 'warning' | 'info';
 
 interface ToastContextType {
-  showToast: (message: string, type?: ToastType, options?: any) => void;
+  showToast: (message: string, type?: ToastType, options?: ToastOptions) => void;
   showSuccess: (message: string) => void;
   showError: (message: string) => void;
   showLoading: (message: string) => string;

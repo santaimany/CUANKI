@@ -1,17 +1,17 @@
 'use client';
 import React, { useState } from 'react';
-import AddTransactionModal, { TransactionFormData } from './AddTransactionModal';
+import AddTransactionModal from './AddTransactionModal';
 
 interface TransactionSummaryProps {
   income?: number;
   expense?: number;
-  onAddTransaction?: (data: TransactionFormData, type: 'income' | 'expense') => void;
+  onRefresh?: () => void; // Callback untuk refresh data setelah tambah transaksi
 }
 
 const TransactionSummary: React.FC<TransactionSummaryProps> = ({
   income = 60000,
   expense = 70000,
-  onAddTransaction,
+  onRefresh,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalType, setModalType] = useState<'income' | 'expense'>('income');
@@ -21,11 +21,11 @@ const TransactionSummary: React.FC<TransactionSummaryProps> = ({
     setIsModalOpen(true);
   };
 
-  const handleSubmit = (data: TransactionFormData) => {
-    if (onAddTransaction) {
-      onAddTransaction(data, modalType);
+  const handleTransactionSuccess = () => {
+    // Refresh parent data if callback provided
+    if (onRefresh) {
+      onRefresh();
     }
-    console.log('Transaction added:', { ...data, type: modalType });
   };
   return (
     <>
@@ -33,7 +33,7 @@ const TransactionSummary: React.FC<TransactionSummaryProps> = ({
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         type={modalType}
-        onSubmit={handleSubmit}
+        onSubmit={handleTransactionSuccess}
       />
 
       <div className="bg-gradient-to-tl from-[#7971BC]  to-[#373456] rounded-xl sm:rounded-2xl p-4 sm:p-6 text-white">

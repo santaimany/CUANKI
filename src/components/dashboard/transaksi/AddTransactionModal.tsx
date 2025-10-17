@@ -4,20 +4,22 @@ import React, { useState, useEffect } from 'react';
 import { getExpenseCategories } from '@/lib/api/user';
 import { ExpenseCategory } from '@/types/api';
 import { useToast } from '@/context/ToastContext';
+import { getUserAccounts, addExpense, addIncome } from '@/lib/services/dashboardService';
+import type { UserAccount } from '@/types/api';
 
 interface AddTransactionModalProps {
   isOpen: boolean;
   onClose: () => void;
   type: 'income' | 'expense';
-  onSubmit: (data: TransactionFormData) => void;
+  onSubmit?: () => void; // Optional callback after successful submission
 }
 
 export interface TransactionFormData {
   date: string;
-  category?: string;
+  categoryId?: number;
   amount: number;
   notes: string;
-  source: string;
+  accountAllocationId: number;
 }
 
 const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
@@ -28,35 +30,57 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
 }) => {
   const [formData, setFormData] = useState<TransactionFormData>({
     date: new Date().toISOString().split('T')[0],
-    category: '',
+    categoryId: undefined,
     amount: 0,
     notes: '',
-    source: '',
+    accountAllocationId: 0,
   });
 
   const [expenseCategories, setExpenseCategories] = useState<ExpenseCategory[]>([]);
+  const [userAccounts, setUserAccounts] = useState<UserAccount[]>([]);
   const [loadingCategories, setLoadingCategories] = useState(false);
+  const [loadingAccounts, setLoadingAccounts] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { showError, showSuccess } = useToast();
 
   useEffect(() => {
-    if (isOpen && type === 'expense') {
-      const fetchCategories = async () => {
-        setLoadingCategories(true);
+    if (isOpen) {
+      // Fetch user accounts
+      const fetchUserAccounts = async () => {
+        setLoadingAccounts(true);
         try {
-          const categories = await getExpenseCategories();
-          setExpenseCategories(categories);
+          const accountsResponse = await getUserAccounts();
+          setUserAccounts(accountsResponse.data.accounts);
         } catch (error) {
-          console.error('Error fetching categories:', error);
-          showError('Gagal memuat kategori pengeluaran');
+          console.error('Error fetching user accounts:', error);
+          showError('Gagal memuat akun pengguna');
         } finally {
-          setLoadingCategories(false);
+          setLoadingAccounts(false);
         }
       };
+
+      // Fetch expense categories if needed
+      const fetchCategories = async () => {
+        if (type === 'expense') {
+          setLoadingCategories(true);
+          try {
+            const categories = await getExpenseCategories();
+            setExpenseCategories(categories);
+          } catch (error) {
+            console.error('Error fetching categories:', error);
+            showError('Gagal memuat kategori pengeluaran');
+          } finally {
+            setLoadingCategories(false);
+          }
+        }
+      };
+
+      fetchUserAccounts();
       fetchCategories();
     }
   }, [isOpen, type, showError]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     // Validation
@@ -70,42 +94,79 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
       return;
     }
     
-    if (!formData.source.trim()) {
-      showError('Sumber tidak boleh kosong');
+    if (!formData.accountAllocationId || formData.accountAllocationId === 0) {
+      showError('Pilih akun terlebih dahulu');
       return;
     }
     
-    if (type === 'expense' && !formData.category) {
+    if (type === 'expense' && !formData.categoryId) {
       showError('Kategori harus dipilih');
       return;
     }
     
+    setIsSubmitting(true);
+    
     try {
-      onSubmit(formData);
+      if (type === 'expense') {
+        await addExpense({
+          tanggal: formData.date,
+          total: formData.amount,
+          notes: formData.notes,
+          kategori: formData.categoryId!,
+          bank_allocation_id: formData.accountAllocationId,
+        });
+      } else {
+        await addIncome({
+          tanggal: formData.date,
+          total: formData.amount,
+          notes: formData.notes,
+          bank_allocation_id: formData.accountAllocationId,
+        });
+      }
+      
       showSuccess(`${type === 'income' ? 'Pendapatan' : 'Pengeluaran'} berhasil ditambahkan`);
       
       // Reset form
       setFormData({
         date: new Date().toISOString().split('T')[0],
-        category: '',
+        categoryId: undefined,
         amount: 0,
         notes: '',
-        source: '',
+        accountAllocationId: 0,
       });
+      
+      // Call optional callback
+      if (onSubmit) {
+        onSubmit();
+      }
+      
       onClose();
     } catch (error) {
       console.error('Error saving transaction:', error);
-      showError('Gagal menyimpan transaksi');
+      if (error instanceof Error) {
+        showError(error.message);
+      } else {
+        showError('Gagal menyimpan transaksi');
+      }
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     
-    setFormData((prev) => ({
-      ...prev,
-      [name]: name === 'amount' ? Number.parseFloat(value) || 0 : value,
-    }));
+    if (name === 'amount') {
+      setFormData(prev => ({
+        ...prev,
+        amount: Number.parseFloat(value) || 0,
+      }));
+    } else if (name === 'notes') {
+      setFormData(prev => ({
+        ...prev,
+        notes: value,
+      }));
+    }
   };
 
   if (!isOpen) return null;
@@ -166,9 +227,14 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
           {type === 'expense' && (
             <div className="relative">
               <select
-                name="category"
-                value={formData.category}
-                onChange={handleChange}
+                name="categoryId"
+                value={formData.categoryId || ''}
+                onChange={(e) => {
+                  setFormData(prev => ({
+                    ...prev,
+                    categoryId: e.target.value ? Number(e.target.value) : undefined
+                  }));
+                }}
                 className="w-full bg-white rounded-xl px-4 py-3 pr-16 text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#00F5A0] mobile-input"
                 required
                 disabled={loadingCategories}
@@ -177,7 +243,7 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
                   {loadingCategories ? 'Loading...' : 'Pilih Kategori'}
                 </option>
                 {expenseCategories.map((cat) => (
-                  <option key={cat.id} value={cat.name}>
+                  <option key={cat.id} value={cat.id}>
                     {cat.name}
                   </option>
                 ))}
@@ -221,23 +287,51 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
             required
           />
 
-          {/* Source */}
-          <input
-            type="text"
-            name="source"
-            value={formData.source}
-            onChange={handleChange}
-            placeholder="BCA - Kebutuhan"
-            className="w-full bg-white rounded-xl px-4 py-3 text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#00F5A0] mobile-input"
-            required
-          />
+          {/* Account Selection */}
+          <div className="relative">
+            <select
+              name="accountAllocationId"
+              value={formData.accountAllocationId || ''}
+              onChange={(e) => {
+                setFormData(prev => ({
+                  ...prev,
+                  accountAllocationId: Number(e.target.value) || 0
+                }));
+              }}
+              className="w-full bg-white rounded-xl px-4 py-3 pr-16 text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#00F5A0] mobile-input"
+              required
+              disabled={loadingAccounts}
+            >
+              <option value="">
+                {loadingAccounts ? 'Loading...' : 'Pilih Akun'}
+              </option>
+              {userAccounts.map((account) => (
+                <option key={account.account_allocation_id} value={account.account_allocation_id}>
+                  {account.label} - {account.formatted_balance}
+                </option>
+              ))}
+            </select>
+            {/* Edit Icon */}
+            <div className="absolute right-10 top-1/2 -translate-y-1/2">
+              <svg className="w-4 h-4 text-gray-800" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+              </svg>
+            </div>
+            {/* Dropdown Icon - Hidden but functional */}
+            <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
+              <svg className="w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+              </svg>
+            </div>
+          </div>
 
           {/* Submit Button */}
           <button
             type="submit"
-            className="w-full bg-[#00F5A0] hover:bg-[#00E68F] text-[#363256] font-bold text-base py-3 px-6 rounded-full transition-colors mt-4"
+            disabled={isSubmitting || loadingCategories || loadingAccounts}
+            className="w-full bg-[#00F5A0] hover:bg-[#00E68F] text-[#363256] font-bold text-base py-3 px-6 rounded-full transition-colors mt-4 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Simpan
+            {isSubmitting ? 'Menyimpan...' : 'Simpan'}
           </button>
         </form>
       </div>
