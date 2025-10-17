@@ -8,6 +8,7 @@ import { useToast } from '@/context/ToastContext';
 interface TransactionListProps {
   filterType?: 'expense' | 'income';
   onRefresh?: () => void; // Optional callback for refreshing parent data
+  searchQuery?: string; // Search query for filtering transactions
 }
 
 interface DisplayTransaction {
@@ -22,7 +23,7 @@ interface DisplayTransaction {
   status?: string; // For income transactions
 }
 
-const TransactionList: React.FC<TransactionListProps> = ({ filterType = 'expense', onRefresh }) => {
+const TransactionList: React.FC<TransactionListProps> = ({ filterType = 'expense', onRefresh, searchQuery = '' }) => {
   const [showCalendar, setShowCalendar] = useState(false);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [expenses, setExpenses] = useState<ExpenseItem[]>([]);
@@ -101,7 +102,7 @@ const TransactionList: React.FC<TransactionListProps> = ({ filterType = 'expense
   const currentTransactions = filterType === 'expense' ? expenses : incomes;
 
   // Format transactions for display
-  const displayTransactions: DisplayTransaction[] = currentTransactions.map((transaction) => {
+  const allDisplayTransactions: DisplayTransaction[] = currentTransactions.map((transaction) => {
     if (filterType === 'expense') {
       const expense = transaction as ExpenseItem;
       return {
@@ -128,6 +129,18 @@ const TransactionList: React.FC<TransactionListProps> = ({ filterType = 'expense
         status: income.formatted.confirmation_status,
       };
     }
+  });
+
+  // Filter transactions based on search query
+  const displayTransactions = allDisplayTransactions.filter(transaction => {
+    if (!searchQuery.trim()) return true;
+    
+    const query = searchQuery.toLowerCase();
+    return (
+      transaction.category.toLowerCase().includes(query) ||
+      transaction.description.toLowerCase().includes(query) ||
+      transaction.source.toLowerCase().includes(query)
+    );
   });
 
   // Group transactions by the single date (since API returns data for specific date)

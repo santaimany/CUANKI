@@ -115,7 +115,7 @@ const DashboardPage = () => {
         </div>
 
         {/* SavingsChart: Baris 6, Kolom 1-3 */}
-        <div className="col-span-3 row-start-6">
+        <div className="col-span-3 row-start-5">
           <SavingsChart />
         </div>
       </div>

@@ -23,13 +23,13 @@ const MyAccounts = () => {
     fetchAccounts();
   }, []);
 
-  // Color mapping based on account type
+  // Color mapping based on account type - same as AssetCards
   const getColorByType = (type: string) => {
     const colorMap: Record<string, string> = {
       'Kebutuhan': 'bg-[#00F5A0]',
-      'Tabungan': 'bg-[#15803d]',
-      'Darurat': 'bg-[#6ee7b7]',
-      'default': 'bg-[#0d9488]'
+      'Tabungan': 'bg-[#00D9D9]',
+      'Darurat': 'bg-[#7BFFC7]',
+      'default': 'bg-[#4DD4AC]'
     };
     return colorMap[type] || colorMap['default'];
   };
@@ -37,11 +37,19 @@ const MyAccounts = () => {
   if (loading) {
     return (
       <div className="p-8 bg-[#363256]">
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mb-4 sm:mb-6">
           {[1, 2, 3, 4].map((i) => (
-            <div key={i} className="bg-white/10 rounded-2xl p-6 animate-pulse">
-              <div className="h-4 bg-white/20 rounded w-20 mb-2"></div>
-              <div className="h-6 bg-white/20 rounded w-32"></div>
+            <div
+              key={i}
+              className="rounded-2xl sm:rounded-3xl overflow-hidden shadow-lg flex flex-col bg-white/10 animate-pulse"
+            >
+              <div className="py-4 sm:py-5 px-4 sm:px-6">
+                <div className="h-8 bg-white/20 rounded mx-auto w-20 mb-2"></div>
+                <div className="h-4 bg-white/20 rounded mx-auto w-16"></div>
+              </div>
+              <div className="bg-white/20 py-3 sm:py-4 px-4 sm:px-6">
+                <div className="h-6 bg-white/30 rounded mx-auto w-32"></div>
+              </div>
             </div>
           ))}
         </div>
@@ -55,12 +63,13 @@ const MyAccounts = () => {
 
   return (
     <div className="p-8 bg-[#363256] h-full flex flex-col">
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mb-4 sm:mb-6">
         {displayAccounts.map((account, index) => (
           <AccountCard
             key={`${account.account_id}-${account.type}-${index}`}
-            accountName={`${account.account_name} - ${account.type}`}
-            balance={parseFloat(account.balance)}
+            accountName={account.account_name}
+            accountType={account.type}
+            balance={Number.parseFloat(account.balance)}
             color={getColorByType(account.type)}
           />
         ))}
