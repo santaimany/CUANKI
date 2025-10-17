@@ -44,7 +44,7 @@ function GoogleCallbackContent() {
                     const baseURL = getBaseURL();
                     
                     // Fetch user profile to check onboarding status
-                    const response = await fetch(`${baseURL}/api/user`, {
+                    const response = await fetch(`${baseURL}/api/profile`, {
                         headers: {
                             'Authorization': `Bearer ${token}`,
                             'Content-Type': 'application/json',
@@ -57,7 +57,7 @@ function GoogleCallbackContent() {
 
                         // Check if user has completed onboarding
                         const hasCompleted = !!(
-                            user?.username && 
+                            user?.username !== null && 
                             user?.age !== null && 
                             user?.origin_id !== null && 
                             user?.status !== null && 
@@ -77,7 +77,7 @@ function GoogleCallbackContent() {
                     } else {
                         // If can't get user data, just redirect to onboarding
                         setStatus('success');
-                        setMessage('Login successful! Redirecting...');
+                        setMessage('Login successful! Redirecting... onboarding');
                         setTimeout(() => {
                             router.push('/onboarding');
                         }, 1500);
