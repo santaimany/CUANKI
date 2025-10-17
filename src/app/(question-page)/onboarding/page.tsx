@@ -12,6 +12,8 @@ import AvatarRight from '@/assets/getstarted/image/right-logo.svg';
 import { QUESTIONS } from '@/data/questionData';
 import { submitFormUser, submitFormAccount, submitFormPlan, getListBank, getListOrigin, type Bank, type Origin } from '@/lib/services/onboardingService';
 import { useToast } from '@/context/ToastContext';
+import Loading from '@/app/loading';
+import LoadingScreen from '@/components/commons/LoadingScreen';
 
 
 export default function OnboardingPage() {
@@ -337,9 +339,7 @@ export default function OnboardingPage() {
   // Show loading indicator while fetching initial data
   if (isLoadingData) {
     return (
-      <div className="w-full max-w-7xl mx-auto px-6 flex flex-col items-center justify-center h-[100dvh]">
-        <div className="text-white text-xl">Loading...</div>
-      </div>
+     <LoadingScreen/>
     );
   }
 

@@ -2,6 +2,7 @@
 import React from 'react';
 import Sidebar from '@/components/dashboard/Sidebar';
 import { useAuth } from '@/hooks/useAuth';
+import LoadingScreen from '@/components/commons/LoadingScreen';
 
 export default function DashboardLayout({
   children,
@@ -15,12 +16,7 @@ export default function DashboardLayout({
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-[#363256] flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#0EFF95] mx-auto mb-4"></div>
-          <p className="text-white text-lg">Loading...</p>
-        </div>
-      </div>
+      <LoadingScreen />
     );
   }
 

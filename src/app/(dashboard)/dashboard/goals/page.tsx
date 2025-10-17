@@ -17,6 +17,7 @@ import {
   type UpdateGoalRequest
 } from '@/lib/services/goalsService';
 import { useToast } from '@/context/ToastContext';
+import LoadingScreen from '@/components/commons/LoadingScreen';
 
 export default function GoalsPage() {
   const [goals, setGoals] = useState<Goal[]>([]);
@@ -133,10 +134,10 @@ export default function GoalsPage() {
     minimumFractionDigits: 0,
   }).format(totalCurrentAmount);
 
-  if (loading) {
+    if (loading) {
     return (
-      <div className="min-h-screen bg-[#363256] pb-20 md:pb-6 flex items-center justify-center">
-        <div className="text-white text-xl">Loading...</div>
+      <div className="pb-20 md:pb-0 flex items-center justify-center min-h-screen">
+        <LoadingScreen  />
       </div>
     );
   }

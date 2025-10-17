@@ -11,6 +11,8 @@ import MyAccounts from '@/components/dashboard/homepage/card/MyAccount';
 import TransactionHistoryList from '@/components/dashboard/homepage/TransactionHistory';
 import { GreetingUsersResponse } from '@/types/api';
 import { getUserGreeting } from '@/lib/api/user';
+import Loading from '@/app/loading';
+import LoadingScreen from '@/components/commons/LoadingScreen';
 
 const DashboardPage = () => {
   const [userData, setUserData] = useState<GreetingUsersResponse | null>(null);
@@ -21,7 +23,7 @@ const DashboardPage = () => {
     const fetchGreeting = async () => {
       try {
         const data = await getUserGreeting();
-        console.log('Dashboard userData:', JSON.stringify(data, null, 2));
+       
         setUserData(data);
       } catch (error) {
         console.error('Error fetching greeting:', error);
@@ -37,7 +39,7 @@ const DashboardPage = () => {
   if (loading) {
     return (
       <div className="pb-20 md:pb-0 flex items-center justify-center min-h-screen">
-        <div className="text-white text-xl">Loading...</div>
+        <LoadingScreen  />
       </div>
     );
   }

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import UserProfileHeader from '@/components/dashboard/UserProfile';
 import AIReminder from '@/components/dashboard/AIReminder';
 import TransactionSummary from '@/components/dashboard/transaksi/TransactionSummary';
@@ -8,10 +8,28 @@ import TransactionTabs from '@/components/dashboard/transaksi/TransactionTabs';
 import SearchAndFilter from '@/components/dashboard/transaksi/SearchAndFilter';
 import TransactionList from '@/components/dashboard/transaksi/TransactionList';
 import MonthlyExpensesSummary from '@/components/dashboard/transaksi/MonthlyExpensesSummary';
+import LoadingScreen from '@/components/commons/LoadingScreen';
 
 const TransaksiPage = () => {
   const [transactionType, setTransactionType] = useState<'expense' | 'income'>('expense');
   const [searchQuery, setSearchQuery] = useState('');
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+      // Simulate loading delay
+      const timer = setTimeout(() => {
+        setLoading(false);
+      }, 2000);
+      return () => clearTimeout(timer);
+    }, []);
+
+     if (loading) {
+    return (
+      <div className="pb-20 md:pb-0 flex items-center justify-center min-h-screen">
+        <LoadingScreen  />
+      </div>
+    );
+  }
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 sm:gap-6 h-full pb-20 md:pb-0">

@@ -1,18 +1,38 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import AssetSummary from '@/components/dashboard/aset/AssetSummary';
 import AssetCards from '@/components/dashboard/aset/AssetCards';
 import AssetProgress from '@/components/dashboard/aset/AssetProgress';
 import UserProfile from '@/components/dashboard/UserProfile';
 import AIReminder from '@/components/dashboard/AIReminder';
 import { UserAccount } from '@/types/api';
+import LoadingScreen from '@/components/commons/LoadingScreen';
 
 export default function AsetPage() {
   const [accounts, setAccounts] = useState<UserAccount[]>([]);
+  const [loading, setLoading] = useState(true);
+  
+    useEffect(() => {
+      // Simulate loading delay
+      const timer = setTimeout(() => {
+        setLoading(false);
+      }, 2000);
+      return () => clearTimeout(timer);
+    }, []);
+
+ 
 
   const handleAccountsChange = (updatedAccounts: UserAccount[]) => {
     setAccounts(updatedAccounts);
   };
+
+      if (loading) {
+    return (
+      <div className="pb-20 md:pb-0 flex items-center justify-center min-h-screen">
+        <LoadingScreen  />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[#363256] pb-20 md:pb-6">

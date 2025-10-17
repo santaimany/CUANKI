@@ -5,6 +5,7 @@ import UserProfile from '@/components/dashboard/UserProfile';
 import AIReminder from '@/components/dashboard/AIReminder';
 import { getBadges, type Badge, type BadgesData } from '@/lib/services/badgesService';
 import { useToast } from '@/context/ToastContext';
+import LoadingScreen from '@/components/commons/LoadingScreen';
 
 export default function BadgesPage() {
   const [badges, setBadges] = useState<Badge[]>([]);
@@ -34,13 +35,13 @@ export default function BadgesPage() {
     fetchBadges();
   };
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-[#363256] pb-20 md:pb-6 flex items-center justify-center">
-        <div className="text-white text-xl">Loading...</div>
-      </div>
-    );
-  }
+     if (loading) {
+     return (
+       <div className="pb-20 md:pb-0 flex items-center justify-center min-h-screen">
+         <LoadingScreen  />
+       </div>
+     );
+   }
 
   // Get featured badge (first earned badge or badge with highest progress)
   const getFeaturedBadge = () => {

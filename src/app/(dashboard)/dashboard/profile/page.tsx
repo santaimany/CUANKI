@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { GreetingUsersResponse } from '@/types/api';
 import { getUserGreeting } from '@/lib/api/user';
 import { useAuth } from '@/hooks/useAuthActions';
+import LoadingScreen from '@/components/commons/LoadingScreen';
 
 export default function ProfilePage() {
   const [userData, setUserData] = useState<GreetingUsersResponse | null>(null);
@@ -31,10 +32,10 @@ export default function ProfilePage() {
     }
   };
 
-  if (loading) {
+    if (loading) {
     return (
-      <div className="min-h-screen bg-[#363256] pb-20 md:pb-6 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#0EFF95]"></div>
+      <div className="pb-20 md:pb-0 flex items-center justify-center min-h-screen">
+        <LoadingScreen  />
       </div>
     );
   }
