@@ -18,13 +18,30 @@ const DashboardPage = () => {
   const [userData, setUserData] = useState<GreetingUsersResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [refreshTransactions, setRefreshTransactions] = useState(0);
+
+  // Function to trigger transaction refresh
+  const handleTransactionRefresh = () => {
+    setRefreshTransactions(prev => prev + 1);
+    // Also refresh user data to update balance
+    fetchGreeting();
+  };
+
+  const fetchGreeting = async () => {
+    try {
+      const data = await getUserGreeting();
+      setUserData(data);
+    } catch (error) {
+      console.error('Error fetching greeting:', error);
+      setError('Failed to load dashboard data');
+    }
+  };
 
   useEffect(() => {
-    const fetchGreeting = async () => {
+    const fetchInitialData = async () => {
       try {
-        const data = await getUserGreeting();
-       
-        setUserData(data);
+        setLoading(true);
+        await fetchGreeting();
       } catch (error) {
         console.error('Error fetching greeting:', error);
         setError('Failed to load dashboard data');
@@ -33,7 +50,7 @@ const DashboardPage = () => {
       }
     };
 
-    fetchGreeting();
+    fetchInitialData();
   }, []);
 
   if (loading) {
@@ -56,7 +73,7 @@ const DashboardPage = () => {
     <div className="pb-20 md:pb-0">
       {/* Mobile Layout: Stack vertically - No UserProfile */}
       <div className="md:hidden flex flex-col gap-4">
-        <BalanceOverview userData={userData} />
+        <BalanceOverview userData={userData} onRefresh={handleTransactionRefresh} />
         <GoalsProgress />
         <BudgetSisa />
         <MyAccounts />
@@ -68,14 +85,14 @@ const DashboardPage = () => {
         </div>
         
         <SavingsChart />
-        <TransactionHistoryList />
+        <TransactionHistoryList key={refreshTransactions} onRefresh={handleTransactionRefresh} />
       </div>
 
       {/* Desktop Layout: Complex Grid */}
       <div className="hidden md:grid grid-cols-4 gap-6 h-full">
         {/* BalanceOverview: Baris 1-2, Kolom 1-3 */}
         <div className="col-span-3 row-span-2">
-          <BalanceOverview userData={userData} />
+          <BalanceOverview userData={userData} onRefresh={handleTransactionRefresh} />
         </div>
 
         {/* UserProfileHeader: Baris 1, Kolom 4 */}
@@ -113,7 +130,7 @@ const DashboardPage = () => {
 
         {/* TransactionHistoryList: Baris 4-6, Kolom 4 */}
         <div className="col-start-4 row-start-4 row-span-3">
-          <TransactionHistoryList />
+          <TransactionHistoryList key={refreshTransactions} onRefresh={handleTransactionRefresh} />
         </div>
 
         {/* SavingsChart: Baris 6, Kolom 1-3 */}

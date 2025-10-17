@@ -89,17 +89,16 @@ const TransactionList: React.FC<TransactionListProps> = ({ filterType = 'expense
       }
     } finally {
       setLoading(false);
-      // Call refresh callback if provided
-      if (onRefresh) {
-        onRefresh();
-      }
     }
-  }, [filterType, showError, onRefresh]);
+  }, [filterType, showError]);
 
   // Load data when component mounts or date/filterType changes
   useEffect(() => {
     fetchTransactionData(selectedDate);
   }, [selectedDate, filterType, fetchTransactionData]);
+
+  // The refresh happens through the key prop change in parent component
+  // This forces the component to remount and re-fetch data
 
   // Close calendar when clicking outside
   React.useEffect(() => {

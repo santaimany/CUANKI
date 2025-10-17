@@ -66,29 +66,40 @@ const getCategoryIcon = (categoryName: string) => {
 };
 
 // --- Komponen Utama: Daftar Riwayat Transaksi ---
-const TransactionHistoryList = () => {
+interface TransactionHistoryListProps {
+  onRefresh?: () => void; // Callback for parent to trigger refresh
+}
+
+const TransactionHistoryList: React.FC<TransactionHistoryListProps> = ({ onRefresh }) => {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [totalExpenses, setTotalExpenses] = useState('Rp 0');
   const [formattedDate, setFormattedDate] = useState('');
 
-  useEffect(() => {
-    const fetchTransactions = async () => {
-      try {
-        setIsLoading(true);
-        const response = await getReceiptToday();
-        setTransactions(response.data.transactions);
-        setTotalExpenses(response.data.formatted_total_expenses);
-        setFormattedDate(response.data.formatted_date);
-      } catch (error) {
-        console.error('Failed to fetch transactions:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
+  const fetchTransactions = async () => {
+    try {
+      setIsLoading(true);
+      const response = await getReceiptToday();
+      setTransactions(response.data.transactions);
+      setTotalExpenses(response.data.formatted_total_expenses);
+      setFormattedDate(response.data.formatted_date);
+    } catch (error) {
+      console.error('Failed to fetch transactions:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchTransactions();
   }, []);
+
+  // Refresh when parent requests it
+  useEffect(() => {
+    if (onRefresh) {
+      fetchTransactions();
+    }
+  }, [onRefresh]);
 
   if (isLoading) {
     return (
@@ -132,7 +143,7 @@ const TransactionHistoryList = () => {
                 icon={getCategoryIcon(transaction.category_name)}
                 category={transaction.category_name}
                 description={transaction.note}
-                amount={parseFloat(transaction.amount) * (transaction.is_income ? 1 : -1)}
+                amount={Number.parseFloat(transaction.amount) * (transaction.is_income ? 1 : -1)}
               />
             ))}
             

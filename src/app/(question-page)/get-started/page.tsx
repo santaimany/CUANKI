@@ -15,7 +15,7 @@ export default function GetStartedPage() {
   const rightCardRef = useRef<HTMLDivElement | null>(null);
   const centerCardRef = useRef<HTMLDivElement | null>(null);
   const contentRef = useRef<HTMLDivElement | null>(null);
-  const buttonRef = useRef<HTMLButtonElement | null>(null); // Ref kembali ke tombol
+  const buttonRef = useRef<HTMLButtonElement | null>(null); 
 
   // Animasi masuk saat komponen dimuat
   useEffect(() => {

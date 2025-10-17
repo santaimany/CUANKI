@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import UserProfileHeader from '@/components/dashboard/UserProfile';
 import AIReminder from '@/components/dashboard/AIReminder';
 import TransactionSummary from '@/components/dashboard/transaksi/TransactionSummary';
@@ -8,35 +8,23 @@ import TransactionTabs from '@/components/dashboard/transaksi/TransactionTabs';
 import SearchAndFilter from '@/components/dashboard/transaksi/SearchAndFilter';
 import TransactionList from '@/components/dashboard/transaksi/TransactionList';
 import MonthlyExpensesSummary from '@/components/dashboard/transaksi/MonthlyExpensesSummary';
-import LoadingScreen from '@/components/commons/LoadingScreen';
 
 const TransaksiPage = () => {
   const [transactionType, setTransactionType] = useState<'expense' | 'income'>('expense');
   const [searchQuery, setSearchQuery] = useState('');
-    const [loading, setLoading] = useState(true);
+  const [refreshKey, setRefreshKey] = useState(0); // Key untuk trigger refresh
 
-    useEffect(() => {
-      // Simulate loading delay
-      const timer = setTimeout(() => {
-        setLoading(false);
-      }, 2000);
-      return () => clearTimeout(timer);
-    }, []);
-
-     if (loading) {
-    return (
-      <div className="pb-20 md:pb-0 flex items-center justify-center min-h-screen">
-        <LoadingScreen  />
-      </div>
-    );
-  }
+  // Function untuk refresh semua komponen transaction
+  const handleRefreshTransactions = () => {
+    setRefreshKey(prev => prev + 1);
+  };
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 sm:gap-6 h-full pb-20 md:pb-0">
       {/* Left Section - Main Content (3 columns) */}
       <div className="lg:col-span-3 space-y-4 sm:space-y-6">
         {/* Transaction Summary Card */}
-        <TransactionSummary />
+        <TransactionSummary onRefresh={handleRefreshTransactions} />
         
         {/* Monthly Expenses Summary - Mobile only */}
         <div className="block lg:hidden">
@@ -49,7 +37,12 @@ const TransaksiPage = () => {
           <SearchAndFilter onSearch={setSearchQuery} />
         </div>
         {/* Transaction List */}
-        <TransactionList filterType={transactionType} searchQuery={searchQuery} />
+        <TransactionList 
+          filterType={transactionType} 
+          searchQuery={searchQuery} 
+          onRefresh={handleRefreshTransactions}
+          key={refreshKey} // Force re-render when key changes
+        />
       </div> 
       <div className="hidden lg:flex lg:col-span-1 flex-col gap-6">
         <UserProfileHeader />

@@ -166,7 +166,7 @@ const HeroSection = () => {
   }, []);
 
   return (
-    <section ref={sectionRef} className="bg-gradient-to-r from-[#363256] to-[#50488A] w-full min-h-screen flex items-center relative px-4 lg:px-8">
+    <section ref={sectionRef} className="bg-gradient-to-r from-[#363256] to-[#50488A] w-full min-h-screen flex items-center relative px-4 lg:px-8 ">
       
       {/* Smile Background Asset - Hidden on mobile, visible on desktop */}
       <div className="hidden lg:block absolute -left-[25vw] top-1/2 -translate-y-1/2 z-10">
@@ -250,7 +250,7 @@ const HeroSection = () => {
       </div>
 
       {/* Desktop Layout - Original */}
-      <div className="hidden lg:flex relative z-10 w-full max-w-screen-2xl mx-auto flex-row items-center justify-center" style={{ gap: "3vw" }}>
+      <div className="hidden lg:flex relative z-10 w-full max-w-screen-2xl overflow-hidden mx-auto flex-row items-center justify-center" style={{ gap: "3vw" }}>
         
         <div ref={imageRef} className="w-full lg:w-1/2 flex items-center justify-center relative">
           <div className="relative">
