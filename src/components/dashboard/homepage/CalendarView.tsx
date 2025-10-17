@@ -38,6 +38,9 @@ const CalendarView = () => {
   // Get color based on date status
   const getDateColor = (dateData: CalendarDate) => {
     if (dateData.is_today) {
+      return 'border-2 border-white';
+    }
+    if (dateData.is_over_budget ) {
       return dateData.is_over_budget 
         ? 'bg-red-500 text-white font-bold' 
         : 'bg-white text-[#363256] font-bold';
