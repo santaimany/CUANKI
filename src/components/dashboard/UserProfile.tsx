@@ -7,8 +7,8 @@ import { getStreak } from '@/lib/services/dashboardService';
 import { useToast } from '@/context/ToastContext';
 
 // Lottie animation URLs
-const FIRE_ACTIVE_ANIMATION = "https://lottie.host/c53b8edc-3a2a-4fc3-8b94-e82eb8c90e85/wf1rLYNb3K.json"; // Fire nyala - bergerak animasi
-const FIRE_INACTIVE_ANIMATION = "https://lottie.host/embed/fire-inactive/animation.json"; // Fire mati - abu-abu/tidak bergerak
+const FIRE_ACTIVE_ANIMATION = "https://lottie.host/25052bc2-7469-40a5-a6d6-9e6a7713fefe/MkdRgn9F6G.json"; // Fire nyala - bergerak animasi
+const FIRE_INACTIVE_ANIMATION = "https://lottie.host/992cfa87-8aba-4f6b-8b35-167db683d58e/gIO625Txek.json"; // Fire mati - abu-abu/tidak bergerak
 
 interface UserProfileHeaderProps {
   userData?: GreetingUsersResponse | null;

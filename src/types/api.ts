@@ -614,3 +614,10 @@ export interface StreakResponse {
   message: string;
   data: StreakData;
 }
+
+
+export interface UsageBar {
+  today_spending: string;
+  daily_limit: string;
+  percentage: number;
+}
