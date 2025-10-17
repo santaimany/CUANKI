@@ -102,8 +102,8 @@ const Sidebar: React.FC<SidebarProps> = ({ className = '' }) => {
       </div>
 
       {/* Desktop Sidebar */}
-      <div className="hidden md:block h-screen py-4">
-        <div className={`h-full w-64 ml-4 flex flex-col bg-[#50488A] rounded-3xl ${className}`}>
+      <div className="hidden md:block fixed left-0 top-0 h-screen py-4 z-40 overflow-y-auto">
+        <div className={`w-64 ml-4 h-full flex flex-col bg-[#50488A] rounded-3xl ${className}`}>
           <div className="bg-[#2E2A4A] text-center pt-12 pb-10 rounded-3xl">
             <div className="flex justify-center mb-6 ml-4">
               <Image src={CuankiLogo} alt="Cuanki Logo" width={52} height={52} className="w-full h-auto" />
