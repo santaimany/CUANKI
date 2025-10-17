@@ -3,7 +3,7 @@ import { StaticImageData } from "next/image";
 
 export interface EducationItem {
   id: string;
-  title?: string;
+  title: string;
   image?: StaticImageData;
   description: string;
   content?: {
