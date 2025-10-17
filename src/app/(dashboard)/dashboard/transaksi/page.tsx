@@ -31,6 +31,11 @@ const TransaksiPage = () => {
         <AIReminder page="transaction" />
         <MonthlyExpensesSummary />
       </div>
+      
+      {/* AI Reminder Floating Button - Mobile only */}
+      <div className="block lg:hidden">
+        <AIReminder page="transaction" isFloating={true} />
+      </div>
     </div>
   );
 };

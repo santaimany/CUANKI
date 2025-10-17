@@ -1,6 +1,10 @@
 import axios from 'axios';
 import toast from 'react-hot-toast';
 
+// Throttle untuk mencegah multiple toast unauthorized
+let lastUnauthorizedToast = 0;
+const TOAST_THROTTLE_DURATION = 5000; // 5 detik
+
 // Get base URL - use proxy in production to avoid mixed content issues
 const getBaseURL = () => {
     // In production (Vercel), use internal proxy to avoid HTTPS/HTTP mixed content
@@ -78,28 +82,36 @@ axiosInstance.interceptors.response.use(
                     // For other requests, show session expired message and redirect
                     console.warn('🔐 Unauthorized access detected - redirecting to login');
                     
-                    // Show toast notification for session expired
-                    toast.error('Sesi Anda telah berakhir. Silakan login kembali.', {
-                        duration: 3000,
-                    });
-                    
-                    // Clear token from localStorage
-                    localStorage.removeItem('token');
-                    localStorage.removeItem('refresh_token');
-                    localStorage.removeItem('onboarding_completed');
-                    
-                    // Only redirect if we're in browser environment
-                    if (globalThis.window !== undefined) {
-                        // Check if we're not already on login/register pages to avoid infinite redirect
-                        const currentPath = globalThis.window.location.pathname;
-                        const authPaths = ['/login', '/register', '/auth/google/callback'];
+                    // Throttle unauthorized toast untuk mencegah spam
+                    const now = Date.now();
+                    if (now - lastUnauthorizedToast > TOAST_THROTTLE_DURATION) {
+                        lastUnauthorizedToast = now;
                         
-                        if (!authPaths.some(path => currentPath.startsWith(path))) {
-                            console.log('🔄 Redirecting to login page...');
-                            // Delay redirect slightly to show toast
-                            setTimeout(() => {
-                                globalThis.window.location.href = '/login';
-                            }, 1500);
+                        // Show toast notification for session expired
+                        toast.error('Sesi Anda telah berakhir. Silakan login kembali.', {
+                            duration: 3000,
+                        });
+                    }
+                    
+                    // Clear token from localStorage (only once per session)
+                    if (localStorage.getItem('token')) {
+                        localStorage.removeItem('token');
+                        localStorage.removeItem('refresh_token');
+                        localStorage.removeItem('onboarding_completed');
+                        
+                        // Only redirect if we're in browser environment
+                        if (globalThis.window !== undefined) {
+                            // Check if we're not already on login/register pages to avoid infinite redirect
+                            const currentPath = globalThis.window.location.pathname;
+                            const authPaths = ['/login', '/register', '/auth/google/callback'];
+                            
+                            if (!authPaths.some(path => currentPath.startsWith(path))) {
+                                console.log('🔄 Redirecting to login page...');
+                                // Delay redirect slightly to show toast
+                                setTimeout(() => {
+                                    globalThis.window.location.href = '/login';
+                                }, 1500);
+                            }
                         }
                     }
                 }

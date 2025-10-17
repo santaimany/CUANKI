@@ -602,3 +602,15 @@ export interface AIReminderResponse {
   message: string;
   data: AIReminderData;
 }
+
+// Streak Types
+export interface StreakData {
+  current_streak: number;
+  is_active_today: boolean;
+}
+
+export interface StreakResponse {
+  status: string;
+  message: string;
+  data: StreakData;
+}

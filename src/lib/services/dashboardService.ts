@@ -12,7 +12,8 @@ import type {
   MonthlyExpensesResponse,
   CreateMonthlyExpenseRequest,
   UpdateMonthlyExpenseRequest,
-  AIReminderResponse
+  AIReminderResponse,
+  StreakResponse
 } from '@/types/api';
 
 /**
@@ -389,5 +390,36 @@ export const getAIReminder = async (page: 'asset' | 'goals' | 'transaction'): Pr
         }
         
         throw new Error('Failed to fetch AI reminder');
+    }
+};
+
+/**
+ * Get user streak information
+ */
+export const getStreak = async (): Promise<StreakResponse> => {
+    try {
+        console.log('🔥 Fetching streak information');
+        
+        const response = await axiosInstance.get<StreakResponse>('/api/streak');
+        
+        console.log('🔥 Streak API Response:', response.data);
+        
+        return response.data;
+    } catch (error: unknown) {
+        // Extract error message from backend response
+        if (typeof error === 'object' && error !== null && 'response' in error) {
+            const axiosError = error as { response?: { data?: { message?: string; error?: string } } };
+            const backendMessage = axiosError.response?.data?.message || axiosError.response?.data?.error;
+            
+            if (backendMessage) {
+                throw new Error(backendMessage);
+            }
+        }
+        
+        if (error instanceof Error) {
+            throw error;
+        }
+        
+        throw new Error('Failed to fetch streak information');
     }
 };

@@ -1,18 +1,18 @@
 'use client';
 
-import React, { createContext, useContext, useMemo } from 'react';
+import React, { createContext, useContext, useMemo, useCallback } from 'react';
 import toast, { Toaster, ToastPosition, type ToastOptions } from 'react-hot-toast';
 
 // Toast types for better organization
 type ToastType = 'success' | 'error' | 'loading' | 'warning' | 'info';
 
 interface ToastContextType {
-  showToast: (message: string, type?: ToastType, options?: ToastOptions) => void;
-  showSuccess: (message: string) => void;
-  showError: (message: string) => void;
-  showLoading: (message: string) => string;
-  showWarning: (message: string) => void;
-  showInfo: (message: string) => void;
+  showToast: (message: string, type?: ToastType, options?: ToastOptions) => string | undefined;
+  showSuccess: (message: string) => string | undefined;
+  showError: (message: string) => string | undefined;
+  showLoading: (message: string) => string | undefined;
+  showWarning: (message: string) => string | undefined;
+  showInfo: (message: string) => string | undefined;
   dismissToast: (toastId: string) => void;
   dismissAll: () => void;
 }
@@ -36,7 +36,21 @@ export const ToastProvider: React.FC<ToastProviderProps> = ({
   children, 
   position = 'top-center' 
 }) => {
-  const showToast = (message: string, type: ToastType = 'info', options?: any) => {
+  // Duplicate prevention untuk toast yang sama
+  const recentToasts = React.useRef<Map<string, number>>(new Map());
+  const DUPLICATE_THRESHOLD = 3000; // 3 detik
+
+  const showToast = useCallback((message: string, type: ToastType = 'info', options?: ToastOptions) => {
+    // Check untuk duplicate toast
+    const key = `${type}-${message}`;
+    const now = Date.now();
+    const lastShown = recentToasts.current.get(key);
+    
+    if (lastShown && now - lastShown < DUPLICATE_THRESHOLD) {
+      return; // Skip duplicate toast
+    }
+    
+    recentToasts.current.set(key, now);
     const toastOptions = {
       duration: 4000,
       style: {
@@ -110,26 +124,18 @@ export const ToastProvider: React.FC<ToastProviderProps> = ({
           },
         });
     }
-  };
-
-  const showSuccess = (message: string) => showToast(message, 'success');
-  const showError = (message: string) => showToast(message, 'error');
-  const showLoading = (message: string) => showToast(message, 'loading');
-  const showWarning = (message: string) => showToast(message, 'warning');
-  const showInfo = (message: string) => showToast(message, 'info');
-  const dismissToast = (toastId: string) => toast.dismiss(toastId);
-  const dismissAll = () => toast.dismiss();
+  }, []);
 
   const value: ToastContextType = useMemo(() => ({
     showToast,
-    showSuccess,
-    showError,
-    showLoading,
-    showWarning,
-    showInfo,
-    dismissToast,
-    dismissAll,
-  }), []);
+    showSuccess: (message: string) => showToast(message, 'success'),
+    showError: (message: string) => showToast(message, 'error'),
+    showLoading: (message: string) => showToast(message, 'loading'),
+    showWarning: (message: string) => showToast(message, 'warning'),
+    showInfo: (message: string) => showToast(message, 'info'),
+    dismissToast: (toastId: string) => toast.dismiss(toastId),
+    dismissAll: () => toast.dismiss(),
+  }), [showToast]);
 
   return (
     <ToastContext.Provider value={value}>

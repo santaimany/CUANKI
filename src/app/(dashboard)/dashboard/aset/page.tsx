@@ -39,6 +39,11 @@ export default function AsetPage() {
           <UserProfile />
           <AIReminder page="asset" />
         </div>
+        
+        {/* AI Reminder Floating Button - Mobile only */}
+        <div className="block lg:hidden">
+          <AIReminder page="asset" isFloating={true} />
+        </div>
       </div>
     </div>
   );

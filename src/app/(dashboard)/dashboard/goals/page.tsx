@@ -74,6 +74,11 @@ export default function GoalsPage() {
           <UserProfile />
           <AIReminder page="goals" />
         </div>
+        
+        {/* AI Reminder Floating Button - Mobile only */}
+        <div className="block lg:hidden">
+          <AIReminder page="goals" isFloating={true} />
+        </div>
       </div>
     </div>
   );
