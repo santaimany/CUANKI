@@ -1,5 +1,6 @@
 'use client';
 import React, { useEffect, useState } from 'react';
+import Link from 'next/link';
 import { getReceiptToday } from '@/lib/services/dashboardService';
 import type { Transaction } from '@/types/api';
 
@@ -124,15 +125,29 @@ const TransactionHistoryList = () => {
             <p>Belum ada transaksi hari ini</p>
           </div>
         ) : (
-          transactions.map((transaction) => (
-            <TransactionItem
-              key={transaction.id}
-              icon={getCategoryIcon(transaction.category_name)}
-              category={transaction.category_name}
-              description={transaction.note}
-              amount={parseFloat(transaction.amount) * (transaction.is_income ? 1 : -1)}
-            />
-          ))
+          <>
+            {transactions.slice(0, 6).map((transaction) => (
+              <TransactionItem
+                key={transaction.id}
+                icon={getCategoryIcon(transaction.category_name)}
+                category={transaction.category_name}
+                description={transaction.note}
+                amount={parseFloat(transaction.amount) * (transaction.is_income ? 1 : -1)}
+              />
+            ))}
+            
+            {/* See All Button - Show only if there are more than 6 transactions */}
+            {transactions.length > 6 && (
+              <div className="pt-2">
+                <Link 
+                  href="/dashboard/transaksi"
+                  className="block w-full bg-[#00F5A0] text-[#363256] text-center py-3 px-4 rounded-xl font-semibold hover:bg-[#00e68f] transition-colors duration-200"
+                >
+                  Lihat Semua ({transactions.length} transaksi)
+                </Link>
+              </div>
+            )}
+          </>
         )}
       </div>
     </div>

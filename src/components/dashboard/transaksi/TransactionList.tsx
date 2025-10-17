@@ -5,6 +5,23 @@ import { getDetailReceiptExpense, getDetailReceiptIncome } from '@/lib/services/
 import type { ExpenseItem, IncomeItem } from '@/types/api';
 import { useToast } from '@/context/ToastContext';
 
+// Hook untuk deteksi mobile
+const useIsMobile = () => {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkIsMobile = () => {
+      setIsMobile(window.innerWidth < 768); // md breakpoint
+    };
+
+    checkIsMobile();
+    window.addEventListener('resize', checkIsMobile);
+    return () => window.removeEventListener('resize', checkIsMobile);
+  }, []);
+
+  return isMobile;
+};
+
 interface TransactionListProps {
   filterType?: 'expense' | 'income';
   onRefresh?: () => void; // Optional callback for refreshing parent data
@@ -44,6 +61,7 @@ const TransactionList: React.FC<TransactionListProps> = ({ filterType = 'expense
     next_date: string | null;
   } | null>(null);
   const { showError } = useToast();
+  const isMobile = useIsMobile();
 
   // Fetch data based on selected date and filter type
   const fetchTransactionData = useCallback(async (date: Date) => {
@@ -210,6 +228,7 @@ const TransactionList: React.FC<TransactionListProps> = ({ filterType = 'expense
                 selectedDate={selectedDate}
                 onSelectDate={handleDateSelect}
                 onClose={() => setShowCalendar(false)}
+                isMobile={isMobile}
               />
             )}
           </div>
