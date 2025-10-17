@@ -136,7 +136,7 @@ export default function EducationDetailPage({ params }: PageProps) {
               {educationItem.image ? (
                 <Image
                   src={educationItem.image}
-                  alt={educationItem.title}
+                  alt="image"
                   className="w-full h-full object-contain" // Sesuai permintaan Anda
                   fill
                 />
