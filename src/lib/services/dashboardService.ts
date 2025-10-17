@@ -11,7 +11,8 @@ import type {
   IncomeDetailResponse,
   MonthlyExpensesResponse,
   CreateMonthlyExpenseRequest,
-  UpdateMonthlyExpenseRequest
+  UpdateMonthlyExpenseRequest,
+  AIReminderResponse
 } from '@/types/api';
 
 /**
@@ -354,5 +355,39 @@ export const updateMonthlyExpense = async (id: number, data: UpdateMonthlyExpens
         }
         
         throw new Error('Failed to update monthly expense');
+    }
+};
+
+/**
+ * Get AI reminder based on current page context
+ * @param page - Current page context ('asset', 'goals', 'transaction')
+ */
+export const getAIReminder = async (page: 'asset' | 'goals' | 'transaction'): Promise<AIReminderResponse> => {
+    try {
+        console.log('🤖 Fetching AI Reminder for page:', page);
+        
+        const response = await axiosInstance.post<AIReminderResponse>('/api/reminder', {
+            page: page
+        });
+        
+        console.log('🤖 AI Reminder API Response:', response.data);
+        
+        return response.data;
+    } catch (error: unknown) {
+        // Extract error message from backend response
+        if (typeof error === 'object' && error !== null && 'response' in error) {
+            const axiosError = error as { response?: { data?: { message?: string; error?: string } } };
+            const backendMessage = axiosError.response?.data?.message || axiosError.response?.data?.error;
+            
+            if (backendMessage) {
+                throw new Error(backendMessage);
+            }
+        }
+        
+        if (error instanceof Error) {
+            throw error;
+        }
+        
+        throw new Error('Failed to fetch AI reminder');
     }
 };

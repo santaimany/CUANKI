@@ -37,7 +37,7 @@ export default function AsetPage() {
         {/* Right Column - User Profile & AI Reminder - Hidden on mobile, shown on lg+ */}
         <div className="hidden lg:flex lg:col-span-1 flex-col gap-6">
           <UserProfile />
-          <AIReminder />
+          <AIReminder page="asset" />
         </div>
       </div>
     </div>

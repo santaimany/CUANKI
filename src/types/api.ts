@@ -572,3 +572,33 @@ export interface UpdateMonthlyExpenseRequest {
   total_amount: number;
   note: string;
 }
+
+// AI Reminder Types
+export interface AIReminderRequest {
+  page: 'asset' | 'goals' | 'transaction';
+}
+
+export interface AIReminderContextAnalysis {
+  account_count: number;
+  total_balance: number;
+  savings_balance: number;
+  emergency_balance: number;
+  monthly_income: string;
+  emergency_fund_months: number;
+  savings_rate: number;
+  account_diversity: string;
+}
+
+export interface AIReminderData {
+  page: string;
+  reminder: string;
+  context_analysis: AIReminderContextAnalysis;
+  priority_level: 'low' | 'medium' | 'high';
+  action_suggestions: string[];
+}
+
+export interface AIReminderResponse {
+  status: string;
+  message: string;
+  data: AIReminderData;
+}

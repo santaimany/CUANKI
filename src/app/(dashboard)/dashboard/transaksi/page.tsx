@@ -28,7 +28,7 @@ const TransaksiPage = () => {
       </div> 
       <div className="hidden lg:flex lg:col-span-1 flex-col gap-6">
         <UserProfileHeader />
-        <AIReminder />
+        <AIReminder page="transaction" />
         <MonthlyExpensesSummary />
       </div>
     </div>
