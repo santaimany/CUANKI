@@ -29,14 +29,14 @@ export const metadata: Metadata = {
     capable: true,
     statusBarStyle: "black-translucent",
     title: "Cuanki",
-    startupImage: '/icon-512x512.png',
+    startupImage: '/android/android-launchericon-512-512.png',
   },
   icons: {
-    icon: "/favicon.ico",
+    icon: "/favicon.svg",
     apple: [
-      { url: '/icon-152x152.png', sizes: '152x152' },
-      { url: '/icon-180x180.png', sizes: '180x180' },
-      { url: '/icon-192x192.png', sizes: '192x192' },
+      { url: '/ios/152.png', sizes: '152x152' },
+      { url: '/ios/180.png', sizes: '180x180' },
+      { url: '/android/android-launchericon-192-192.png', sizes: '192x192' },
     ],
   },
 };
