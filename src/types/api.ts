@@ -621,3 +621,8 @@ export interface UsageBar {
   daily_limit: string;
   percentage: number;
 }
+
+export interface UsageBarsResponse {
+  success: boolean;
+  data: UsageBar; 
+}
