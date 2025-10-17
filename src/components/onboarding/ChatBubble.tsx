@@ -8,15 +8,15 @@ type Props = {
 };
 
 export default function ChatBubble({ children, side = 'left', className = '' }: Props) {
-  // Responsive padding and text sizing
-  const base = 'relative inline-block px-3 sm:px-4 py-2 text-xs sm:text-sm md:text-base';
+  // Mobile-first responsive design
+  const base = 'relative inline-block px-4 sm:px-4 py-2.5 sm:py-2 text-sm sm:text-sm md:text-base break-words leading-relaxed';
   
-  // Solid background with border
-  const leftStyle = 'bg-[#50488A] border-1 border-gray-400 rounded-2xl rounded-bl-none';
-  const rightStyle = 'bg-[#E6E1F8] text-[#50488A] rounded-2xl rounded-br-none';
+  // Chat bubble styling - more mobile-friendly
+  const leftStyle = 'bg-[#50488A] text-white border-1 border-gray-400 rounded-2xl rounded-bl-md shadow-sm';
+  const rightStyle = 'bg-[#00F5A0] text-black rounded-2xl rounded-br-md shadow-sm';
 
   return (
-    <div className={`max-w-[100%] ${side === 'left' ? 'self-start' : 'self-end'} ${className}`}>
+    <div className={`max-w-[85%] sm:max-w-[100%] ${side === 'left' ? 'self-start' : 'self-end'} ${className}`}>
       <div className={`${base} ${side === 'left' ? leftStyle : rightStyle}`}>
         {children}
       </div>

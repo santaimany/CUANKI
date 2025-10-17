@@ -51,10 +51,11 @@ const EditAccountModal: React.FC<EditAccountModalProps> = ({
       });
 
       // Cari allocation_id dari berbagai kemungkinan field name
+      const accountWithId = account as UserAccount & { allocation_id?: number; id?: number };
       const allocationId = account.account_allocation_id 
-        || (account as any).allocation_id 
-        || (account as any).id
-        || (account as any).value; // value bisa jadi ID string
+        || accountWithId.allocation_id 
+        || accountWithId.id
+        || (typeof account.value === 'string' ? Number.parseInt(account.value) : account.value);
       
       console.log('🔍 Detected allocation ID:', allocationId, 'Type:', typeof allocationId);
       
@@ -73,7 +74,7 @@ const EditAccountModal: React.FC<EditAccountModalProps> = ({
         new_type?: string;
         new_balance?: string;
       } = {
-        account_allocation_id: typeof allocationId === 'string' ? parseInt(allocationId) : allocationId,
+        account_allocation_id: typeof allocationId === 'string' ? Number.parseInt(allocationId) : allocationId,
       };
 
       // Only include type if it changed
@@ -123,7 +124,7 @@ const EditAccountModal: React.FC<EditAccountModalProps> = ({
         const validationErrors = axiosError.response?.data?.errors;
         if (validationErrors) {
           const errorDetails = Object.entries(validationErrors)
-            .map(([field, messages]) => `${field}: ${(messages as string[]).join(', ')}`)
+            .map(([field, messages]) => `${field}: ${Array.isArray(messages) ? messages.join(', ') : messages}`)
             .join('\n');
           errorMessage += '\n\nDetail:\n' + errorDetails;
         }
@@ -138,7 +139,7 @@ const EditAccountModal: React.FC<EditAccountModalProps> = ({
   };
 
   const handleBalanceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value.replace(/\D/g, '');
+    const value = e.target.value.replaceAll(/\D/g, '');
     setBalance(value);
   };
 
@@ -216,7 +217,7 @@ const EditAccountModal: React.FC<EditAccountModalProps> = ({
               <input
                 id="balance-input"
                 type="text"
-                value={balance ? parseInt(balance).toLocaleString('id-ID') : ''}
+                value={balance ? Number.parseInt(balance).toLocaleString('id-ID') : ''}
                 onChange={handleBalanceChange}
                 className="w-full bg-white rounded-xl pl-12 pr-4 py-3 text-gray-800 font-semibold text-lg focus:outline-none focus:ring-2 focus:ring-[#00F5A0]"
                 placeholder="0"

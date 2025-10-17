@@ -316,9 +316,35 @@ body {
   }
 }
 
-/* Fix for iOS date picker in modal */
+/* iOS Safari specific fixes to prevent zoom */
 @supports (-webkit-touch-callout: none) {
+  /* All input elements in iOS */
+  input, textarea, select {
+    font-size: 16px !important;
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-appearance: none;
+    transform: translateZ(0); /* Force hardware acceleration */
+  }
+  
+  /* Prevent zoom when focusing inputs */
+  input:focus, textarea:focus, select:focus {
+    font-size: 16px !important;
+    zoom: 1;
+    -webkit-user-select: text;
+  }
+  
+  /* Fix for iOS date picker in modal */
   .modal-content {
     -webkit-overflow-scrolling: touch;
+  }
+  
+  /* Onboarding input specific fixes */
+  .onboarding-input {
+    font-size: 16px !important;
+    -webkit-text-size-adjust: none;
+    -webkit-user-select: text;
+    -webkit-appearance: none;
+    border-radius: 9999px;
   }
 }
