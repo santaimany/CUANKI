@@ -21,7 +21,8 @@ function GoogleCallbackContent() {
         const handleCallback = async () => {
             try {
                 // Extract parameters from URL
-                const token = searchParams.get('token');
+                const token = searchParams.get('access_token');
+                const refreshToken = searchParams.get('refresh_token');
                 const error = searchParams.get('error');
 
                 if (error) {
@@ -34,8 +35,9 @@ function GoogleCallbackContent() {
                 }
 
                 if (token) {
-                    // Save token to localStorage
+                    // Save token to cookie
                     localStorage.setItem('token', token);
+                    localStorage.setItem('refresh_token', refreshToken || '');
                     console.log('✅ Google login successful, token saved');
 
                     // Get user data to check onboarding status
@@ -69,7 +71,7 @@ function GoogleCallbackContent() {
                             if (hasCompleted) {
                                 router.push('/dashboard');
                             } else {
-                                router.push('/onboarding');
+                                router.push('/get-started');
                             }
                         }, 1500);
                     } else {
@@ -81,7 +83,7 @@ function GoogleCallbackContent() {
                         }, 1500);
                     }
                 } else {
-                    // No token found, redirect to backend callback to initiate OAuth flow
+              
                     const baseURL = getBaseURL();
                     const backendCallbackUrl = `${baseURL}/api/auth/google/callback${window.location.search}`;
                     

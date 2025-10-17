@@ -147,7 +147,7 @@ const getBaseURL = (): string => {
  * Redirects user to backend Google OAuth endpoint
  */
 export const initiateGoogleLogin = (): void => {
-    const baseURL = getBaseURL();
+    const baseURL = getBaseURL(); 
     const googleAuthUrl = `${baseURL}/api/auth/google`;
     
     console.log('🔐 Initiating Google OAuth login:', googleAuthUrl);

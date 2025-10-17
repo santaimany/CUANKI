@@ -92,7 +92,7 @@ const BalanceOverview: React.FC<BalanceOverviewProps> = ({ userData, onRefresh }
           
           <div className="flex-1 text-center md:text-left">
             <p className="text-xs sm:text-sm md:text-base mb-1 sm:mb-2">Hai {firstName}!, ini uang kamu hari ini:</p>
-            <h2 className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl xl:text-7xl font-bold mb-3 sm:mb-4">{budgetFormatted}</h2>
+            <h2 className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-bold mb-3 sm:mb-4">{budgetFormatted}</h2>
             <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
               <button 
                 onClick={() => handleOpenModal('income')}
