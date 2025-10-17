@@ -67,7 +67,7 @@ export default function CalendarPicker({ value = '', onChange }: CalendarPickerP
           </div>
         ))}
       </div>
-      <div className="grid grid-cols-10 gap-2">
+      <div className="grid md:grid-cols-10 grid-cols-7 gap-2">
         {renderDays()}
       </div>
     </div>
