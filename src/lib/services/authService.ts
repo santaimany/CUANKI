@@ -146,10 +146,6 @@ const getBaseURL = (): string => {
  * Initiate Google OAuth login flow
  * Redirects user to backend Google OAuth endpoint
  */
-export const initiateGoogleLogin = (): void => {
-    const baseURL = getBaseURL(); 
-    const googleAuthUrl = `${baseURL}/api/auth/google`;
-    
- 
-    window.location.href = googleAuthUrl;
-};
+
+ export const googleAuthUrl: string = `${process.env.NEXT_PUBLIC_API_URL}/api/auth/google`;
+

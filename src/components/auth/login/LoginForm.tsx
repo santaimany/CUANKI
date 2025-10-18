@@ -1,6 +1,6 @@
 'use client';
 import { useState } from 'react';
-import { loginUser, initiateGoogleLogin } from '@/lib/services/authService';
+import { loginUser, googleAuthUrl } from '@/lib/services/authService';
 import Link from 'next/link';
 import { useToast } from '@/context/ToastContext';
 
@@ -13,8 +13,7 @@ const LoginForm = () => {
     const [isLoading, setIsLoading] = useState(false);
     const { showError, showSuccess, showLoading } = useToast();
 
-    const googleRedirect = `${process.env.NEXT_PUBLIC_API_URL}/api/auth/google`;
-
+    
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setFormData((prev) => ({
@@ -179,7 +178,7 @@ const LoginForm = () => {
 
                 {/* Google Login Button */}
                 <Link
-                    href={googleRedirect}
+                    href={googleAuthUrl}
                     className="w-full bg-white text-gray-600 py-4 sm:py-5 rounded-2xl text-lg sm:text-xl font-medium border border-gray-200 hover:bg-gray-50 transition-colors duration-300 flex items-center justify-center space-x-3"
                 >
                     <svg className="w-6 h-6 sm:w-7 sm:h-7" viewBox="0 0 24 24">
