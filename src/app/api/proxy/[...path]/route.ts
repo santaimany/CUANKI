@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 // Get backend URL from environment variable
-const BACKEND_URL = process.env.BACKEND_API_URL || process.env.NEXT_PUBLIC_API_URL || 'http://103.186.0.127';
+const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL || 'http://103.186.0.127';
 
 // Clean URL (remove quotes if exists)
 const cleanBackendUrl = BACKEND_URL.replace(/['"]/g, '').replace(/\/$/, '');

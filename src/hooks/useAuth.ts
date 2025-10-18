@@ -58,7 +58,7 @@ export function useAuth(options: UseAuthOptions = {}) {
 
           // Redirect logic
           if (requireOnboarding && !onboardingComplete) {
-            router.push('/onboarding');
+            router.push('/get-started');
             return;
           }
 

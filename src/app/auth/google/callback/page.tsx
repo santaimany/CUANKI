@@ -48,6 +48,7 @@ function GoogleCallbackContent() {
                         headers: {
                             'Authorization': `Bearer ${token}`,
                             'Content-Type': 'application/json',
+                            
                         },
                     });
 
@@ -55,7 +56,6 @@ function GoogleCallbackContent() {
                         const data = await response.json();
                         const user = data.data || data;
 
-                        // Check if user has completed onboarding
                         const hasCompleted = !!(
                             user?.username !== null && 
                             user?.age !== null && 
@@ -79,7 +79,7 @@ function GoogleCallbackContent() {
                         setStatus('success');
                         setMessage('Login successful! Redirecting... onboarding');
                         setTimeout(() => {
-                            router.push('/onboarding');
+                            router.push('/get-started');
                         }, 1500);
                     }
                 } else {

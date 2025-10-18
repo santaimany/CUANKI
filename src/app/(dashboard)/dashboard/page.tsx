@@ -93,7 +93,6 @@ const DashboardPage = () => {
         <BudgetSisa />
         <MyAccounts />
         
-        {/* Calendar and Daily Expense side by side on mobile */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <CalendarView />
           <DailyExpenseSummary />
@@ -105,7 +104,7 @@ const DashboardPage = () => {
 
       {/* Desktop Layout: Complex Grid */}
       <div className="hidden md:grid grid-cols-4 gap-6 h-full">
-        {/* BalanceOverview: Baris 1-2, Kolom 1-3 */}
+   =
         <div className="col-span-3 row-span-2">
           <BalanceOverview userData={userData} onRefresh={handleTransactionRefresh} />
         </div>

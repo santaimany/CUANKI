@@ -150,8 +150,6 @@ export const initiateGoogleLogin = (): void => {
     const baseURL = getBaseURL(); 
     const googleAuthUrl = `${baseURL}/api/auth/google`;
     
-    console.log('🔐 Initiating Google OAuth login:', googleAuthUrl);
-    
-    // Redirect to Google OAuth
+ 
     window.location.href = googleAuthUrl;
 };

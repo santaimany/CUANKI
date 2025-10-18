@@ -13,6 +13,8 @@ const LoginForm = () => {
     const [isLoading, setIsLoading] = useState(false);
     const { showError, showSuccess, showLoading } = useToast();
 
+    const googleRedirect = `${process.env.NEXT_PUBLIC_API_URL}/api/auth/google`;
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setFormData((prev) => ({
@@ -54,7 +56,7 @@ const LoginForm = () => {
                     globalThis.location.href = '/dashboard';
                 } else {
                     // Redirect to onboarding
-                    globalThis.location.href = '/onboarding';
+                    globalThis.location.href = '/get-started';
                 }
             }, 1000);
         } catch (err) {
@@ -176,9 +178,8 @@ const LoginForm = () => {
                 </button>
 
                 {/* Google Login Button */}
-                <button
-                    type="button"
-                    onClick={initiateGoogleLogin}
+                <Link
+                    href={googleRedirect}
                     className="w-full bg-white text-gray-600 py-4 sm:py-5 rounded-2xl text-lg sm:text-xl font-medium border border-gray-200 hover:bg-gray-50 transition-colors duration-300 flex items-center justify-center space-x-3"
                 >
                     <svg className="w-6 h-6 sm:w-7 sm:h-7" viewBox="0 0 24 24">
@@ -188,7 +189,7 @@ const LoginForm = () => {
                         <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
                     </svg>
                     <span>Continue with google</span>
-                </button>
+                </Link>
             </form>
 
             {/* Sign Up Link */}
