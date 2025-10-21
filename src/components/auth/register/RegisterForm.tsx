@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { registerUser, initiateGoogleLogin, googleAuthUrl } from '@/lib/services/authService';
+import { registerUser, googleAuthUrl } from '@/lib/services/authService';
 import { useToast } from '@/context/ToastContext';
 import Link from 'next/link';
 
