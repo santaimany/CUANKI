@@ -102,9 +102,8 @@ const DashboardPage = () => {
         <TransactionHistoryList key={refreshTransactions} onRefresh={handleTransactionRefresh} />
       </div>
 
-      {/* Desktop Layout: Complex Grid */}
-      <div className="hidden md:grid grid-cols-4 gap-6 h-full">
-   =
+  {/* Desktop Layout: Complex Grid */}
+  <div className="hidden md:grid grid-cols-4 gap-6 h-full">
         <div className="col-span-3 row-span-2">
           <BalanceOverview userData={userData} onRefresh={handleTransactionRefresh} />
         </div>

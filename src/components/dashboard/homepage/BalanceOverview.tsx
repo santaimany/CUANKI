@@ -96,13 +96,13 @@ const BalanceOverview: React.FC<BalanceOverviewProps> = ({ userData, onRefresh }
             <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
               <button 
                 onClick={() => handleOpenModal('income')}
-                className="bg-[#00F5A0] text-[#363256] px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl font-semibold border-b-2 border-white hover:opacity-90 transition-opacity"
+                className="bg-[#00F5A0] text-[#363256] cursor-pointer px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl font-semibold border-b-2 border-white hover:opacity-90 transition-opacity"
               >
                 + pendapatan
               </button>
               <button 
                 onClick={() => handleOpenModal('expense')}
-                className="bg-[#E85D5D] text-white px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl font-semibold border-b-2 border-white hover:opacity-90 transition-opacity"
+                className="bg-[#E85D5D] text-white cursor-pointer px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl font-semibold border-b-2 border-white hover:opacity-90 transition-opacity"
               >
                 - pengeluaran
               </button>
