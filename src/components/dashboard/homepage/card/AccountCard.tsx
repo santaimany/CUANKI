@@ -26,13 +26,13 @@ const AccountCard: React.FC<AccountCardProps> = ({
   if (onEdit) {
     return (
       <button 
-        className="rounded-2xl sm:rounded-3xl overflow-hidden shadow-lg flex flex-col bg-white hover:shadow-xl transition-shadow cursor-pointer group w-full text-left"
+        className="rounded-2xl sm:rounded-3xl overflow-hidden shadow-lg flex flex-col bg-white hover:shadow-xl transition-shadow cursor-pointer group w-full text-left min-w-0"
         onClick={onEdit}
         aria-label={`Edit account ${accountName}`}
       >
         {/* Bagian Atas: Nama Akun */}
         <div className="py-4 sm:py-5 px-4 sm:px-6 relative">
-          <h3 className="text-center text-2xl sm:text-3xl md:text-4xl font-bold text-[#363256]">
+            <h3 className="text-center text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-[#363256] break-words max-w-full leading-tight">
             {accountName}
           </h3>
           {accountType && (
@@ -44,7 +44,7 @@ const AccountCard: React.FC<AccountCardProps> = ({
 
         {/* Bagian Bawah: Saldo */}
         <div className={`${color} text-black py-3 sm:py-4 px-4 sm:px-6`}>
-          <p className="text-center text-base sm:text-lg md:text-xl lg:text-2xl font-bold">
+          <p className="text-center text-sm sm:text-base md:text-lg lg:text-xl font-bold break-words max-w-full leading-tight">
             {formattedBalance}
           </p>
         </div>
@@ -53,10 +53,10 @@ const AccountCard: React.FC<AccountCardProps> = ({
   }
 
   return (
-    <div className="rounded-2xl sm:rounded-3xl overflow-hidden shadow-lg flex flex-col bg-white">
+    <div className="rounded-2xl sm:rounded-3xl overflow-hidden shadow-lg flex flex-col bg-white min-w-0">
       {/* Bagian Atas: Nama Akun */}
       <div className="py-4 sm:py-5 px-4 sm:px-6 relative">
-        <h3 className="text-center text-2xl sm:text-3xl md:text-2xl font-bold text-[#363256]">
+        <h3 className="text-center text-lg sm:text-xl md:text-2xl lg:text-2xl font-bold text-[#363256] break-words max-w-full leading-tight">
           {accountName}
         </h3>
         {accountType && (
@@ -68,7 +68,7 @@ const AccountCard: React.FC<AccountCardProps> = ({
 
       {/* Bagian Bawah: Saldo */}
       <div className={`${color} text-black py-3 sm:py-4 px-4 sm:px-6`}>
-        <p className="text-center text-base sm:text-lg md:text-xl lg:text-lg font-bold">
+        <p className="text-center text-sm sm:text-base md:text-lg lg:text-lg font-bold break-words max-w-full leading-tight">
           {formattedBalance}
         </p>
       </div>

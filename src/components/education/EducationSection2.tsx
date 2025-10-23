@@ -27,9 +27,9 @@ const EducationSection2 = () => {
           <div className="bg-[#A3FFD6] rounded-3xl p-6 space-y-2 mb-20">
             {/* Login Button */}
             <div className="flex justify-center">
-              <button className="bg-[#363256] text-white px-10 py-2.5 rounded-full text-sm font-bold hover:bg-[#2A2448] transition-colors">
+              <Link href="/login" className="bg-[#363256] text-white px-10 py-2.5 rounded-full text-sm font-bold hover:bg-[#2A2448] transition-colors">
                 Login
-              </button>
+              </Link>
             </div>
 
             {/* Description */}
@@ -42,9 +42,9 @@ const EducationSection2 = () => {
               <div className="w-5 h-5 bg-[#363256] rounded-full flex items-center justify-center">
                 <span className="text-white text-xs">💬</span>
               </div>
-              <Link href="/contact" className="text-[#363256] text-xs font-bold hover:underline">
+              <p className="text-[#363256] text-xs font-bold hover:underline">
                 Talk to us to learn more!
-              </Link>
+              </p>
             </div>
           </div>
 
@@ -52,9 +52,9 @@ const EducationSection2 = () => {
           <div className=" rounded-3xl p-6 space-y-4 mb-20">
             {/* Start Button */}
             <div className="flex justify-center">
-              <button className="border-2 border-[#363256] bg-white text-[#363256] px-10 py-2 rounded-full text-sm font-bold hover:bg-[#363256] hover:text-white transition-all duration-300">
+              <Link href="/register" className="border-2 border-[#363256] bg-white text-[#363256] px-10 py-2 rounded-full text-sm font-bold hover:bg-[#363256] hover:text-white transition-all duration-300">
                 Start
-              </button>
+              </Link>
             </div>
 
             {/* Heading */}
@@ -133,9 +133,9 @@ const EducationSection2 = () => {
           
           <div className="space-y-6 lg:-mt-94 lg:ml-8">
             <div className="flex justify-center lg:justify-start">
-              <button className="border-2 border-[#363256] text-[#363256] px-15 py-2 rounded-full font-semibold hover:bg-[#363256] hover:text-white transition-all duration-300 text-[clamp(1.125rem,1.2vw,1.25rem)]">
+              <Link href="/register" className="border-2 border-[#363256] text-[#363256] px-15 py-2 rounded-full font-semibold hover:bg-[#363256] hover:text-white transition-all duration-300 text-[clamp(1.125rem,1.2vw,1.25rem)]">
                 Start
-              </button>
+              </Link>
             </div>
             
             <div className="space-y-6 text-center lg:text-left">
@@ -155,9 +155,9 @@ const EducationSection2 = () => {
           <div className="flex flex-col items-center lg:items-end mt-12 lg:-mt-130 lg:pr-8">
             <div className="max-w-sm space-y-4">
               <div className="flex justify-center lg:justify-end">
-                <button className="bg-[#363256] text-white px-15 py-2 rounded-full text-lg font-semibold hover:bg-[#2A2448] transition-colors">
+                <Link href="/login" className="bg-[#363256] text-white px-15 py-2 rounded-full text-lg font-semibold hover:bg-[#2A2448] transition-colors">
                   Login
-                </button>
+                </Link>
               </div>
               
               <div className="space-y-3 text-center lg:text-right">
