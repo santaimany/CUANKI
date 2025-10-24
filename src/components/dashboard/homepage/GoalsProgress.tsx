@@ -12,8 +12,8 @@ const GoalsProgress = () => {
       try {
         const data = await getGoalsProgress();
         setGoalsData(data);
-      } catch (error) {
-        console.error('Error fetching goals progress:', error);
+      } catch  {
+    
       } finally {
         setLoading(false);
       }

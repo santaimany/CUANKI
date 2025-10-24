@@ -13,8 +13,8 @@ const MyAccounts = () => {
       try {
         const response = await getUserAccounts();
         setAccounts(response.data.accounts);
-      } catch (error) {
-        console.error('Error fetching accounts:', error);
+      } catch {
+    
       } finally {
         setLoading(false);
       }

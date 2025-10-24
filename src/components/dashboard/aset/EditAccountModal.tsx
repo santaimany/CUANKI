@@ -1,7 +1,7 @@
-'use client';
-import React, { useState, useEffect } from 'react';
-import { UserAccount } from '@/types/api';
-import { updateAccountAllocation } from '@/lib/api/user';
+"use client";
+import React, { useState, useEffect } from "react";
+import { UserAccount } from "@/types/api";
+import { updateAccountAllocation } from "@/lib/api/user";
 
 interface EditAccountModalProps {
   isOpen: boolean;
@@ -16,12 +16,12 @@ const EditAccountModal: React.FC<EditAccountModalProps> = ({
   account,
   onSuccess,
 }) => {
-  const [balance, setBalance] = useState<string>('');
-  const [accountType, setAccountType] = useState<string>('');
+  const [balance, setBalance] = useState<string>("");
+  const [accountType, setAccountType] = useState<string>("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const accountTypes = ['Kebutuhan', 'Tabungan', 'Darurat'];
+  const accountTypes = ["Kebutuhan", "Tabungan", "Darurat"];
 
   useEffect(() => {
     if (account) {
@@ -38,32 +38,29 @@ const EditAccountModal: React.FC<EditAccountModalProps> = ({
     setError(null);
 
     try {
-      console.log('🔍 Full account object:', account);
-      console.log('🔍 Available fields in account:', Object.keys(account));
-      console.log('🔍 Current account data:', {
-        account_id: account.account_id,
-        account_allocation_id: account.account_allocation_id,
-        account_name: account.account_name,
-        current_type: account.type,
-        current_balance: account.balance,
-        new_type: accountType,
-        new_balance: balance,
-      });
+  
 
       // Cari allocation_id dari berbagai kemungkinan field name
-      const accountWithId = account as UserAccount & { allocation_id?: number; id?: number };
-      const allocationId = account.account_allocation_id 
-        || accountWithId.allocation_id 
-        || accountWithId.id
-        || (typeof account.value === 'string' ? Number.parseInt(account.value) : account.value);
+      const accountWithId = account as UserAccount & {
+        allocation_id?: number;
+        id?: number;
+      };
+      const allocationId =
+        account.account_allocation_id ||
+        accountWithId.allocation_id ||
+        accountWithId.id ||
+        (typeof account.value === "string"
+          ? Number.parseInt(account.value)
+          : account.value);
+
       
-      console.log('🔍 Detected allocation ID:', allocationId, 'Type:', typeof allocationId);
-      
+
       if (!allocationId) {
-        console.error('❌ Cannot find allocation ID in any field!');
-        console.error('📋 Account object keys:', Object.keys(account));
-        console.error('📋 Account values:', Object.values(account));
-        setError('ID alokasi tidak ditemukan. Data akun: ' + JSON.stringify(Object.keys(account)));
+    
+        setError(
+          "ID alokasi tidak ditemukan. Data akun: " +
+            JSON.stringify(Object.keys(account))
+        );
         setLoading(false);
         return;
       }
@@ -74,7 +71,10 @@ const EditAccountModal: React.FC<EditAccountModalProps> = ({
         new_type?: string;
         new_balance?: string;
       } = {
-        account_allocation_id: typeof allocationId === 'string' ? Number.parseInt(allocationId) : allocationId,
+        account_allocation_id:
+          typeof allocationId === "string"
+            ? Number.parseInt(allocationId)
+            : allocationId,
       };
 
       // Only include type if it changed
@@ -91,47 +91,56 @@ const EditAccountModal: React.FC<EditAccountModalProps> = ({
 
       // Check if anything actually changed
       if (!requestData.new_type && !requestData.new_balance) {
-        setError('Tidak ada perubahan yang dibuat.');
+        setError("Tidak ada perubahan yang dibuat.");
         setLoading(false);
         return;
       }
 
-      console.log('📤 Sending request data:', requestData);
-
+     
       const response = await updateAccountAllocation(requestData);
-      
-      console.log('✅ Update successful:', response);
-      console.log('📊 Change summary:', response.data.change_summary);
-      console.log('🏦 Updated accounts:', response.data.updated_accounts);
 
+      
       onSuccess();
       onClose();
-      setBalance('');
-      setAccountType('');
+      setBalance("");
+      setAccountType("");
     } catch (err) {
-      console.error('❌ Error updating account allocation:', err);
-      
+    
+
       // Type guard for axios error
-      if (err && typeof err === 'object' && 'response' in err) {
-        const axiosError = err as { response?: { data?: { message?: string; error?: string; errors?: Record<string, string[]> } } };
-        console.error('📋 Error response:', axiosError.response?.data);
-        console.error('📋 Validation errors:', axiosError.response?.data?.errors);
-        
+      if (err && typeof err === "object" && "response" in err) {
+        const axiosError = err as {
+          response?: {
+            data?: {
+              message?: string;
+              error?: string;
+              errors?: Record<string, string[]>;
+            };
+          };
+        };
+       
+
         // Build error message with validation details
-        let errorMessage = axiosError.response?.data?.message || 'Gagal mengupdate akun.';
-        
+        let errorMessage =
+          axiosError.response?.data?.message || "Gagal mengupdate akun.";
+
         // Add validation errors if available
         const validationErrors = axiosError.response?.data?.errors;
         if (validationErrors) {
           const errorDetails = Object.entries(validationErrors)
-            .map(([field, messages]) => `${field}: ${Array.isArray(messages) ? messages.join(', ') : messages}`)
-            .join('\n');
-          errorMessage += '\n\nDetail:\n' + errorDetails;
+            .map(
+              ([field, messages]) =>
+                `${field}: ${
+                  Array.isArray(messages) ? messages.join(", ") : messages
+                }`
+            )
+            .join("\n");
+          errorMessage += "\n\nDetail:\n" + errorDetails;
         }
-        
+
         setError(errorMessage);
       } else {
-        setError('Gagal mengupdate akun. Silakan coba lagi.');
+        setError("Gagal mengupdate akun. Silakan coba lagi.");
       }
     } finally {
       setLoading(false);
@@ -139,7 +148,7 @@ const EditAccountModal: React.FC<EditAccountModalProps> = ({
   };
 
   const handleBalanceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value.replaceAll(/\D/g, '');
+    const value = e.target.value.replaceAll(/\D/g, "");
     setBalance(value);
   };
 
@@ -161,7 +170,12 @@ const EditAccountModal: React.FC<EditAccountModalProps> = ({
             className="text-white hover:text-white/80 transition-colors"
             disabled={loading}
           >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg
+              className="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -170,7 +184,9 @@ const EditAccountModal: React.FC<EditAccountModalProps> = ({
               />
             </svg>
           </button>
-          <h2 className="text-white text-xl font-semibold ml-4">Edit Saldo Akun</h2>
+          <h2 className="text-white text-xl font-semibold ml-4">
+            Edit Saldo Akun
+          </h2>
         </div>
 
         {/* Account Info */}
@@ -179,14 +195,19 @@ const EditAccountModal: React.FC<EditAccountModalProps> = ({
           <p className="text-white text-lg font-bold">{account.account_name}</p>
           <p className="text-white/70 text-xs mt-1">Tipe: {account.type}</p>
           <p className="text-white/70 text-sm mt-3">Saldo Saat Ini</p>
-          <p className="text-white text-lg font-bold">{account.formatted_balance}</p>
+          <p className="text-white text-lg font-bold">
+            {account.formatted_balance}
+          </p>
         </div>
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Account Type Dropdown */}
           <div>
-            <label htmlFor="account-type" className="block text-white/80 text-sm mb-2">
+            <label
+              htmlFor="account-type"
+              className="block text-white/80 text-sm mb-2"
+            >
               Tipe Akun
             </label>
             <select
@@ -207,7 +228,10 @@ const EditAccountModal: React.FC<EditAccountModalProps> = ({
 
           {/* Balance Input */}
           <div>
-            <label htmlFor="balance-input" className="block text-white/80 text-sm mb-2">
+            <label
+              htmlFor="balance-input"
+              className="block text-white/80 text-sm mb-2"
+            >
               Saldo Baru
             </label>
             <div className="relative">
@@ -217,7 +241,11 @@ const EditAccountModal: React.FC<EditAccountModalProps> = ({
               <input
                 id="balance-input"
                 type="text"
-                value={balance ? Number.parseInt(balance).toLocaleString('id-ID') : ''}
+                value={
+                  balance
+                    ? Number.parseInt(balance).toLocaleString("id-ID")
+                    : ""
+                }
                 onChange={handleBalanceChange}
                 className="w-full bg-white rounded-xl pl-12 pr-4 py-3 text-gray-800 font-semibold text-lg focus:outline-none focus:ring-2 focus:ring-[#00F5A0]"
                 placeholder="0"
@@ -249,7 +277,7 @@ const EditAccountModal: React.FC<EditAccountModalProps> = ({
               className="flex-1 bg-gradient-to-r from-[#A3FFD6] to-[#0EFF95] text-black font-bold py-3 rounded-2xl hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
               disabled={loading}
             >
-              {loading ? 'Menyimpan...' : 'Simpan'}
+              {loading ? "Menyimpan..." : "Simpan"}
             </button>
           </div>
         </form>

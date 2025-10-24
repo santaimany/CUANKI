@@ -86,7 +86,7 @@ const AddEditGoalModal: React.FC<AddEditGoalModalProps> = ({
       await onSave(goalData);
       onClose();
     } catch (error) {
-      console.error('Error saving goal:', error);
+
     }
   };
 

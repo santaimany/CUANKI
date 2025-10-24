@@ -16,8 +16,8 @@ const CalendarView = () => {
         const response = await getCalendarStatus();
         setCalendarDates(response.data.calendar_dates);
         setMonthName(response.data.month_name);
-      } catch (error) {
-        console.error('Failed to fetch calendar data:', error);
+      } catch {
+        
       } finally {
         setIsLoading(false);
       }

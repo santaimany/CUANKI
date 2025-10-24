@@ -16,8 +16,8 @@ const DailyExpenseSummary = () => {
         // Find today's data from calendar_dates
         const today = response.data.calendar_dates.find(date => date.is_today);
         setTodayData(today || null);
-      } catch (error) {
-        console.error('Failed to fetch today data:', error);
+      } catch {
+        
       } finally {
         setIsLoading(false);
       }

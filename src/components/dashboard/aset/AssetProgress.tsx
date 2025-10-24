@@ -70,13 +70,13 @@ const AssetProgress: React.FC = () => {
     setError(null);
     
     try {
-      console.log('📊 Fetching usage bar allocations...');
+   
       const response = await axiosInstance.get<UsageBarAllocationResponse>('/api/usage-bar-allocation');
       
-      console.log('✅ Usage bar allocations response:', response.data);
+     
       setAllocations(response.data.data.allocations);
-    } catch (err) {
-      console.error('❌ Error fetching usage bar allocations:', err);
+    } catch {
+    
       setError('Gagal memuat data alokasi');
     } finally {
       setLoading(false);

@@ -41,10 +41,9 @@ const AddAccountModal: React.FC<AddAccountModalProps> = ({
       setLoadingBanks(true);
       const response = await axiosInstance.get('/api/listbank');
       const banksData = response.data.data || response.data;
-      console.log('📊 Fetched banks:', banksData);
+   
       setBanks(banksData);
-    } catch (err) {
-      console.error('❌ Error fetching banks:', err);
+    } catch {
       setError('Gagal memuat daftar bank. Silakan coba lagi.');
     } finally {
       setLoadingBanks(false);
@@ -68,19 +67,17 @@ const AddAccountModal: React.FC<AddAccountModalProps> = ({
         balance_per_type: balance,
       };
 
-      console.log('📤 Adding new account:', requestData);
 
       const response = await axiosInstance.post('/api/add-new-account', requestData);
       
-      console.log('✅ Account added successfully:', response.data);
-
+     
       onSuccess();
       onClose();
       setBankId('');
       setAccountType('Kebutuhan');
       setBalance('');
     } catch (err) {
-      console.error('❌ Error adding account:', err);
+     
       const errorMessage = err && typeof err === 'object' && 'response' in err
         ? ((err as { response?: { data?: { message?: string } } }).response?.data?.message || 'Gagal menambahkan akun. Silakan coba lagi.')
         : 'Gagal menambahkan akun. Silakan coba lagi.';

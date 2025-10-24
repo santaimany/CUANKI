@@ -28,15 +28,13 @@ const AssetCards: React.FC<AssetCardsProps> = ({ showButtons = true, onAccountsC
     setLoading(true);
     try {
       const response = await getUserAccounts();
-      console.log('📊 Full API Response:', response);
-      console.log('📊 Accounts data:', response.data.accounts);
-      console.log('📊 First account structure:', response.data.accounts[0]);
+   
       setAccounts(response.data.accounts);
       if (onAccountsChange) {
         onAccountsChange(response.data.accounts);
       }
-    } catch (error) {
-      console.error('Error fetching accounts:', error);
+    } catch {
+
       showError('Gagal memuat data akun. Silakan coba lagi.');
     } finally {
       setLoading(false);
@@ -96,16 +94,12 @@ const AssetCards: React.FC<AssetCardsProps> = ({ showButtons = true, onAccountsC
     showLoading(`Menghapus akun ${accountToDelete.name}...`);
     
     try {
-      console.log('🗑️ Deleting account ID:', accountToDelete.id);
-      console.log('🗑️ DELETE URL:', `/api/account/${accountToDelete.id}`);
-      
+ 
       const response = await deleteAccount(accountToDelete.id);
-      console.log('✅ Delete response:', response);
-      
-      // Refresh data setelah delete
+  
       await fetchAccounts();
       
-      // Reset ke halaman 1 jika halaman saat ini tidak ada data lagi
+      
       const newTotalPages = Math.ceil((accounts.length - 1) / 4);
       if (currentPage > newTotalPages && newTotalPages > 0) {
         setCurrentPage(newTotalPages);
@@ -113,14 +107,11 @@ const AssetCards: React.FC<AssetCardsProps> = ({ showButtons = true, onAccountsC
       
       showSuccess(`Akun ${accountToDelete.name} berhasil dihapus!`);
     } catch (error) {
-      console.error('❌ Error deleting account:', error);
-      
-      // Type guard for axios error
+  
+
       if (error && typeof error === 'object' && 'response' in error) {
         const axiosError = error as { response?: { data?: { message?: string }; status?: number } };
-        console.error('❌ Error response:', axiosError.response?.data);
-        console.error('❌ Error status:', axiosError.response?.status);
-        
+     
         const errorMessage = axiosError.response?.data?.message || 'Gagal menghapus akun. Silakan coba lagi.';
         showError(errorMessage);
       } else {
