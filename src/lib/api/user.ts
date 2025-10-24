@@ -20,7 +20,7 @@ export async function getUserGreeting(): Promise<GreetingUsersResponse> {
     const response = await axiosInstance.get<GreetingUsersResponse>('/api/greeting-user');
     return response.data;
   } catch (error) {
-    console.error('Failed to fetch user greeting:', error);
+   
     throw error;
   }
 }
@@ -34,7 +34,7 @@ export async function getGoalsProgress(): Promise<GoalsProgressResponse> {
     const response = await axiosInstance.get<GoalsProgressResponse>('/api/goals-progress');
     return response.data;
   } catch (error) {
-    console.error('Failed to fetch goals progress:', error);
+   
     throw error;
   }
 }
@@ -48,7 +48,7 @@ export async function getUserAccounts(): Promise<UserAccountsResponse> {
     const response = await axiosInstance.get<UserAccountsResponse>('/api/user-accounts');
     return response.data;
   } catch (error) {
-    console.error('Failed to fetch user accounts:', error);
+
     throw error;
   }
 }
@@ -62,7 +62,7 @@ export async function getExpenseCategories(): Promise<ExpenseCategoriesResponse>
     const response = await axiosInstance.get<ExpenseCategoriesResponse>('/api/expense-categories');
     return response.data;
   } catch (error) {
-    console.error('Failed to fetch expense categories:', error);
+  
     throw error;
   }
 }
@@ -83,7 +83,7 @@ export async function updateAccountBalance(
     );
     return response.data;
   } catch (error) {
-    console.error('Failed to update account balance:', error);
+
     throw error;
   }
 }
@@ -103,7 +103,7 @@ export async function updateAccountAllocation(
     );
     return response.data;
   } catch (error) {
-    console.error('Failed to update account allocation:', error);
+  
     throw error;
   }
 }
@@ -119,7 +119,7 @@ export async function deleteAccount(accountId: number): Promise<{ status: string
     );
     return response.data;
   } catch (error) {
-    console.error('Failed to delete account:', error);
+    
     throw error;
   }
 }
@@ -129,7 +129,7 @@ export async function getUserProfile(): Promise<UserProfileResponse> {
     const response = await axiosInstance.get<UserProfileResponse>('/api/profile');
     return response.data;
   } catch (error) {
-    console.error('Failed to fetch user profile:', error);
+
     throw error;
   } 
 }
