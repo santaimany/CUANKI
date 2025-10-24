@@ -33,20 +33,15 @@ const RegisterForm = () => {
 
         try {
             const response = await registerUser(formData);
-            console.log('Registration successful:', response);
-            
-            // Verify token is saved
+        
             const savedToken = localStorage.getItem('token');
-            console.log('Token saved after registration:', !!savedToken);
-            
+           
             if (!savedToken) {
-                console.error('Token not saved! Response structure:', response);
-                // Still redirect but user will need to login
+               
             }
             
             showSuccess('Akun berhasil dibuat! Mengarahkan...');
-            
-            // Redirect ke get-started setelah 1 detik
+     
             setTimeout(() => {
                 globalThis.location.href = '/get-started';
             }, 1000);
@@ -76,7 +71,7 @@ const RegisterForm = () => {
             }
             
             showError(errorMessage);
-            console.error('Registration error:', err);
+         
         } finally {
             setIsLoading(false);
         }

@@ -84,7 +84,7 @@ const LoginForm = () => {
             }
             
             showError(errorMessage);
-            console.error('Login error:', err);
+    
         } finally {
             setIsLoading(false);
         }
