@@ -23,7 +23,7 @@ export const useAuth = () => {
         router.push('/login');
       }, 1000);
     } catch (error) {
-      console.error('Error during logout:', error);
+   
       showError('Terjadi kesalahan saat logout');
     }
   };
@@ -38,7 +38,7 @@ export const useAuth = () => {
     if (message) {
       showError(message);
     }
-    logout(false); // Don't show logout success message when forcing login
+    logout(false); 
   };
 
   return {

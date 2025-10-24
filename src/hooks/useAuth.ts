@@ -64,8 +64,7 @@ export function useAuth(options: UseAuthOptions = {}) {
 
           setIsLoading(false);
         } catch (error) {
-          // Token invalid or expired
-          console.error('Auth verification failed:', error);
+        
           localStorage.removeItem('token');
           setIsAuthenticated(false);
           setIsLoading(false);
@@ -75,7 +74,6 @@ export function useAuth(options: UseAuthOptions = {}) {
           }
         }
       } catch (error) {
-        console.error('Auth check error:', error);
         setIsLoading(false);
       }
     };
