@@ -37,7 +37,7 @@ const Sidebar: React.FC<SidebarProps> = ({ className = '' }) => {
   };
 
   const menuItems = React.useMemo(() => [
-    { name: 'Homepage', path: '/dashboard', icon: <Image src={HomeIcon} alt="Homepage" width={24} height={24} /> },
+    { name: 'Home', path: '/dashboard', icon: <Image src={HomeIcon} alt="Homepage" width={24} height={24} /> },
     { name: 'Transaksi', path: '/dashboard/transaksi', icon: <TransaksiIcon/> },
     { name: 'Aset', path: '/dashboard/aset', icon: <TabunganIcon/> },
     { name: 'Goals', path: '/dashboard/goals', icon: <GoalsIcon/> },
@@ -45,7 +45,7 @@ const Sidebar: React.FC<SidebarProps> = ({ className = '' }) => {
   ], []);
 
   const mobileMenuItems = React.useMemo(() => [
-    { name: 'Homepage', path: '/dashboard', icon: <Image src={HomeIcon} alt="Homepage" width={24} height={24} /> },
+    { name: 'Home', path: '/dashboard', icon: <Image src={HomeIcon} alt="Homepage" width={24} height={24} /> },
     { name: 'Transaksi', path: '/dashboard/transaksi', icon: <TransaksiIcon/> },
     { name: 'Aset', path: '/dashboard/aset', icon: <TabunganIcon/> },
     { name: 'Financial', path: 'financial', icon: <FinancialIcon/>, isModal: true },
