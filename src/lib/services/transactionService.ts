@@ -7,7 +7,7 @@ export const getUsageBars = async (): Promise<UsageBarsResponse> => {
         const response = await axiosInstance.get('/api/usage-bar');
         return response.data;
     } catch (error) {
-        console.error('Error fetching usage bars:', error);
+   
         throw error;
     }
 };

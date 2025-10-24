@@ -30,9 +30,7 @@ export const getCalendarStatus = async (month?: number, year?: number): Promise<
         const queryString = params.toString();
         const url = queryString ? `/api/calendar-status?${queryString}` : '/api/calendar-status';
         const response = await axiosInstance.get(url);
-        
-        console.log('Calendar Status API Response:', response.data);
-        
+     
         return response.data;
     } catch (error: unknown) {
         // Extract error message from backend response
@@ -61,8 +59,7 @@ export const getDailySaving = async (): Promise<DailySavingResponse> => {
     try {
         const response = await axiosInstance.get('/api/daily-saving');
         
-        console.log('Daily Saving API Response:', response.data);
-        
+       
         return response.data;
     } catch (error: unknown) {
         // Extract error message from backend response
@@ -91,8 +88,7 @@ export const getReceiptToday = async (): Promise<ReceiptTodayResponse> => {
     try {
         const response = await axiosInstance.get('/api/receipt-today');
         
-        console.log('Receipt Today API Response:', response.data);
-        
+       
         return response.data;
     } catch (error: unknown) {
         // Extract error message from backend response
@@ -120,8 +116,6 @@ export const getUserAccounts = async (): Promise<UserAccountsResponse> => {
     try {
         const response = await axiosInstance.get('/api/user-accounts');
         
-        console.log('User Accounts API Response:', response.data);
-        
         return response.data;
     } catch (error: unknown) {
         if (typeof error === 'object' && error !== null && 'response' in error) {
@@ -148,8 +142,7 @@ export const addExpense = async (data: AddExpenseRequest): Promise<TransactionRe
     try {
         const response = await axiosInstance.post('/api/add-expense', data);
         
-        console.log('Add Expense API Response:', response.data);
-        
+       
         return response.data;
     } catch (error: unknown) {
         if (typeof error === 'object' && error !== null && 'response' in error) {
@@ -176,8 +169,7 @@ export const addIncome = async (data: AddIncomeRequest): Promise<TransactionResp
     try {
         const response = await axiosInstance.post('/api/add-income', data);
         
-        console.log('Add Income API Response:', response.data);
-        
+       
         return response.data;
     } catch (error: unknown) {
         if (typeof error === 'object' && error !== null && 'response' in error) {
@@ -210,8 +202,7 @@ export const getDetailReceiptExpense = async (date?: string): Promise<ExpenseDet
         const url = queryString ? `/api/detail-receipt-expense?${queryString}` : '/api/detail-receipt-expense';
         const response = await axiosInstance.get(url);
         
-        console.log('Detail Receipt Expense API Response:', response.data);
-        
+       
         return response.data;
     } catch (error: unknown) {
         if (typeof error === 'object' && error !== null && 'response' in error) {
@@ -244,8 +235,7 @@ export const getDetailReceiptIncome = async (date?: string): Promise<IncomeDetai
         const url = queryString ? `/api/detail-receipt-incomes?${queryString}` : '/api/detail-receipt-incomes';
         const response = await axiosInstance.get(url);
         
-        console.log('Detail Receipt Income API Response:', response.data);
-        
+      
         return response.data;
     } catch (error: unknown) {
         if (typeof error === 'object' && error !== null && 'response' in error) {
@@ -280,8 +270,7 @@ export const getMonthlyExpenses = async (month?: number, year?: number): Promise
         const url = queryString ? `/api/monthly-expenses?${queryString}` : '/api/monthly-expenses';
         const response = await axiosInstance.get(url);
         
-        console.log('Monthly Expenses API Response:', response.data);
-        
+       
         return response.data;
     } catch (error: unknown) {
         if (typeof error === 'object' && error !== null && 'response' in error) {
@@ -307,8 +296,6 @@ export const getMonthlyExpenses = async (month?: number, year?: number): Promise
 export const createMonthlyExpense = async (data: CreateMonthlyExpenseRequest): Promise<TransactionResponse> => {
     try {
         const response = await axiosInstance.post('/api/monthly-expenses', data);
-        
-        console.log('Create Monthly Expense API Response:', response.data);
         
         return response.data;
     } catch (error: unknown) {
@@ -338,8 +325,6 @@ export const updateMonthlyExpense = async (id: number, data: UpdateMonthlyExpens
     try {
         const response = await axiosInstance.put(`/api/monthly-expenses/${id}`, data);
         
-        console.log('Update Monthly Expense API Response:', response.data);
-        
         return response.data;
     } catch (error: unknown) {
         if (typeof error === 'object' && error !== null && 'response' in error) {
@@ -365,14 +350,12 @@ export const updateMonthlyExpense = async (id: number, data: UpdateMonthlyExpens
  */
 export const getAIReminder = async (page: 'asset' | 'goals' | 'transaction'): Promise<AIReminderResponse> => {
     try {
-        console.log('🤖 Fetching AI Reminder for page:', page);
-        
+       
         const response = await axiosInstance.post<AIReminderResponse>('/api/reminder', {
             page: page
         });
         
-        console.log('🤖 AI Reminder API Response:', response.data);
-        
+       
         return response.data;
     } catch (error: unknown) {
         // Extract error message from backend response
@@ -398,11 +381,9 @@ export const getAIReminder = async (page: 'asset' | 'goals' | 'transaction'): Pr
  */
 export const getStreak = async (): Promise<StreakResponse> => {
     try {
-        console.log('🔥 Fetching streak information');
-        
+       
         const response = await axiosInstance.get<StreakResponse>('/api/streak');
         
-        console.log('🔥 Streak API Response:', response.data);
         
         return response.data;
     } catch (error: unknown) {
