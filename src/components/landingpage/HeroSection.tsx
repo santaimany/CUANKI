@@ -268,19 +268,7 @@ const HeroSection = () => {
 
         <div className="w-full lg:w-1/2 flex flex-col items-center lg:items-end text-center lg:text-right">
           <div className="flex flex-col items-center lg:items-end lg:max-w-none" style={{ gap: "2vw", maxWidth: "40vw" }}>
-            <button ref={buttonRef}
-              className="border-2 border-[#0EFF95] text-[#0EFF95] font-bold rounded-full 
-                         hover:bg-[#0EFF95] hover:text-[#1e1e1e] 
-                         transition-all duration-300 ease-in-out relative overflow-hidden
-                         before:absolute before:inset-0 before:bg-[#0EFF95] before:opacity-0 
-                         before:transition-opacity before:duration-300 hover:before:opacity-20"
-              style={{
-                fontSize: '1.3vw',
-                padding: '0.8vw 2.5vw',
-              }}
-            >
-              <span className="relative z-10">Register</span>
-            </button>
+         
             <h1 ref={headlineRef} className="leading-tight text-white relative"
               style={{ fontSize: '4.5vw', lineHeight: '1.1' }}
             >
