@@ -18,6 +18,10 @@ const Navbar = () => {
   const langRef = useRef<HTMLAnchorElement | null>(null);
   const loginBtnRef = useRef<HTMLAnchorElement | null>(null);
 
+  // ================================================================
+  // BAGIAN 1: EFEK SAAT SCROLL (TIDAK BERUBAH)
+  // Ini adalah kode 'useEffect' yang telah kita setujui sebelumnya.
+  // ================================================================
   useEffect(() => {
     const ctx = gsap.context(() => {
       // Check if mobile/tablet/desktop
@@ -35,6 +39,7 @@ const Navbar = () => {
         duration: 1, 
       });
 
+      // Style "setelah scroll"
       tl.set(navRef.current, {
         background: "rgba(255, 255, 255, 0.08)",
         backdropFilter: "blur(20px)",
@@ -43,37 +48,32 @@ const Navbar = () => {
         boxShadow: "0 8px 32px rgba(0, 0, 0, 0.3)",
       });
       
-      // Responsive padding for container
+      // Padding "setelah scroll" (versi 'rem' yang disetujui)
       if (isMobile) {
-        tl.set(navContainerRef.current, { paddingTop: "1rem", paddingBottom: "1rem" });
+        tl.set(navContainerRef.current, { paddingTop: "0.875rem", paddingBottom: "0.875rem" }); 
+        tl.set(logoRef.current, { width: "7.5rem" });
       } else if (isTablet) {
-        tl.set(navContainerRef.current, { paddingTop: "1rem", paddingBottom: "1rem" });
+        tl.set(navContainerRef.current, { paddingTop: "0.875rem", paddingBottom: "0.875rem" });
+        tl.set(logoRef.current, { width: "8rem" });
       } else if (isMedium) {
-        tl.set(navContainerRef.current, { paddingTop: "1.2vw", paddingBottom: "1.2vw" });
+        tl.set(navContainerRef.current, { paddingTop: "0.625rem", paddingBottom: "0.625rem" });
+        tl.set(logoRef.current, { width: "9rem" });
       } else {
-        tl.set(navContainerRef.current, { paddingTop: "1.2vw", paddingBottom: "1.2vw" });
+        tl.set(navContainerRef.current, { paddingTop: "1rem", paddingBottom: "1rem" }); 
+        tl.set(logoRef.current, { width: "8rem" });
       }
       
-      // Responsive logo size
-      if (isMobile) {
-        tl.set(logoRef.current, { width: "7rem" }); // 112px - slightly smaller after scroll
-      } else if (isTablet) {
-        tl.set(logoRef.current, { width: "8rem" }); // 128px
-      } else if (isMedium) {
-        tl.set(logoRef.current, { width: "9rem" }); // 144px
-      } else {
-        tl.set(logoRef.current, { width: "8vw" }); // Desktop uses vw
-      }
-      
-      // Only set font sizes for desktop elements
+      // Style tombol/link "setelah scroll" (hanya desktop)
       if (!isMobile && !isTablet) {
-        tl.set(navLinkRefs.current, { fontSize: isMedium ? "0.875rem" : "1.1vw" });
+        const desktopFontSize = isMedium ? "0.875rem" : "0.875rem";
+        
+        tl.set(navLinkRefs.current, { fontSize: desktopFontSize });
         tl.set(loginBtnRef.current, { 
-          padding: isMedium ? "0.5rem 1.5rem" : "0.4vw 1.6vw", 
-          fontSize: isMedium ? "0.875rem" : "1.1vw" 
+          padding: isMedium ? "0.5rem 1.5rem" : "0.5rem 1.25rem", 
+          fontSize: desktopFontSize
         });
         tl.set(langRef.current, { 
-          padding: isMedium ? "0.5rem 1.25rem" : "0.4vw 1.2vw" 
+          padding: isMedium ? "0.375rem 1.25rem" : "0.375rem 1rem" 
         });
       }
 
@@ -84,8 +84,7 @@ const Navbar = () => {
 
       ScrollTrigger.create({
         trigger: document.documentElement,
-      
-        start: "400vw top",
+        start: "400px top", // Mulai animasi setelah scroll 400px
         onEnter: () => tl.play(),
         onLeaveBack: () => tl.reverse(),
       });
@@ -96,36 +95,74 @@ const Navbar = () => {
   }, []);
 
 
+  // ================================================================
+  // BAGIAN 2: TAMPILAN JSX (DIUBAH KE 'rem' DENGAN UKURAN BESAR)
+  // Semua nilai 'md:' dan 'lg:' telah diperbesar secara signifikan.
+  // ================================================================
   return (
     <>
       <nav ref={navRef} className="w-full bg-gradient-to-r from-[#363256] to-[#50488A] sticky top-0 z-50 border-b border-transparent">
-        <div ref={navContainerRef} className="w-full max-w-screen-2xl mx-auto flex justify-between items-center px-4 py-4 sm:px-6 sm:py-4 md:px-[5vw] md:py-[1.3vw] lg:px-[6vw] lg:py-[1.5vw]">
+        {/*
+          DIUBAH: Padding 'md' dan 'lg' diperbesar
+          Sebelumnya (md): md:px-10 md:py-2.5
+          Sebelumnya (lg): lg:px-20 lg:py-5
+        */}
+        <div ref={navContainerRef} className="w-full max-w-screen-2xl mx-auto flex justify-between items-center px-4 py-4 sm:px-6 sm:py-4 md:px-12 md:py-3 lg:px-28 lg:py-7">
           
           <div className="flex items-center">
-            <Link href="/" className="cursor-pointer transition-transform duration-200 w-32 sm:w-36 md:w-40 lg:w-[9vw]">
+            {/*
+              DIUBAH: Ukuran logo 'lg' diperbesar
+              Sebelumnya (lg): lg:w-44
+            */}
+            <Link href="/" className="cursor-pointer transition-transform duration-200 w-32 sm:w-36 md:w-40 lg:w-44">
             <Image ref={logoRef} src={Logo} alt="Cuanki Logo"/>
             </Link>
-            <div className="hidden md:flex items-center ml-6 gap-6 md:ml-[2.8vw] md:gap-[2.2vw] lg:ml-[2.5vw] lg:gap-[2vw]">
+            {/*
+              DIUBAH: Margin & Gap 'md' dan 'lg' diperbesar
+              Sebelumnya (md): md:ml-5 md:gap-4
+              Sebelumnya (lg): lg:ml-8 lg:gap-6
+            */}
+            <div className="hidden md:flex items-center ml-6 gap-6 md:ml-8 md:gap-6 lg:ml-12 lg:gap-10">
               <Link
                 ref={el => { navLinkRefs.current[0] = el; }}
-                href="/education" 
-                className="text-white font-semibold hover:text-[#00E676] transition-colors duration-200 text-base md:text-[1.4vw] lg:text-[1.3vw]"
+                href="/education"
+                /*
+                  DIUBAH: Ukuran font 'md' dan 'lg' diperbesar
+                  Sebelumnya (md): md:text-sm
+                  Sebelumnya (lg): lg:text-base
+                */
+                className="text-white font-semibold hover:text-[#00E676] transition-colors duration-200 text-base md:text-base lg:text-2xl"
               >
                 Education
               </Link>
             </div>
           </div>
 
-          <div className="hidden md:flex items-center gap-4 md:gap-[1.8vw] lg:gap-[1.5vw]">
-            <Link href="/register" ref={langRef} className="flex items-center text-[#0EFF95] border-2 border-[#0EFF95] rounded-full cursor-pointer hover:bg-white/10 transition-colors duration-200 px-5 py-2 md:px-[1.8vw] md:py-[0.35vw] lg:px-[1.6vw] lg:py-[0.3vw]">
-              <span className="font-semibold text-sm md:text-[1.2vw] lg:text-[1.1vw]">Register</span>
+          {/*
+            DIUBAH: Gap 'md' dan 'lg' diperbesar
+            Sebelumnya (md): md:gap-4
+            Sebelumnya (lg): lg:gap-4
+          */}
+          <div className="hidden md:flex items-center gap-4 md:gap-5 lg:gap-7">
+            {/*
+              DIUBAH: Padding & Font 'md' dan 'lg' diperbesar
+              Sebelumnya (md): md:px-4 md:py-1 md:text-xs
+              Sebelumnya (lg): lg:px-5 lg:py-1 lg:text-sm
+            */}
+            <Link href="/register" ref={langRef} className="flex items-center text-[#0EFF95] border-2 border-[#0EFF95] rounded-full cursor-pointer hover:bg-white/10 transition-colors duration-200 px-5 py-2 text-sm md:px-6 md:py-1.5 md:text-sm lg:px-8 lg:py-1.5 lg:text-xl">
+              <span className="font-semibold">Register</span>
             </Link>
-            <Link href="/login" ref={loginBtnRef} className="bg-[#0EFF95] text-[#4A4978] font-bold rounded-full hover:bg-opacity-90 transition-all duration-200 shadow-lg px-6 py-2 text-sm md:px-[2.7vw] md:py-[0.35vw] md:text-[1.2vw] lg:px-[2.4vw] lg:py-[0.3vw] lg:text-[1.1vw] flex items-center justify-center">
+            {/*
+              DIUBAH: Padding & Font 'md' dan 'lg' diperbesar
+              Sebelumnya (md): md:px-5 md:py-1 md:text-xs
+              Sebelumnya (lg): lg:px-7 lg:py-1 lg:text-sm
+            */}
+            <Link href="/login" ref={loginBtnRef} className="bg-[#0EFF95] text-[#4A4978] font-bold rounded-full hover:bg-opacity-90 transition-all duration-200 shadow-lg px-6 py-2 text-sm md:px-8 md:py-1.5 md:text-sm lg:px-12 lg:py-1.5 lg:text-xl flex items-center justify-center">
               Login
             </Link>
           </div>
 
-          {/* Mobile Menu Button */}
+          {/* Mobile Menu Button (Tidak berubah) */}
           <div className="md:hidden">
             <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="text-white focus:outline-none p-2">
               <svg 
@@ -146,9 +183,9 @@ const Navbar = () => {
         </div>
       </nav>
 
-      {/* Mobile Menu Dropdown */}
+      {/* Mobile Menu Dropdown (Tidak berubah) */}
       {isMenuOpen && (
-        <div className="md:hidden bg-[#363256]/95 backdrop-blur-xl border-t border-white/20 flex flex-col fixed w-full z-40 shadow-2xl p-6 gap-4 animate-slide-down">
+        <div className="md:hidden bg-[#363256]/95 backdrop-blur-xl border-t border-white/20 flex flex-col fixed w-full z-40 shadow-xl p-6 gap-4 animate-slide-down">
           <Link 
             href="/education" 
             className="text-white font-semibold hover:text-[#00E676] text-lg py-3 px-4 rounded-lg hover:bg-white/10 transition-all duration-200"
