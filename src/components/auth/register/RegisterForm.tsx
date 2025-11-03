@@ -88,8 +88,8 @@ const RegisterForm = () => {
     };
 
     return (
-        <div className="w-full max-w-md mx-auto px-4 sm:px-6 md:max-w-lg lg:max-w-xl">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-[#50488A] mb-3 text-center">
+        <div className="w-full  max-w-md mx-auto px-4 sm:px-6 md:max-w-lg lg:max-w-xl">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-[#50488A] mb-2 text-center">
                 Create an account
             </h1>
             <p className="text-[#50488A] mb-8 sm:mb-10 text-center text-base sm:text-lg opacity-70">
@@ -109,7 +109,7 @@ const RegisterForm = () => {
                             onFocus={() => setFocusedField('firstName')}
                             onBlur={() => setFocusedField(null)}
                             required
-                            className={`w-full px-4 py-4 sm:px-6 sm:py-5 rounded-2xl border-none text-gray-700 placeholder-gray-500 focus:outline text-lg sm:text-xl transition-all focus:duration-300 ${getFieldStyle('firstName', 'bg-white')}`}
+                            className={`w-full px-4 py-4 sm:px-6 sm:py-4 rounded-2xl border-none text-gray-700 placeholder-gray-500 focus:outline text-lg sm:text-xl transition-all focus:duration-300 ${getFieldStyle('firstName', 'bg-white')}`}
                         />
                     </div>
                     <div>
@@ -122,7 +122,7 @@ const RegisterForm = () => {
                             onFocus={() => setFocusedField('lastName')}
                             onBlur={() => setFocusedField(null)}
                             required
-                            className={`w-full px-4 py-4 sm:px-6 sm:py-5 rounded-2xl border-none text-gray-700 placeholder-gray-500 focus:outline text-lg sm:text-xl transition-all focus:duration-300 ${getFieldStyle('lastName', 'bg-white')}`}
+                            className={`w-full px-4 py-4 sm:px-6 sm:py-4 rounded-2xl border-none text-gray-700 placeholder-gray-500 focus:outline text-lg sm:text-xl transition-all focus:duration-300 ${getFieldStyle('lastName', 'bg-white')}`}
                         />
                     </div>
                 </div>
@@ -138,7 +138,7 @@ const RegisterForm = () => {
                         onFocus={() => setFocusedField('email')}
                         onBlur={() => setFocusedField(null)}
                         required
-                        className={`w-full px-4 py-4 sm:px-6 sm:py-5 rounded-2xl border-none text-gray-700 placeholder-gray-500 focus:outline text-lg sm:text-xl transition-all focus:duration-300 ${getFieldStyle('email', 'bg-white')}`}
+                        className={`w-full px-4 py-4 sm:px-6 sm:py-4 rounded-2xl border-none text-gray-700 placeholder-gray-500 focus:outline text-lg sm:text-xl transition-all focus:duration-300 ${getFieldStyle('email', 'bg-white')}`}
                     />
                 </div>
 
@@ -154,7 +154,7 @@ const RegisterForm = () => {
                         onBlur={() => setFocusedField(null)}
                         required
                         minLength={8}
-                        className={`w-full px-4 py-4 sm:px-6 sm:py-5 rounded-2xl border-none text-gray-700 placeholder-gray-500 focus:outline text-lg sm:text-xl pr-14 transition-all focus:duration-300 ${getFieldStyle('password', 'bg-white')}`}
+                        className={`w-full px-4 py-4 sm:px-6 sm:py-4 rounded-2xl border-none text-gray-700 placeholder-gray-500 focus:outline text-lg sm:text-xl pr-14 transition-all focus:duration-300 ${getFieldStyle('password', 'bg-white')}`}
                     />
                     <button
                         type="button"
@@ -179,7 +179,7 @@ const RegisterForm = () => {
                         onBlur={() => setFocusedField(null)}
                         required
                         minLength={8}
-                        className={`w-full px-4 py-4 sm:px-6 sm:py-5 rounded-2xl border-none text-gray-700 placeholder-gray-500 focus:outline text-lg sm:text-xl pr-14 transition-all focus:duration-300 ${getFieldStyle('passwordConfirmation', 'bg-white')}`}
+                        className={`w-full px-4 py-4 sm:px-6 sm:py-4 rounded-2xl border-none text-gray-700 placeholder-gray-500 focus:outline text-lg sm:text-xl pr-14 transition-all focus:duration-300 ${getFieldStyle('passwordConfirmation', 'bg-white')}`}
                     />
                 </div>
 
@@ -199,7 +199,7 @@ const RegisterForm = () => {
                 <button
                     type="submit"
                     disabled={isLoading}
-                    className="w-full bg-[#50488A] text-white py-4 sm:py-5 rounded-3xl text-lg sm:text-xl font-semibold hover:bg-[#2d2747] transition-colors duration-300 mt-6 sm:mt-10 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full bg-[#50488A] text-white py-4 sm:py-4 rounded-3xl text-lg sm:text-xl font-semibold hover:bg-[#2d2747] transition-colors duration-300 mt-6  disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                     {isLoading ? 'Creating account...' : 'Create account'}
                 </button>
@@ -207,7 +207,7 @@ const RegisterForm = () => {
                 {/* Google Signup Button */}
                 <Link
                     href={googleAuthUrl}
-                    className="w-full bg-white text-gray-600 py-4 sm:py-5 rounded-3xl text-lg sm:text-xl font-medium border border-gray-700 hover:bg-gray-200 transition-colors duration-300 flex items-center justify-center space-x-3"
+                    className="w-full bg-white text-gray-600 py-4 sm:py-4 rounded-3xl text-lg sm:text-xl font-medium border border-gray-700 hover:bg-gray-200 transition-colors duration-300 flex items-center justify-center space-x-3"
                 >
                     <svg className="w-6 h-6 sm:w-7 sm:h-7" viewBox="0 0 24 24">
                         <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>

@@ -200,7 +200,7 @@ const AboutUsSection = () => {
                                 <button
                                     data-tab-button="aboutus"
                                     onClick={() => handleTabSwitch("aboutus")}
-                                    className={`border-2 px-4 py-2 rounded-full font-semibold text-sm transition-all duration-300 sm:px-5 sm:py-2.5 sm:text-base md:px-6 md:py-3 md:text-lg lg:px-7 lg:py-3.5 lg:text-xl xl:px-8 xl:py-4 xl:text-2xl ${
+                                    className={`border-2 px-4 py-2 cursor-pointer rounded-full font-semibold text-sm transition-all duration-300 sm:px-5 sm:py-2.5 sm:text-base md:px-6 md:py-3 md:text-lg lg:px-7 lg:py-3.5 lg:text-xl xl:px-8 xl:py-4 xl:text-2xl ${
                                         activeTab === "aboutus" 
                                             ? "bg-transparent text-black border-[#4A4978]" 
                                             : "border-gray-600 border-2 bg-[#4A4978] hover:bg-[#4A4978] text-white hover:border-[#4A4978]"
@@ -214,7 +214,7 @@ const AboutUsSection = () => {
                                         <button 
                                             data-tab-button="solution"
                                             onClick={() => handleTabSwitch("solution")}
-                                            className={`px-4 py-2 rounded-full font-semibold text-sm transition-all duration-300 sm:px-5 sm:py-2.5 sm:text-base md:px-6 md:py-3 md:text-lg lg:px-7 lg:py-3.5 lg:text-xl xl:px-8 xl:py-4 xl:text-2xl ${
+                                            className={`px-4 py-2 cursor-pointer rounded-full font-semibold text-sm transition-all duration-300 sm:px-5 sm:py-2.5 sm:text-base md:px-6 md:py-3 md:text-lg lg:px-7 lg:py-3.5 lg:text-xl xl:px-8 xl:py-4 xl:text-2xl ${
                                                 activeTab === "solution" 
                                                     ? "bg-transparent text-black border-2 border-[#4A4978]" 
                                                     : "bg-[#4A4978] text-[#ffffff]"
