@@ -100,46 +100,43 @@ const LoginForm = () => {
 
         } catch (err) {
             let errorMessage = 'Terjadi kesalahan saat login. Silakan coba lagi.';
-            // if (err instanceof Error) {
-            //     const message = err.message.toLowerCase();
+            if (err instanceof Error) {
+                const message = err.message.toLowerCase();
                 
-            //     // --- PERBAIKAN UTAMA DI SINI ---
-            //     // Cek error spesifik yang Anda berikan
+                // --- PERBAIKAN UTAMA DI SINI ---
+                // Cek error spesifik yang Anda berikan
                 
-            //     if (message.includes('invalid_password') || message.includes('password salah')) {
-            //         errorMessage = 'Password salah. Silakan periksa kembali.';
-            //         // Tandai field password sebagai error
-            //         setErrors(prev => ({ ...prev, password: 'Password salah' }));
+                if (message.includes('invalid_password') || message.includes('password salah')) {
+                    errorMessage = 'Password salah. Silakan periksa kembali.';
+                    // Tandai field password sebagai error
+                    setErrors(prev => ({ ...prev, password: 'Password salah' }));
                 
-            //     } else if (message.includes('email_not_found') || message.includes('email tidak terdaftar')) {
-            //         errorMessage = 'Email tidak terdaftar. Silakan register terlebih dahulu.';
-            //         // Tandai field email sebagai error
-            //         setErrors(prev => ({ ...prev, email: 'Email tidak terdaftar' }));
+                } else if (message.includes('email_not_found') || message.includes('email tidak terdaftar')) {
+                    errorMessage = 'Email tidak terdaftar. Silakan register terlebih dahulu.';
+                    // Tandai field email sebagai error
+                    setErrors(prev => ({ ...prev, email: 'Email tidak terdaftar' }));
 
-            //     // Fallback untuk error 401 lainnya
-            //     } else if (message.includes('404') || message.includes('invalid') || 
-            //         message.includes('incorrect') || message.includes('unauthorized')) {
-            //         errorMessage = 'Email atau password salah. Silakan periksa kembali data Anda.';
+                // Fallback untuk error 401 lainnya
+                } else if (message.includes('404') || message.includes('invalid') || 
+                    message.includes('incorrect') || message.includes('unauthorized')) {
+                    errorMessage = 'Email atau password salah. Silakan periksa kembali data Anda.';
                 
-            //     // Sisa error handling
-            //     } else if (message.includes('timeout') || message.includes('exceeded')) {
-            //         errorMessage = 'Koneksi timeout. Periksa koneksi internet Anda dan coba lagi.';
-            //     } else if (message.includes('network') || message.includes('fetch') || message.includes('respons tidak valid')) {
-            //         errorMessage = 'Gagal terhubung ke server. Periksa koneksi internet Anda.';
-            //     } else if (message.includes('500')) {
-            //         errorMessage = 'Server sedang bermasalah. Silakan coba beberapa saat lagi.';
-            //     } else if (message.includes('400')) {
-            //         errorMessage = 'Data yang dikirim tidak valid. Periksa kembali form Anda.';
-            //     } else if (message.includes('403')) {
-            //         errorMessage = 'Akses ditolak. Silakan hubungi administrator.';
-            //     } else if (err.message && !message.includes('failed to fetch')) {
-            //         errorMessage = err.message;
-            //     }
-            // }
-            if (err.response?.code === "EMAIL_NOT_FOUND"){
-                errorMessage = 'Email tidak terdaftar. Silakan register terlebih dahulu.';
-                setErrors(prev => ({ ...prev, email: 'Email tidak terdaftar' }));
+                // Sisa error handling
+                } else if (message.includes('timeout') || message.includes('exceeded')) {
+                    errorMessage = 'Koneksi timeout. Periksa koneksi internet Anda dan coba lagi.';
+                } else if (message.includes('network') || message.includes('fetch') || message.includes('respons tidak valid')) {
+                    errorMessage = 'Gagal terhubung ke server. Periksa koneksi internet Anda.';
+                } else if (message.includes('500')) {
+                    errorMessage = 'Server sedang bermasalah. Silakan coba beberapa saat lagi.';
+                } else if (message.includes('400')) {
+                    errorMessage = 'Data yang dikirim tidak valid. Periksa kembali form Anda.';
+                } else if (message.includes('403')) {
+                    errorMessage = 'Akses ditolak. Silakan hubungi administrator.';
+                } else if (err.message && !message.includes('failed to fetch')) {
+                    errorMessage = err.message;
+                }
             }
+         
 
             showError(errorMessage);
     
