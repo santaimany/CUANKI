@@ -181,8 +181,19 @@ export default function OnboardingPage() {
     }
   }, [messages, current.type]);
 
-  function handleAnswerChange(v: string) {
-    const cleaned = current.id === 'age' ? v.replace(/\D+/g, '') : v;
+ function handleAnswerChange(v: string) {
+    let cleaned = v;
+    
+    if (current.id === 'age') {
+      cleaned = v.replaceAll(/\D+/g, ''); // Hapus semua non-angka
+      const numValue = Number.parseInt(cleaned);
+      
+      // Jika angkanya ada (bukan NaN) dan lebih dari 80, batasi ke 80
+      if (!Number.isNaN(numValue) && numValue > 80) {
+        cleaned = '80';
+      }
+    }
+    
     setAnswers((a) => ({ ...a, [current.id]: cleaned }));
   }
 
@@ -202,6 +213,14 @@ export default function OnboardingPage() {
     if (q.type === 'chat') {
       const userText = answers[q.id] ?? '';
       setMessages((m) => [...m, { kind: 'user', text: userText || '', qId: q.id }]);
+
+      if (q.id === 'age') {
+      const age = Number.parseInt(answers['age'] || '0');
+      if (age < 8 || age > 80) {
+        showError('Umur harus di antara 8 dan 80 tahun.');
+        return; // Hentikan fungsi
+      }
+    }
 
       if (step < QUESTIONS.length - 1) {
         setIsTransitioning(true);
