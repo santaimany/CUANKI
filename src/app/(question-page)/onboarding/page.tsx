@@ -211,7 +211,11 @@ export default function OnboardingPage() {
     const isAfterTargetStep = q.id === 'target'; // Step 8 (last)
 
     if (q.type === 'chat') {
-      const userText = answers[q.id] ?? '';
+      let userText = answers[q.id] ?? '';
+       if ((q.id === 'nabung' || q.id === 'income') && userText) {
+        userText = `Rp ${userText}`;
+      }
+
       setMessages((m) => [...m, { kind: 'user', text: userText || '', qId: q.id }]);
 
       if (q.id === 'age') {
