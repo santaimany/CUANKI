@@ -15,10 +15,8 @@ const RegisterForm = () => {
         password_confirmation: '',
     });
     
-    // --- BARU ---
     const [errors, setErrors] = useState<Record<string, string>>({});
     const [showPassword, setShowPassword] = useState(false);
-    // --- AKHIR BARU ---
 
     const [isLoading, setIsLoading] = useState(false);
     const { showError, showSuccess, showLoading } = useToast();
@@ -30,7 +28,6 @@ const RegisterForm = () => {
             [name]: value,
         }));
         
-        // Hapus error saat pengguna mulai mengetik lagi
         if (errors[name]) {
             setErrors((prev) => ({
                 ...prev,
@@ -39,12 +36,10 @@ const RegisterForm = () => {
         }
     };
 
-    // --- BARU: Fungsi untuk toggle password ---
     const toggleShowPassword = () => {
         setShowPassword(!showPassword);
     };
 
-    // --- BARU: Fungsi validasi terpisah ---
     const validateForm = (data: typeof formData, termsChecked: boolean) => {
         const newErrors: Record<string, string> = {};
 
@@ -67,27 +62,22 @@ const RegisterForm = () => {
             newErrors.password_confirmation = 'Konfirmasi password tidak cocok';
         }
 
-        if (!termsChecked) {
-            newErrors.terms = 'Anda harus menyetujui Syarat & Ketentuan';
-        }
 
         return newErrors;
     };
 
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => { // Tipe diubah
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => { 
         e.preventDefault();
-        setErrors({}); // Hapus error lama
+        setErrors({}); 
 
-        // --- BARU: Logika validasi ---
         const termsCheckbox = e.currentTarget.elements.namedItem('terms') as HTMLInputElement;
         const formErrors = validateForm(formData, termsCheckbox.checked);
 
         if (Object.keys(formErrors).length > 0) {
             setErrors(formErrors);
-            showError(Object.values(formErrors)[0]); // Tampilkan error pertama di toast
+            showError(Object.values(formErrors)[0]); 
             return;
         }
-        // --- AKHIR VALIDASI ---
 
         setIsLoading(true);
         showLoading('Membuat akun...');
@@ -112,7 +102,6 @@ const RegisterForm = () => {
             if (err instanceof Error) {
                 const message = err.message.toLowerCase();
                 
-                // Handle specific error types
                 if (message.includes('409') || message.includes('already exists') || 
                     message.includes('email already registered')) {
                     errorMessage = 'Email sudah terdaftar. Silakan gunakan email lain atau login.';
@@ -170,13 +159,11 @@ const RegisterForm = () => {
                             onFocus={() => setFocusedField('firstName')}
                             onBlur={() => setFocusedField(null)}
                             required
-                            /* DIUBAH: Penambahan style error dan focus */
                             className={`w-full px-4 py-3 sm:px-5 sm:py-3 rounded-2xl border-none text-gray-700 placeholder-gray-500 text-base sm:text-lg transition-all focus:duration-300
                                         focus:outline-none focus:ring-2 focus:ring-[#50488A]
                                         ${getFieldStyle('firstName', 'bg-white')}
                                         ${errors.first_name ? 'ring-2 ring-red-500' : ''}`}
                         />
-                        {/* BARU: Tampilkan pesan error */}
                         {errors.first_name && <p className="mt-1 text-sm text-red-600">{errors.first_name}</p>}
                     </div>
                     <div>
@@ -189,13 +176,11 @@ const RegisterForm = () => {
                             onFocus={() => setFocusedField('lastName')}
                             onBlur={() => setFocusedField(null)}
                             required
-                            /* DIUBAH: Penambahan style error dan focus */
                             className={`w-full px-4 py-3 sm:px-5 sm:py-3 rounded-2xl border-none text-gray-700 placeholder-gray-500 text-base sm:text-lg transition-all focus:duration-300
                                         focus:outline-none focus:ring-2 focus:ring-[#50488A]
                                         ${getFieldStyle('lastName', 'bg-white')}
                                         ${errors.last_name ? 'ring-2 ring-red-500' : ''}`}
                         />
-                        {/* BARU: Tampilkan pesan error */}
                         {errors.last_name && <p className="mt-1 text-sm text-red-600">{errors.last_name}</p>}
                     </div>
                 </div>
@@ -211,93 +196,101 @@ const RegisterForm = () => {
                         onFocus={() => setFocusedField('email')}
                         onBlur={() => setFocusedField(null)}
                         required
-                        /* DIUBAH: Penambahan style error dan focus */
                         className={`w-full px-4 py-3 sm:px-5 sm:py-3 rounded-2xl border-none text-gray-700 placeholder-gray-500 text-base sm:text-lg transition-all focus:duration-300
                                     focus:outline-none focus:ring-2 focus:ring-[#50488A]
                                     ${getFieldStyle('email', 'bg-white')}
                                     ${errors.email ? 'ring-2 ring-red-500' : ''}`}
                     />
-                    {/* BARU: Tampilkan pesan error */}
                     {errors.email && <p className="mt-1 text-sm text-red-600">{errors.email}</p>}
                 </div>
 
                 {/* Password Input */}
-                <div className="relative">
-                    <input
-                        // DIUBAH: 'type' dinamis
-                        type={showPassword ? 'text' : 'password'}
-                        name="password"
-                        value={formData.password}
-                        onChange={handleChange}
-                        placeholder="Enter your password"
-                        onFocus={() => setFocusedField('password')}
-                        onBlur={() => setFocusedField(null)}
-                        required
-                        minLength={8}
-                        /* DIUBAH: Penambahan style error dan focus */
-                        className={`w-full px-4 py-3 sm:px-5 sm:py-3 rounded-2xl border-none text-gray-700 placeholder-gray-500 text-base sm:text-lg pr-12 transition-all focus:duration-300
-                                    focus:outline-none focus:ring-2 focus:ring-[#50488A]
-                                    ${getFieldStyle('password', 'bg-white')}
-                                    ${errors.password ? 'ring-2 ring-red-500' : ''}`}
-                    />
-                    <button
-                        type="button"
-                        onClick={toggleShowPassword} // BARU: onClick
-                        className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
-                    >
-                        {/* BARU: Ikon dinamis */}
-                        {showPassword ? (
-                            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7 1.274-4.057 5.064-7 9.542-7 4.478 0 8.268 2.943 9.542 7-.17.55-.35 1.08-.55 1.58m-3.9-3.9a3 3 0 11-4.24 4.24m4.24-4.24L18.825 13.875M4.93 4.93l1.414 1.414" /></svg>
-                        ) : (
-                            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                            </svg>
-                        )}
-                    </button>
+                <div> {/* BARU: Dibungkus div agar error bisa dikelompokkan */}
+                    <div className="relative">
+                        <input
+                            type={showPassword ? 'text' : 'password'}
+                            name="password"
+                            value={formData.password}
+                            onChange={handleChange}
+                            placeholder="Enter your password"
+                            onFocus={() => setFocusedField('password')}
+                            onBlur={() => setFocusedField(null)}
+                            required
+                            minLength={8}
+                            className={`w-full px-4 py-3 sm:px-5 sm:py-3 rounded-2xl border-none text-gray-700 placeholder-gray-500 text-base sm:text-lg pr-12 transition-all focus:duration-300
+                                        focus:outline-none focus:ring-2 focus:ring-[#50488A]
+                                        ${getFieldStyle('password', 'bg-white')}
+                                        ${errors.password ? 'ring-2 ring-red-500' : ''}`}
+                        />
+                        <button
+                            type="button"
+                            onClick={toggleShowPassword} 
+                            className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                        >
+                            {showPassword ? (
+                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7 1.274-4.057 5.064-7 9.542-7 4.478 0 8.268 2.943 9.542 7-.17.55-.35 1.08-.55 1.58m-3.9-3.9a3 3 0 11-4.24 4.24m4.24-4.24L18.825 13.875M4.93 4.93l1.414 1.414" /></svg>
+                            ) : (
+                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                </svg>
+                            )}
+                        </button>
+                    </div>
+                    {errors.password && <p className="mt-1 text-sm text-red-600">{errors.password}</p>}
                 </div>
-                {/* BARU: Tampilkan pesan error */}
-                {errors.password && <p className="mt-1 text-sm text-red-600">{errors.password}</p>}
 
                 {/* Password Confirmation Input */}
-                <div className="relative">
-                    <input
-                        // DIUBAH: 'type' dinamis
-                        type={showPassword ? 'text' : 'password'}
-                        name="password_confirmation"
-                        value={formData.password_confirmation}
-                        onChange={handleChange}
-                        placeholder="Confirm your password"
-                        onFocus={() => setFocusedField('passwordConfirmation')}
-                        onBlur={() => setFocusedField(null)}
-                        required
-                        minLength={8}
-                        /* DIUBAH: Penambahan style error dan focus */
-                        className={`w-full px-4 py-3 sm:px-5 sm:py-3 rounded-2xl border-none text-gray-700 placeholder-gray-500 text-base sm:text-lg pr-12 transition-all focus:duration-300
-                                    focus:outline-none focus:ring-2 focus:ring-[#50488A]
-                                    ${getFieldStyle('passwordConfirmation', 'bg-white')}
-                                    ${errors.password_confirmation ? 'ring-2 ring-red-500' : ''}`}
-                    />
+                <div> {/* BARU: Dibungkus div agar error bisa dikelompokkan */}
+                    <div className="relative">
+                        <input
+                            type={showPassword ? 'text' : 'password'}
+                            name="password_confirmation"
+                            value={formData.password_confirmation}
+                            onChange={handleChange}
+                            placeholder="Confirm your password"
+                            onFocus={() => setFocusedField('passwordConfirmation')}
+                            onBlur={() => setFocusedField(null)}
+                            required
+                            minLength={8}
+                            className={`w-full px-4 py-3 sm:px-5 sm:py-3 rounded-2xl border-none text-gray-700 placeholder-gray-500 text-base sm:text-lg pr-12 transition-all focus:duration-300
+                                        focus:outline-none focus:ring-2 focus:ring-[#50488A]
+                                        ${getFieldStyle('passwordConfirmation', 'bg-white')}
+                                        ${errors.password_confirmation ? 'ring-2 ring-red-500' : ''}`}
+                        />
+                    </div>
+                    {errors.password_confirmation && <p className="mt-1 text-sm text-red-600">{errors.password_confirmation}</p>}
                 </div>
-                {/* BARU: Tampilkan pesan error */}
-                {errors.password_confirmation && <p className="mt-1 text-sm text-red-600">{errors.password_confirmation}</p>}
 
-                {/* Terms Agreement */}
-                <div className="flex items-start text-sm sm:text-base">
-                    <input
-                        type="checkbox"
-                        id="terms"
-                        name="terms" // BARU: Tambahkan 'name'
-                        onChange={() => setErrors(prev => ({ ...prev, terms: '' }))} // BARU: Hapus error
-                        className={`w-5 h-5 text-[#363256] bg-white border-gray-300 rounded focus:ring-[#363256] mr-3 mt-1
-                                    ${errors.terms ? 'ring-2 ring-red-500' : ''}`} // BARU: Style error
-                    />
-                    <label htmlFor="terms" className="text-[#4A4480]">
-                        I agree to the <a href="#" className="underline hover:no-underline">Terms & Conditions</a>
+             <div>
+                    <label 
+                        htmlFor="terms" 
+                        className="flex items-start text-sm sm:text-base text-[#4A4480] cursor-pointer"
+                    >
+                        <input
+                            type="checkbox"
+                            id="terms"
+                            name="terms" 
+                            onChange={() => setErrors(prev => ({ ...prev, terms: '' }))} 
+                            // flex-shrink-0 penting agar kotaknya tidak 'gepeng'
+                            className={`flex-shrink-0 w-5 h-5 text-[#363256] bg-white border-gray-300 rounded focus:ring-[#363256] mr-3 mt-1
+                                        ${errors.terms ? 'ring-2 ring-red-500' : ''}`} 
+                        />
+                        {/* Teks dibungkus <span> agar rapi */}
+                        <span className="flex-1"> 
+                            I agree to the <a href="#" className="underline hover:no-underline">Terms & Conditions</a>
+                        </span>
                     </label>
+                    
+                    {/* Pesan error diletakkan setelahnya, di-indentasi agar lurus */}
+                    {errors.terms && (
+                        // pl-8 = w-5 (1.25rem) + mr-3 (0.75rem) = 2rem (32px)
+                        <div className="text-sm text-red-600 mt-1 pl-8"> 
+                            {errors.terms}
+                        </div>
+                    )}
                 </div>
-                {/* BARU: Tampilkan pesan error */}
-                {errors.terms && <p className="-mt-5 text-sm text-red-600">{errors.terms}</p>}
+                {/* --- AKHIR PERBAIKAN --- */}
 
 
                 {/* Create Account Button */}
@@ -328,4 +321,3 @@ const RegisterForm = () => {
 }
 
 export default RegisterForm;
-
