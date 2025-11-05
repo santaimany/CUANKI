@@ -62,7 +62,7 @@ const MyAccounts = () => {
   const hasMore = accounts.length > 4;
 
   return (
-    <div className="p-6 sm:p-8 bg-[#363256] h-full flex flex-col">
+    <div className="p-6 sm:p-1 bg-[#363256] h-full flex flex-col">
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mb-4 sm:mb-6">
         {displayAccounts.map((account, index) => (
           <div className="min-w-0" key={`${account.account_id}-${account.type}-${index}`}>

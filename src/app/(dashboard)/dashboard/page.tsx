@@ -86,7 +86,8 @@ const DashboardPage = () => {
 
   return (
     <div className="pb-20 md:pb-0">
-      {/* Mobile Layout: Stack vertically - No UserProfile */}
+ 
+      {/* --- MOBILE LAYOUT (Tidak Berubah) --- */}
       <div className="md:hidden flex flex-col gap-4">
         <BalanceOverview userData={userData} onRefresh={handleTransactionRefresh} />
         <GoalsProgress />
@@ -102,52 +103,64 @@ const DashboardPage = () => {
         <TransactionHistoryList key={refreshTransactions} onRefresh={handleTransactionRefresh} />
       </div>
 
-  {/* Desktop Layout: Complex Grid */}
-  <div className="hidden md:grid grid-cols-4 gap-6 h-full">
-        <div className="col-span-3 row-span-2">
+      {/* --- DESKTOP LAYOUT (DIUBAH) --- */}
+      <div 
+        className="hidden md:grid gap-6 h-full"
+        style={{
+          // Ini adalah "peta" visual dari layout Anda.
+          // Setiap kata adalah nama 'grid-area'.
+          gridTemplateAreas: `
+            "balance  balance  balance  profile"
+            "balance  balance  balance  accounts"
+            "goals    goals    budget   accounts"
+            "calendar expenses expenses transactions"
+            "chart    chart    chart    transactions"
+            "chart    chart    chart    transactions"
+          `,
+          // 3 kolom pertama fleksibel, kolom terakhir sedikit lebih lebar.
+          gridTemplateColumns: '1fr 1fr 1fr 1.25fr',
+          // 5 baris pertama ukurannya otomatis, baris terakhir (chart/transaksi)
+          // akan mengisi sisa ruang vertikal.
+          gridTemplateRows: 'auto auto auto auto auto 1fr' 
+        }}
+      >
+        {/* Sekarang kita hanya perlu menetapkan 'gridArea' ke setiap komponen.
+          Tidak perlu lagi pusing dengan col-span/row-start.
+        */}
+        
+        <div style={{ gridArea: 'balance' }}>
           <BalanceOverview userData={userData} onRefresh={handleTransactionRefresh} />
         </div>
 
-        {/* UserProfileHeader: Baris 1, Kolom 4 */}
-        <div className="col-span-1 row-span-1">
+        <div style={{ gridArea: 'profile' }}>
           <UserProfileHeader userData={userData} userProfile={userProfile} />
         </div>
-
-        {/* MyAccounts: Baris 2-3, Kolom 4 */}
-        <div className="col-start-4 row-start-2 row-span-2">
+     
+        <div style={{ gridArea: 'accounts' }}>
           <MyAccounts />
         </div>
         
-        {/* GoalsProgress: Baris 3, Kolom 1-2 */}
-        <div className="col-span-2 row-start-3">
+        <div style={{ gridArea: 'goals' }}>
           <GoalsProgress />
         </div>
 
-        {/* Streak: Baris 3, Kolom 3 */}
-        <div className="col-start-3 row-start-3">
+        <div style={{ gridArea: 'budget' }}>
           <BudgetSisa/>
         </div>
 
-          {/* CalendarView: Left side */}
-          <div className="col-span-1">
+        <div style={{ gridArea: 'calendar' }}>
             <CalendarView />
-          </div>
+        </div>
           
-          {/* DailyExpenseSummary: Right side */}
-          <div className="col-span-2">
+        <div style={{ gridArea: 'expenses' }}>
             <DailyExpenseSummary />
-          </div>
+        </div>
      
-
-      
-
-        {/* TransactionHistoryList: Baris 4-6, Kolom 4 */}
-        <div className="col-start-4 row-start-4 row-span-3">
+        <div style={{ gridArea: 'transactions' }}>
           <TransactionHistoryList key={refreshTransactions} onRefresh={handleTransactionRefresh} />
         </div>
 
-        {/* SavingsChart: Baris 6, Kolom 1-3 */}
-        <div className="col-span-3 row-start-5">
+        <div style={{ gridArea: 'chart' }}>
           <SavingsChart />
         </div>
       </div>

@@ -176,14 +176,14 @@ export default function OnboardingCompletePage() {
             <Image src={cardImages[cardOrder[0]]} alt={cardAlts[cardOrder[0]]} fill className="object-contain" />
           </div>
           <div 
-            className="absolute inset-0 bg-gradient-to-br from-[#00F5A0] to-[#00D9D9] rounded-2xl sm:rounded-3xl p-2 sm:p-3 md:p-4 lg:p-5 xl:p-6 overflow-auto flex flex-col"
+            className="absolute inset-0 bg-gradient-to-br  from-[#00F5A0] to-[#00D9D9] rounded-2xl sm:rounded-3xl p-2 sm:p-3 md:p-4 lg:p-5 xl:p-6 overflow-auto flex flex-col"
             style={{ 
               backfaceVisibility: 'hidden',
               transform: flippedCard === cardOrder[0] ? 'rotateY(0deg)' : 'rotateY(180deg)',
               transition: 'transform 0.8s'
             }}
           >
-            <h3 className="text-[#363256] text-xs sm:text-sm md:text-base lg:text-xl xl:text-2xl font-bold mb-1 sm:mb-2 lg:mb-3">
+            <h3 className="text-[#363256] text-xs sm:text-sm md:text-base lg:text-xl justify-center xl:text-2xl font-bold mb-1 sm:mb-2 lg:mb-3">
               {isLoadingAdvice ? 'Loading...' : (adviceData?.cards?.[cardOrder[0]]?.title || 'AI Analytics')}
             </h3>
             <p className="text-[#363256] text-[8px] sm:text-[9px] md:text-[10px] lg:text-xs xl:text-sm leading-relaxed">

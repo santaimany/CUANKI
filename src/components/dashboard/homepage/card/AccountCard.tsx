@@ -20,7 +20,7 @@ const AccountCard: React.FC<AccountCardProps> = ({
   const formattedBalance = new Intl.NumberFormat('id-ID', {
     style: 'currency',
     currency: 'IDR',
-    minimumFractionDigits: 0, // Menghilangkan ,00 jika tidak perlu
+    minimumFractionDigits: 0, 
   }).format(balance);
 
   if (onEdit) {
@@ -53,9 +53,9 @@ const AccountCard: React.FC<AccountCardProps> = ({
   }
 
   return (
-    <div className="rounded-2xl sm:rounded-3xl overflow-hidden shadow-lg flex flex-col bg-white min-w-0">
+    <div className="rounded-2xl  sm:rounded-3xl overflow-hidden shadow-lg flex flex-col bg-white min-w-0">
       {/* Bagian Atas: Nama Akun */}
-      <div className="py-4 sm:py-5 px-4 sm:px-6 relative">
+      <div className="py-4 sm:py-5 px-4 sm:px-2 relative">
         <h3 className="text-center text-lg sm:text-xl md:text-2xl lg:text-2xl font-bold text-[#363256] break-words max-w-full leading-tight">
           {accountName}
         </h3>
@@ -66,7 +66,7 @@ const AccountCard: React.FC<AccountCardProps> = ({
         )}
       </div>
 
-      {/* Bagian Bawah: Saldo */}
+
       <div className={`${color} text-black py-3 sm:py-4 px-4 sm:px-6`}>
         <p className="text-center text-sm sm:text-base md:text-lg lg:text-lg font-bold break-words max-w-full leading-tight">
           {formattedBalance}
