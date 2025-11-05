@@ -38,8 +38,7 @@ const CalendarView = () => {
   // Get color based on date status
   const getDateColor = (dateData: CalendarDate) => {
     if (dateData.is_today) {
-      // Dibuat lebih menonjol
-      return 'border-2 border-white text-white font-bold';
+      return 'border-2 border-white';
     }
     if (dateData.is_over_budget ) {
       return dateData.is_over_budget 
@@ -68,27 +67,23 @@ const CalendarView = () => {
 
   if (isLoading) {
     return (
-      <div className="bg-[#50488A] rounded-2xl p-4 sm:p-5 text-white h-full flex items-center justify-center">
+      <div className="bg-[#50488A] rounded-2xl p-4 text-white h-full flex items-center justify-center">
         <div className="text-sm text-white/60">Loading calendar...</div>
       </div>
     );
   }
 
   return (
-    // DIUBAH: Padding dibuat responsif
-    <div className="bg-[#50488A] rounded-2xl p-4 sm:p-5 text-white h-full">
+    <div className="bg-[#50488A] rounded-2xl p-4 text-white h-full">
       {monthName && (
-        // DIUBAH: Font dibuat sedikit lebih besar dan tebal
-        <div className="text-center text-base font-semibold mb-4 text-white/80">
+        <div className="text-center text-sm font-semibold mb-3 text-white/80">
           {monthName}
         </div>
       )}
-      {/* DIUBAH: Font dan gap dibuat responsif */}
-      <div className="grid grid-cols-7 gap-y-1 sm:gap-y-2 text-center text-xs sm:text-sm">
+      <div className="grid grid-cols-7 gap-y-2 text-center text-xs">
         {/* Render Nama Hari */}
         {daysOfWeek.map((day) => (
-          // DIUBAH: Font dan margin dibuat responsif
-          <div key={day} className="font-semibold text-white/60 mb-2 text-xs sm:text-sm">
+          <div key={day} className="font-semibold text-white/60 mb-1">
             {day}
           </div>
         ))}
@@ -102,13 +97,7 @@ const CalendarView = () => {
         {calendarDates.map((dateData) => (
           <div
             key={dateData.date}
-            /* --- PERBAIKAN UTAMA DI SINI ---
-              DIHAPUS: 'h-7 w-7 mx-auto'
-              DIGANTI: 'w-full aspect-square' 
-              Ini membuat bulatan tanggal mengisi sel grid dan 
-              membuat tingginya sama dengan lebarnya (responsive square).
-            */
-            className={`flex justify-center items-center rounded-full transition-colors w-full aspect-square ${getDateColor(dateData)}`}
+            className={`flex justify-center items-center h-7 w-7 mx-auto rounded-full transition-colors ${getDateColor(dateData)}`}
             title={`${dateData.formatted.date}: ${dateData.formatted.daily_expenses} / ${dateData.formatted.daily_budget}`}
           >
             {dateData.day}
