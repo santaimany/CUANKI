@@ -21,10 +21,9 @@ const DashboardPage = () => {
   const [error, setError] = useState<string | null>(null);
   const [refreshTransactions, setRefreshTransactions] = useState(0);
 
-  // Function to trigger transaction refresh
+  // --- (Logika Fetching Data Anda - Tidak Berubah) ---
   const handleTransactionRefresh = () => {
     setRefreshTransactions(prev => prev + 1);
-    // Also refresh user data to update balance
     fetchGreeting();
   };
 
@@ -45,7 +44,6 @@ const DashboardPage = () => {
       setUserProfile(data);
     } catch (error) {
       console.error('Dashboard - Error fetching user profile:', error);
-      // Don't set error for profile as it's not critical
     }
   };
 
@@ -83,12 +81,13 @@ const DashboardPage = () => {
       </div>
     );
   }
-
+  
   return (
     <div className="pb-20 md:pb-0">
  
-      {/* --- MOBILE LAYOUT (Tidak Berubah) --- */}
-      <div className="md:hidden flex flex-col gap-4">
+      {/* --- 1. MOBILE LAYOUT ( --- */}
+     
+      <div className="lg:hidden flex flex-col gap-4">
         <BalanceOverview userData={userData} onRefresh={handleTransactionRefresh} />
         <GoalsProgress />
         <BudgetSisa />
@@ -103,12 +102,43 @@ const DashboardPage = () => {
         <TransactionHistoryList key={refreshTransactions} onRefresh={handleTransactionRefresh} />
       </div>
 
-      {/* --- DESKTOP LAYOUT (DIUBAH) --- */}
+      {/* --- 2. TABLET LAYOUT --- */}
+ 
+      <div className="hidden lg:grid xl:hidden grid-cols-2 gap-4 p-4">
+        <div className="col-span-2">
+          <BalanceOverview userData={userData} onRefresh={handleTransactionRefresh} />
+        </div>
+        <div>
+          <UserProfileHeader userData={userData} userProfile={userProfile} />
+        </div>
+        <div>
+          <BudgetSisa/>
+        </div>
+        <div>
+          <GoalsProgress />
+        </div>
+        <div>
+          <MyAccounts />
+        </div>
+        <div>
+          <CalendarView />
+        </div>
+        <div>
+          <DailyExpenseSummary />
+        </div>
+        <div className="col-span-2">
+          <SavingsChart />
+        </div>
+        <div className="col-span-2">
+          <TransactionHistoryList key={refreshTransactions} onRefresh={handleTransactionRefresh} />
+        </div>
+      </div>
+
+      {/* --- 3. DESKTOP LAYOUT  --- */}
       <div 
-        className="hidden md:grid gap-6 h-full"
+        className="hidden xl:grid gap-6 h-full"
         style={{
-          // Ini adalah "peta" visual dari layout Anda.
-          // Setiap kata adalah nama 'grid-area'.
+          // Peta layout grid-template-areas Anda (sudah benar)
           gridTemplateAreas: `
             "balance  balance  balance  profile"
             "balance  balance  balance  accounts"
@@ -117,49 +147,35 @@ const DashboardPage = () => {
             "chart    chart    chart    transactions"
             "chart    chart    chart    transactions"
           `,
-          // 3 kolom pertama fleksibel, kolom terakhir sedikit lebih lebar.
           gridTemplateColumns: '1fr 1fr 1fr 1.25fr',
-          // 5 baris pertama ukurannya otomatis, baris terakhir (chart/transaksi)
-          // akan mengisi sisa ruang vertikal.
           gridTemplateRows: 'auto auto auto auto auto 1fr' 
         }}
       >
-        {/* Sekarang kita hanya perlu menetapkan 'gridArea' ke setiap komponen.
-          Tidak perlu lagi pusing dengan col-span/row-start.
-        */}
-        
+   
         <div style={{ gridArea: 'balance' }}>
           <BalanceOverview userData={userData} onRefresh={handleTransactionRefresh} />
         </div>
-
         <div style={{ gridArea: 'profile' }}>
           <UserProfileHeader userData={userData} userProfile={userProfile} />
         </div>
-     
         <div style={{ gridArea: 'accounts' }}>
           <MyAccounts />
         </div>
-        
         <div style={{ gridArea: 'goals' }}>
           <GoalsProgress />
         </div>
-
         <div style={{ gridArea: 'budget' }}>
           <BudgetSisa/>
         </div>
-
         <div style={{ gridArea: 'calendar' }}>
             <CalendarView />
         </div>
-          
         <div style={{ gridArea: 'expenses' }}>
             <DailyExpenseSummary />
         </div>
-     
         <div style={{ gridArea: 'transactions' }}>
           <TransactionHistoryList key={refreshTransactions} onRefresh={handleTransactionRefresh} />
         </div>
-
         <div style={{ gridArea: 'chart' }}>
           <SavingsChart />
         </div>
