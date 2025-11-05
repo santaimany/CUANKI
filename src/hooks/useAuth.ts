@@ -50,8 +50,7 @@ export function useAuth(options: UseAuthOptions = {}) {
             user.username && 
             user.age !== null && 
             user.origin_id !== null && 
-            user.status !== null && 
-            user.origin !== null
+            user.status !== null
           );
           
           setHasCompletedOnboarding(onboardingComplete);

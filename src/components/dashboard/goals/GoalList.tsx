@@ -4,14 +4,12 @@ import { Goal } from '@/lib/services/goalsService';
 
 interface GoalListProps {
   goals?: Goal[];
-  onRefresh?: () => void;
   onEdit?: (goal: Goal) => void;
   onDelete?: (goal: Goal) => void;
 }
 
 const GoalList: React.FC<GoalListProps> = ({ 
   goals = [], 
-  onRefresh, 
   onEdit, 
   onDelete 
 }) => {
@@ -19,14 +17,7 @@ const GoalList: React.FC<GoalListProps> = ({
     return (
       <div className="bg-[#7971BC] rounded-2xl sm:rounded-3xl p-8 text-center">
         <p className="text-white/70 text-lg">Belum ada goals</p>
-        {onRefresh && (
-          <button 
-            onClick={onRefresh}
-            className="mt-4 bg-[#00F5A0] text-[#363256] px-4 py-2 rounded-lg font-medium hover:bg-[#00e68f] transition-colors"
-          >
-            Refresh
-          </button>
-        )}
+    
       </div>
     );
   }

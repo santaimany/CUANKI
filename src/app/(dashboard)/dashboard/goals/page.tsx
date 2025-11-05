@@ -45,9 +45,6 @@ export default function GoalsPage() {
     fetchUserData();
   }, [fetchGoals, fetchUserData]);
 
-  const handleRefresh = () => {
-    fetchGoals();
-  };
 
   // Modal handlers
   const handleAddGoal = () => {
@@ -151,7 +148,6 @@ export default function GoalsPage() {
           {/* Goal List */}
           <GoalList 
             goals={goals} 
-            onRefresh={handleRefresh}
             onEdit={handleEditGoal}
             onDelete={handleDeleteGoal}
           />

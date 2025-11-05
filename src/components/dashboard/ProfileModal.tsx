@@ -60,8 +60,6 @@ const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose, userProfil
   const profileData = userProfile?.data?.user;
   // --- AKHIR PERBAIKAN ---
 
-  console.log('ProfileModal - profileData:', profileData);
-  console.log('ProfileModal - loading:', loading);
 
   return (
     <>

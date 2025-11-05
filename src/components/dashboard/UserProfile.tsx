@@ -26,14 +26,16 @@ const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({ userData, userPro
   const { showError } = useToast();
   
   // --- PERBAIKAN UTAMA DI SINI ---
-  // Mengakses data sesuai struktur interface yang baru
+  // Kode yang error/salah tempel telah dihapus dan diganti dengan yang benar.
+  
+  // 1. Ambil objek 'user' dari masing-masing prop
   const userFromProfile = userProfile?.data?.user;
-  const userFromGreeting = userData?.data?.user;
 
-  // Prioritaskan data dari userProfile, fallback ke userData
-  const username = userFromProfile?.username || userFromGreeting?.username || 'User';
-  // 'full_name' dari profile, 'name' dari greeting
-  const name = userFromProfile?.full_name; 
+
+  // 2. Tentukan nilai fallback dengan prioritas
+  // 'full_name' dari profile, fallback ke 'name' dari greeting
+  const name = userFromProfile?.full_name || 'User'; 
+  const username = userFromProfile?.username || 'user';
   const profilePicture = userFromProfile?.profile_picture;
   // --- AKHIR PERBAIKAN ---
 
@@ -159,7 +161,8 @@ const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({ userData, userPro
             />
           ) : (
             <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#00F5A0] to-[#00D4AA] text-white font-semibold text-xs sm:text-sm">
-              
+              {/* Menggunakan 'name' yang sudah didefinisikan di atas */}
+              {name.charAt(0).toUpperCase()}
             </div>
           )}
         </div>
@@ -169,7 +172,7 @@ const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({ userData, userPro
           {loadingProfile ? (
             <div className="w-16 h-4 bg-white/20 rounded animate-pulse"></div>
           ) : (
-            username 
+            username // Menggunakan 'name' yang sudah didefinisikan di atas
           )}
         </span>
 
@@ -194,7 +197,7 @@ const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({ userData, userPro
       <ProfileModal 
         isOpen={isModalOpen} 
         onClose={() => setIsModalOpen(false)} 
-        userProfile={userProfile} // Mengirim state userProfile yang sudah benar
+        userProfile={userProfile}
       />
     </>
   );
