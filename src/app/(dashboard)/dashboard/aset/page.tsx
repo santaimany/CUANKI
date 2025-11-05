@@ -45,19 +45,19 @@ export default function AsetPage() {
 
       if (loading) {
     return (
-      <div className="pb-20 md:pb-0 flex items-center justify-center min-h-screen">
+      <div className="pb-20 lg:pb-0 flex items-center justify-center min-h-screen">
         <LoadingScreen  />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#363256] pb-20 md:pb-6">
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 sm:gap-6 h-full p-3 sm:p-4 md:p-6 pb-20 md:pb-6">
+    <div className="min-h-screen bg-[#363256] pb-20 lg:pb-6">
+      <div className="grid grid-cols-1 xl:grid-cols-4 gap-4 sm:gap-6 h-full p-3 sm:p-4 lg:p-6 pb-20 lg:pb-6">
         {/* Left Column - Main Content (3 columns) */}
-        <div className="lg:col-span-3 space-y-4 sm:space-y-6">
+        <div className="xl:col-span-3 space-y-4 sm:space-y-6">
           {/* Title */}
-          <h1 className="text-white text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold">
+          <h1 className="text-white text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold">
             Kategori aset kamu
           </h1>
           
@@ -72,13 +72,13 @@ export default function AsetPage() {
         </div>
 
         {/* Right Column - User Profile & AI Reminder - Hidden on mobile, shown on lg+ */}
-        <div className="hidden lg:flex lg:col-span-1 flex-col gap-6">
+        <div className="hidden lg:hidden xl:flex xl:col-span-1 flex-col gap-6">
           <UserProfile userData={userData} userProfile={userProfile} />
           <AIReminder page="asset" />
         </div>
         
         {/* AI Reminder Floating Button - Mobile only */}
-        <div className="block lg:hidden">
+        <div className="block xl:hidden">
           <AIReminder page="asset" isFloating={true} />
         </div>
       </div>
