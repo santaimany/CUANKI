@@ -1,6 +1,7 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import { Goal, CreateGoalRequest, UpdateGoalRequest } from '@/lib/services/goalsService';
+import { getSavingsAllocation, type AvailableAllocation } from '@/lib/services/bankService';
 
 interface AddEditGoalModalProps {
   isOpen: boolean;
@@ -21,14 +22,45 @@ const AddEditGoalModal: React.FC<AddEditGoalModalProps> = ({
     goal_name: '',
     target_amount: '',
     target_deadline: '',
-    account_allocation_id: 1
+    account_allocation_id: 0
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [loadingAllocationId, setLoadingAllocationId] = useState(false);
+  const [allocationDetails, setAllocationDetails] = useState<AvailableAllocation | null>(null);
 
   const isEditMode = !!editGoal;
 
+  // Fetch savings allocation when modal opens for add mode
   useEffect(() => {
+    const fetchAllocationDetails = async () => {
+      if (!isEditMode && isOpen) {
+        setLoadingAllocationId(true);
+        try {
+          const allocation = await getSavingsAllocation();
+          if (allocation) {
+            setAllocationDetails(allocation);
+            setFormData(prev => ({ ...prev, account_allocation_id: allocation.allocation_id }));
+          } else {
+            setAllocationDetails(null);
+            setErrors(prev => ({ 
+              ...prev, 
+              account_allocation_id: 'Tidak ada rekening tabungan ditemukan. Silakan tambahkan rekening tabungan terlebih dahulu.' 
+            }));
+          }
+        } catch (error) {
+          console.error('Error fetching allocation details:', error);
+          setAllocationDetails(null);
+          setErrors(prev => ({ 
+            ...prev, 
+            account_allocation_id: 'Gagal mengambil data rekening tabungan' 
+          }));
+        } finally {
+          setLoadingAllocationId(false);
+        }
+      }
+    };
+
     if (isEditMode && editGoal) {
       setFormData({
         goal_name: editGoal.goal_name,
@@ -36,15 +68,19 @@ const AddEditGoalModal: React.FC<AddEditGoalModalProps> = ({
         target_deadline: editGoal.target_deadline || '',
         account_allocation_id: editGoal.account_info.allocation_id
       });
-    } else {
+      setErrors({});
+      setAllocationDetails(null);
+    } else if (isOpen) {
       setFormData({
         goal_name: '',
         target_amount: '',
         target_deadline: '',
-        account_allocation_id: 1
+        account_allocation_id: 0
       });
+      setErrors({});
+      setAllocationDetails(null);
+      fetchAllocationDetails();
     }
-    setErrors({});
   }, [isEditMode, editGoal, isOpen]);
 
   const validateForm = () => {
@@ -86,7 +122,8 @@ const AddEditGoalModal: React.FC<AddEditGoalModalProps> = ({
       await onSave(goalData);
       onClose();
     } catch (error) {
-
+      console.error('Error saving goal:', error);
+      // Error will be handled by parent component
     }
   };
 
@@ -94,6 +131,31 @@ const AddEditGoalModal: React.FC<AddEditGoalModalProps> = ({
     setFormData(prev => ({ ...prev, [field]: value }));
     if (errors[field]) {
       setErrors(prev => ({ ...prev, [field]: '' }));
+    }
+  };
+
+  // Format number to currency string (1.000.000)
+  const formatCurrency = (value: string): string => {
+    // Remove non-numeric characters
+    const numericValue = value.replaceAll(/\D/g, '');
+    
+    if (!numericValue) return '';
+    
+    // Format with thousand separators
+    return new Intl.NumberFormat('id-ID').format(Number(numericValue));
+  };
+
+  // Handle currency input change
+  const handleCurrencyChange = (value: string) => {
+    // Remove non-numeric characters
+    const numericValue = value.replaceAll(/\D/g, '');
+    
+    // Update form data with numeric value
+    setFormData(prev => ({ ...prev, target_amount: numericValue }));
+    
+    // Clear error if exists
+    if (errors.target_amount) {
+      setErrors(prev => ({ ...prev, target_amount: '' }));
     }
   };
 
@@ -144,20 +206,34 @@ const AddEditGoalModal: React.FC<AddEditGoalModalProps> = ({
           {/* Target Amount */}
           <div>
             <label htmlFor="target_amount" className="block text-white text-sm font-medium mb-2">
-              Target Amount (Rp) *
+              Target Amount *
             </label>
-            <input
-              id="target_amount"
-              type="number"
-              value={formData.target_amount}
-              onChange={(e) => handleChange('target_amount', e.target.value)}
-              className="w-full bg-[#4A4462] text-white rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#00F5A0] border border-white/10"
-              placeholder="8000000"
-              min="1"
-              disabled={isLoading}
-            />
+            <div className="relative">
+              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-white/60 font-medium">
+                Rp
+              </span>
+              <input
+                id="target_amount"
+                type="text"
+                inputMode="numeric"
+                value={formatCurrency(formData.target_amount)}
+                onChange={(e) => handleCurrencyChange(e.target.value)}
+                className="w-full bg-[#4A4462] text-white rounded-xl pl-12 pr-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#00F5A0] border border-white/10"
+                placeholder="8.000.000"
+                disabled={isLoading || loadingAllocationId}
+              />
+            </div>
             {errors.target_amount && (
               <p className="text-red-400 text-xs mt-1">{errors.target_amount}</p>
+            )}
+            {formData.target_amount && (
+              <p className="text-white/40 text-xs mt-1">
+                {new Intl.NumberFormat('id-ID', {
+                  style: 'currency',
+                  currency: 'IDR',
+                  minimumFractionDigits: 0,
+                }).format(Number(formData.target_amount))}
+              </p>
             )}
           </div>
 
@@ -177,28 +253,55 @@ const AddEditGoalModal: React.FC<AddEditGoalModalProps> = ({
             />
           </div>
 
-          {/* Account Allocation - Only for Add Mode */}
+          {/* Account Allocation Info - Only for Add Mode */}
           {!isEditMode && (
             <div>
-              <label htmlFor="account_allocation_id" className="block text-white text-sm font-medium mb-2">
-                Account Allocation *
-              </label>
-              <select
-                id="account_allocation_id"
-                value={formData.account_allocation_id}
-                onChange={(e) => handleChange('account_allocation_id', Number(e.target.value))}
-                className="w-full bg-[#4A4462] text-white rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#00F5A0] border border-white/10"
-                disabled={isLoading}
-              >
-                <option value={1}>Kebutuhan</option>
-                <option value={2}>Keinginan</option>
-                <option value={3}>Tabungan</option>
-                <option value={4}>Investasi</option>
-                <option value={5}>Dana Darurat</option>
-              </select>
+              <div className="block text-white text-sm font-medium mb-2">
+                Rekening Tujuan
+              </div>
+              <div className="w-full bg-[#4A4462] rounded-xl px-4 py-3 border border-white/10">
+                {(() => {
+                  if (loadingAllocationId) {
+                    return (
+                      <div className="flex items-center gap-2">
+                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-[#00F5A0]"></div>
+                        <span className="text-white/60">Memuat rekening tabungan...</span>
+                      </div>
+                    );
+                  }
+                  
+                  if (allocationDetails && formData.account_allocation_id > 0) {
+                    return (
+                      <div className="space-y-2">
+                        <div className="flex items-start gap-2">
+                          <svg className="w-5 h-5 text-[#00F5A0] mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                          </svg>
+                          <div className="flex-1 min-w-0">
+                            <p className="text-white font-medium truncate">{allocationDetails.bank_name}</p>
+                            <p className="text-white/60 text-sm">{allocationDetails.type}</p>
+                            <p className="text-[#00F5A0] text-sm font-medium mt-1">
+                              Saldo: {allocationDetails.formatted_balance}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  }
+                  
+                  return (
+                    <div className="text-center py-2">
+                      <span className="text-white/60">Tidak ada rekening tabungan</span>
+                    </div>
+                  );
+                })()}
+              </div>
               {errors.account_allocation_id && (
                 <p className="text-red-400 text-xs mt-1">{errors.account_allocation_id}</p>
               )}
+              <p className="text-white/40 text-xs mt-1">
+                Goal akan otomatis terhubung dengan rekening tabungan Anda
+              </p>
             </div>
           )}
 
@@ -208,17 +311,18 @@ const AddEditGoalModal: React.FC<AddEditGoalModalProps> = ({
               type="button"
               onClick={onClose}
               className="flex-1 bg-white/10 text-white font-medium py-3 rounded-xl hover:bg-white/20 transition-colors"
-              disabled={isLoading}
+              disabled={isLoading || loadingAllocationId}
             >
               Batal
             </button>
             <button
               type="submit"
-              className="flex-1 bg-[#00F5A0] text-[#363256] font-bold py-3 rounded-xl hover:bg-[#00e68f] transition-colors disabled:opacity-50"
-              disabled={isLoading}
+              className="flex-1 bg-[#00F5A0] text-[#363256] font-bold py-3 rounded-xl hover:bg-[#00e68f] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              disabled={isLoading || loadingAllocationId || (!isEditMode && formData.account_allocation_id === 0)}
             >
               {(() => {
                 if (isLoading) return 'Menyimpan...';
+                if (loadingAllocationId) return 'Memuat...';
                 if (isEditMode) return 'Update';
                 return 'Simpan';
               })()}

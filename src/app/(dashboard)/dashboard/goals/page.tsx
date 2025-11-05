@@ -8,23 +8,13 @@ import { GreetingUsersResponse, UserProfileResponse } from '@/types/api';
 import { getUserGreeting, getUserProfile } from '@/lib/api/user';
 import AddEditGoalModal from '@/components/dashboard/goals/AddEditGoalModal';
 import DeleteConfirmModal from '@/components/dashboard/goals/DeleteConfirmModal';
-import { 
-  getGoals, 
-  createGoal, 
-  updateGoal, 
-  deleteGoal,
-  type Goal, 
-  type GoalsSummary,
-  type CreateGoalRequest,
-  type UpdateGoalRequest
-} from '@/lib/services/goalsService';
+import { useGoals } from '@/hooks/useGoals';
+import type { Goal, CreateGoalRequest, UpdateGoalRequest } from '@/lib/services/goalsService';
 import { useToast } from '@/context/ToastContext';
 import LoadingScreen from '@/components/commons/LoadingScreen';
 
 export default function GoalsPage() {
-  const [goals, setGoals] = useState<Goal[]>([]);
-  const [summary, setSummary] = useState<GoalsSummary | null>(null);
-  const [loading, setLoading] = useState(true);
+  const { goals, summary, loading, fetchGoals, addGoal, editGoal, removeGoal } = useGoals();
   const [userData, setUserData] = useState<GreetingUsersResponse | null>(null);
   const [userProfile, setUserProfile] = useState<UserProfileResponse | null>(null);
   
@@ -32,23 +22,9 @@ export default function GoalsPage() {
   const [showAddEditModal, setShowAddEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedGoal, setSelectedGoal] = useState<Goal | null>(null);
-  const [editMode, setEditMode] = useState(false);
+  const [isEditMode, setIsEditMode] = useState(false);
   
   const { showError, showSuccess } = useToast();
-
-  const fetchGoals = React.useCallback(async () => {
-    try {
-      setLoading(true);
-      const response = await getGoals();
-      setGoals(response.data.goals);
-      setSummary(response.data.summary);
-    } catch (error) {
-      console.error('Error fetching goals:', error);
-      showError('Gagal memuat data goals');
-    } finally {
-      setLoading(false);
-    }
-  }, [showError]);
 
   const fetchUserData = React.useCallback(async () => {
     try {
@@ -76,13 +52,13 @@ export default function GoalsPage() {
   // Modal handlers
   const handleAddGoal = () => {
     setSelectedGoal(null);
-    setEditMode(false);
+    setIsEditMode(false);
     setShowAddEditModal(true);
   };
 
   const handleEditGoal = (goal: Goal) => {
     setSelectedGoal(goal);
-    setEditMode(true);
+    setIsEditMode(true);
     setShowAddEditModal(true);
   };
 
@@ -91,37 +67,19 @@ export default function GoalsPage() {
     setShowDeleteModal(true);
   };
 
-  const handleCreateGoal = async (data: CreateGoalRequest) => {
-    try {
-      await createGoal(data);
-      showSuccess('Goal berhasil ditambahkan');
-      setShowAddEditModal(false);
-      fetchGoals();
-    } catch (error) {
-      console.error('Error creating goal:', error);
-      showError('Gagal menambahkan goal');
-    }
-  };
-
-  const handleUpdateGoal = async (data: UpdateGoalRequest) => {
-    if (!selectedGoal) return;
-    
-    try {
-      await updateGoal(selectedGoal.id, data);
-      showSuccess('Goal berhasil diupdate');
-      setShowAddEditModal(false);
-      fetchGoals();
-    } catch (error) {
-      console.error('Error updating goal:', error);
-      showError('Gagal mengupdate goal');
-    }
-  };
-
   const handleSaveGoal = async (data: CreateGoalRequest | UpdateGoalRequest) => {
-    if (editMode && selectedGoal) {
-      await handleUpdateGoal(data as UpdateGoalRequest);
-    } else {
-      await handleCreateGoal(data as CreateGoalRequest);
+    try {
+      if (isEditMode && selectedGoal) {
+        await editGoal(selectedGoal.id, data as UpdateGoalRequest);
+        showSuccess('Goal berhasil diupdate');
+      } else {
+        await addGoal(data as CreateGoalRequest);
+        showSuccess('Goal berhasil ditambahkan');
+      }
+      setShowAddEditModal(false);
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Gagal menyimpan goal';
+      showError(errorMessage);
     }
   };
 
@@ -129,13 +87,12 @@ export default function GoalsPage() {
     if (!selectedGoal) return;
     
     try {
-      await deleteGoal(selectedGoal.id);
+      await removeGoal(selectedGoal.id);
       showSuccess('Goal berhasil dihapus');
       setShowDeleteModal(false);
-      fetchGoals();
     } catch (error) {
-      console.error('Error deleting goal:', error);
-      showError('Gagal menghapus goal');
+      const errorMessage = error instanceof Error ? error.message : 'Gagal menghapus goal';
+      showError(errorMessage);
     }
   };
 
@@ -218,7 +175,7 @@ export default function GoalsPage() {
           isOpen={showAddEditModal}
           onClose={() => setShowAddEditModal(false)}
           onSave={handleSaveGoal}
-          editGoal={editMode ? selectedGoal : undefined}
+          editGoal={isEditMode ? selectedGoal : undefined}
         />
       )}
 
