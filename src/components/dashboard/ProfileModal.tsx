@@ -12,21 +12,23 @@ interface ProfileModalProps {
 }
 
 const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose, userProfile: propUserProfile }) => {
+  // State internal modal
   const [userProfile, setUserProfile] = useState<UserProfileResponse | null>(propUserProfile || null);
   const [loading, setLoading] = useState(false);
   const { showError } = useToast();
 
-  // Update userProfile when propUserProfile changes
+  // Update userProfile ketika prop berubah
   useEffect(() => {
     if (propUserProfile) {
       setUserProfile(propUserProfile);
     }
   }, [propUserProfile]);
 
-  // Fetch user profile if not provided as prop
+  // Fetch data jika modal terbuka tapi data tidak ada
   useEffect(() => {
     const fetchUserProfile = async () => {
-      if (!propUserProfile && isOpen) {
+      // Hanya fetch jika modal terbuka DAN data belum ada
+      if (!propUserProfile && isOpen && !userProfile) { 
         setLoading(true);
         try {
           const response = await getUserProfile();
@@ -43,20 +45,23 @@ const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose, userProfil
           setLoading(false);
         }
       } else if (propUserProfile) {
-        console.log('ProfileModal - Using propUserProfile:', propUserProfile);
+        // Jika data dari props sudah ada, gunakan itu
         setUserProfile(propUserProfile);
       }
     };
 
     fetchUserProfile();
-  }, [propUserProfile, isOpen, showError]);
+  }, [propUserProfile, isOpen, showError, userProfile]); // userProfile ditambahkan
 
   if (!isOpen) return null;
 
-  const profileData = userProfile?.data;
+  // --- PERBAIKAN UTAMA DI SINI ---
+  // Mengakses objek 'user' dari dalam 'data'
+  const profileData = userProfile?.data?.user;
+  // --- AKHIR PERBAIKAN ---
+
   console.log('ProfileModal - profileData:', profileData);
   console.log('ProfileModal - loading:', loading);
-  console.log('ProfileModal - propUserProfile:', propUserProfile);
 
   return (
     <>
@@ -82,7 +87,8 @@ const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose, userProfil
                 />
               ) : (
                 <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#00F5A0] to-[#00D4AA] text-white font-bold text-xl">
-                  {loading ? '...' : (profileData?.name?.charAt(0)?.toUpperCase() || profileData?.username?.charAt(0)?.toUpperCase() || 'U')}
+                  {/* PERBAIKAN: Menggunakan full_name */}
+                  {loading ? '...' : (profileData?.full_name?.charAt(0)?.toUpperCase() || profileData?.username?.charAt(0)?.toUpperCase() || 'U')}
                 </div>
               )}
             </div>
@@ -94,10 +100,11 @@ const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose, userProfil
                 </div>
               ) : (
                 <>
-                  <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#363256]">
-                    {profileData?.name || profileData?.username || 'User'}
+                  {/* PERBAIKAN: Menggunakan full_name */}
+                  <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#363256] truncate">
+                    {profileData?.full_name || profileData?.username || 'User'}
                   </h2>
-                  <p className="text-base sm:text-lg md:text-xl text-[#363256]/80">
+                  <p className="text-base sm:text-lg md:text-xl text-[#363256]/80 capitalize">
                     {profileData?.status || 'Status tidak tersedia'}
                   </p>
                 </>
@@ -114,7 +121,8 @@ const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose, userProfil
                 <input
                   id="fullName"
                   type="text"
-                  value={loading ? 'Loading...' : (profileData?.name || 'Tidak tersedia')}
+                  // PERBAIKAN: Menggunakan full_name
+                  value={loading ? 'Loading...' : (profileData?.full_name || 'Tidak tersedia')}
                   readOnly
                   className="w-full bg-white text-[#363256] px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0EFF95] text-sm sm:text-base"
                 />
@@ -152,7 +160,7 @@ const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose, userProfil
                   type="text"
                   value={loading ? 'Loading...' : (profileData?.status || 'Tidak tersedia')}
                   readOnly
-                  className="w-full bg-white text-[#363256] px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0EFF95] text-sm sm:text-base"
+                  className="w-full bg-white text-[#363256] px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0EFF95] text-sm sm:text-base capitalize"
                 />
               </div>
 
@@ -168,13 +176,14 @@ const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose, userProfil
                 />
               </div>
 
-              {/* Origin ID */}
+              {/* Origin (Nama) */}
               <div>
-                <label htmlFor="originId" className="block text-white text-sm sm:text-base font-medium mb-2">Origin ID</label>
+                <label htmlFor="originName" className="block text-white text-sm sm:text-base font-medium mb-2">Asal Kota</label>
                 <input
-                  id="originId"
+                  id="originName"
                   type="text"
-                  value={loading ? 'Loading...' : (profileData?.origin_id || 'Tidak tersedia')}
+                  // PERBAIKAN: Menggunakan origin_name
+                  value={loading ? 'Loading...' : (profileData?.origin_name || 'Tidak tersedia')}
                   readOnly
                   className="w-full bg-white text-[#363256] px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0EFF95] text-sm sm:text-base"
                 />
@@ -187,7 +196,7 @@ const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose, userProfil
                 onClick={onClose}
                 className="bg-gradient-to-r from-[#0EFF95] to-[#00D9D9] text-[#363256] font-bold px-8 sm:px-12 py-3 rounded-full hover:shadow-lg transition-all duration-200 text-sm sm:text-base"
               >
-                Simpan
+                Tutup
               </button>
             </div>
           </div>

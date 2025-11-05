@@ -1,12 +1,4 @@
-export interface User {
-  name: string;
-  username: string | null;
-  age?: number | null;
-  origin_id?: number | null;
-  origin?: string | null;
-  status?: string | null;
-  has_completed_onboarding?: boolean; // Deprecated - use field checks instead
-}
+
 
 export interface DailyBudget {
   current_amount: number;
@@ -628,18 +620,27 @@ export interface UsageBarsResponse {
 }
 
 
-export interface UserProfile {
-  name: string;
-  username: string; 
+
+export interface User {
+  id: number;
+  full_name: string;
+  username: string;
   email: string;
-  age: number ;
+  age: number;
   status: string;
-  origin_id: string;
+  origin_id: number; 
+  origin_name: string;
   profile_picture: string | null;
+  email_verified_at: string | null;
+  created_at: string;
+  updated_at: string;
+  has_completed_onboarding?: boolean; 
 }
 
 export interface UserProfileResponse {
   status: string;
   message: string;
-  data: UserProfile;
+  data: {
+    user: User; 
+  };
 }

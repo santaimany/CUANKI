@@ -25,10 +25,17 @@ const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({ userData, userPro
   const [loadingProfile, setLoadingProfile] = useState(false);
   const { showError } = useToast();
   
+  // --- PERBAIKAN UTAMA DI SINI ---
+  // Mengakses data sesuai struktur interface yang baru
+  const userFromProfile = userProfile?.data?.user;
+  const userFromGreeting = userData?.data?.user;
+
   // Prioritaskan data dari userProfile, fallback ke userData
-  const username = userProfile?.data?.username || userData?.data?.user?.username || 'User';
-  const name = userProfile?.data?.name || username;
-  const profilePicture = userProfile?.data?.profile_picture;
+  const username = userFromProfile?.username || userFromGreeting?.username || 'User';
+  // 'full_name' dari profile, 'name' dari greeting
+  const name = userFromProfile?.full_name; 
+  const profilePicture = userFromProfile?.profile_picture;
+  // --- AKHIR PERBAIKAN ---
 
   console.log('UserProfileHeader - propUserProfile:', propUserProfile);
   console.log('UserProfileHeader - userProfile state:', userProfile);
@@ -89,7 +96,7 @@ const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({ userData, userPro
     <>
       <div className="bg-[#6F64A7] rounded-xl p-3 sm:p-4 flex items-center justify-between text-white shadow-lg">
         {/* Kiri: Ikon Notifikasi */}
-        <div className="flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-transparent">
+        <div className="flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-transparent flex-shrink-0">
           <svg
             className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7"
             fill="currentColor"
@@ -101,7 +108,7 @@ const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({ userData, userPro
         </div>
 
         {/* Streak Indicator dengan Lottie Animation */}
-        <div className="flex items-center gap-1 relative group">
+        <div className="flex items-center gap-1 relative group flex-shrink-0">
           <div className="relative w-6 h-6 sm:w-8 sm:h-8">
             {loadingStreak ? (
               <div className="w-full h-full flex items-center justify-center">
@@ -137,11 +144,11 @@ const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({ userData, userPro
         {/* Tengah: Avatar, Nama Pengguna, Dropdown */}
         <button 
           type="button"
-          className="flex items-center gap-2 sm:gap-3 cursor-pointer hover:opacity-80 transition-opacity bg-transparent border-none"
+          className="flex items-center gap-2 sm:gap-3 cursor-pointer hover:opacity-80 transition-opacity bg-transparent border-none min-w-0"
           onClick={() => setIsModalOpen(true)}
         >
         {/* Gambar Avatar */}
-        <div className="relative w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-full bg-teal-300 flex items-center justify-center overflow-hidden">
+        <div className="relative w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-full bg-teal-300 flex items-center justify-center overflow-hidden flex-shrink-0">
           {profilePicture ? (
             <Image
               src={profilePicture}
@@ -152,23 +159,23 @@ const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({ userData, userPro
             />
           ) : (
             <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#00F5A0] to-[#00D4AA] text-white font-semibold text-xs sm:text-sm">
-              {name.charAt(0).toUpperCase()}
+              
             </div>
           )}
         </div>
         
         {/* Nama Pengguna */}
-        <span className="text-sm sm:text-base md:text-lg lg:text-xl font-semibold">
+        <span className="text-sm sm:text-base md:text-lg lg:text-xl font-semibold truncate max-w-[100px] sm:max-w-[150px] md:max-w-[200px]">
           {loadingProfile ? (
             <div className="w-16 h-4 bg-white/20 rounded animate-pulse"></div>
           ) : (
-            name
+            username 
           )}
         </span>
 
         {/* Ikon Dropdown */}
         <svg
-          className="w-4 h-4 sm:w-5 sm:h-5 ml-0.5 sm:ml-1"
+          className="w-4 h-4 sm:w-5 sm:h-5 ml-0.5 sm:ml-1 flex-shrink-0"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -187,7 +194,7 @@ const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({ userData, userPro
       <ProfileModal 
         isOpen={isModalOpen} 
         onClose={() => setIsModalOpen(false)} 
-        userProfile={userProfile}
+        userProfile={userProfile} // Mengirim state userProfile yang sudah benar
       />
     </>
   );

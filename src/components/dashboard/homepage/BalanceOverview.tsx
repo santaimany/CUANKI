@@ -58,7 +58,7 @@ const BalanceOverview: React.FC<BalanceOverviewProps> = ({ userData, onRefresh }
     }
   };
 
-  const userName = userData?.data?.user?.name || 'User';
+  const userName = userData?.data?.user?.username || 'User';
   const firstName = typeof userName === 'string' ? userName.split(' ')[0] : 'User';
   
   // Get formatted budget amount
