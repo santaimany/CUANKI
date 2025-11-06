@@ -29,24 +29,8 @@ const BalanceOverview: React.FC<BalanceOverviewProps> = ({ userData, onRefresh }
   };
 
   // Get daily budget data
-  const dailyBudget = userData?.data?.daily_budget;
-  const currentAmount = dailyBudget?.current_amount || 0;
-  const initialAmount = dailyBudget?.initial_amount || 0;
-  
-  // Calculate progress percentage (how much budget has been used)
-  const progress = initialAmount > 0 
-    ? Math.round((currentAmount / initialAmount) * 100)
-    : 0;
+  const dailyBudget = userData?.data?.user.daily_budget || null;
 
-  const data = {
-    datasets: [{
-      data: [progress, 100 - progress],
-      backgroundColor: ['#00F5A0', 'rgba(229, 231, 235, 0.3)'],
-      borderWidth: 0,
-      borderRadius: 20,
-    }],
-  };
-  
   const options = {
     responsive: true,
     maintainAspectRatio: false,
@@ -61,9 +45,6 @@ const BalanceOverview: React.FC<BalanceOverviewProps> = ({ userData, onRefresh }
   const userName = userData?.data?.user?.username || 'User';
   const firstName = typeof userName === 'string' ? userName.split(' ')[0] : 'User';
   
-  // Get formatted budget amount
-  const budgetFormatted = dailyBudget?.formatted?.current_amount || 'Rp 0';
-
   return (
     <>
       <AddTransactionModal
@@ -73,29 +54,12 @@ const BalanceOverview: React.FC<BalanceOverviewProps> = ({ userData, onRefresh }
         onSubmit={handleTransactionSuccess}
       />
 
-      {/* DIUBAH: Menambahkan md:h-full untuk memastikan komponen mengisi 
-        ruang grid-area di layout desktop. 
-      */}
       <div className="bg-[#6F64A7] rounded-2xl p-4 sm:p-5 md:p-6 min-h-[300px] md:h-full text-white relative">
         <div className="flex flex-col md:flex-row items-center md:items-start gap-4 md:gap-6">
-          <div className="flex flex-col items-center justify-center w-20 sm:w-24 md:w-28">
-            <div className="relative w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28">
-              <Doughnut data={data} options={options} />
-              
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="transform -rotate-45">
-                  <svg className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                  </svg>
-                </div>
-              </div>
-            </div>
-            <p className="text-xs sm:text-sm md:text-base font-semibold mt-1">{progress}% Terpakai</p>
-          </div>
           
           <div className="flex-1 text-center md:text-left">
             <p className="text-xs sm:text-sm md:text-base mb-1 sm:mb-2">Hai {firstName}!, ini uang kamu hari ini:</p>
-            <h2 className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-bold mb-3 sm:mb-4">{budgetFormatted}</h2>
+            <h2 className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-bold mb-3 sm:mb-4">{dailyBudget}</h2>
             
             {/* DIUBAH: Membungkus tombol dalam div dengan max-w-sm 
               agar tidak terlalu lebar di layar besar (lg/xl).

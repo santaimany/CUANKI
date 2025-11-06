@@ -15,7 +15,7 @@ const BudgetSisa = () => {
         
         const response = await getDailySaving();
         
-        // Set daily saving dengan formatted value dari backend
+
         if (response.data?.formatted?.daily_saving) {
           setDailySaving(response.data.formatted.daily_saving);
         }

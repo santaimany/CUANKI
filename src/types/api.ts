@@ -1,28 +1,21 @@
 
 
-export interface DailyBudget {
-  current_amount: number;
-  initial_amount: number;
-  difference: number;
-  is_reduced: boolean;
-  formatted: {
-    current_amount: string;
-    initial_amount: string;
-    difference: string;
-  };
-  kebutuhan_balance: number;
-  days_in_month: number;
-  source: string;
-  budget_records_count: number;
-}
+
 
 
 export interface GreetingUsersResponse {
   status: string;
   message: string;
   data: {
-    user: User;
-    daily_budget: DailyBudget;
+    user: {
+      name: string;
+      age: number;
+      origin_id: number;
+      status: string;
+      username: string;
+      daily_budget?: number;
+    }
+    
   };
 }
 
