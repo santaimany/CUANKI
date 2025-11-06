@@ -5,14 +5,10 @@ import { getUsageBars } from '@/lib/services/transactionService';
 import { UsageBar } from '@/types/api';
 
 interface TransactionSummaryProps {
-  income?: number;
-  expense?: number;
   onRefresh?: () => void; // Callback untuk refresh data setelah tambah transaksi
 }
 
 const TransactionSummary: React.FC<TransactionSummaryProps> = ({
-  income = 60000,
-  expense = 70000,
   onRefresh,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -25,9 +21,9 @@ const TransactionSummary: React.FC<TransactionSummaryProps> = ({
     setLoading(true);
     try {
       const response = await getUsageBars();
-      // Response structure: { success: true, data: { today_spending, daily_limit, percentage } }
+  
       if (response.success && response.data) {
-        setUsageBars([response.data]); // Wrap single object in array for consistent rendering
+        setUsageBars([response.data]);
       }
     } catch (error) {
       console.error('Error fetching usage bars:', error);
@@ -36,7 +32,7 @@ const TransactionSummary: React.FC<TransactionSummaryProps> = ({
     }
   };
 
-  // Load usage bars on component mount
+
   React.useEffect(() => {
     fetchUsageBars();
   }, []);
@@ -47,11 +43,9 @@ const TransactionSummary: React.FC<TransactionSummaryProps> = ({
   };
 
   const handleTransactionSuccess = () => {
-    // Refresh parent data if callback provided
     if (onRefresh) {
       onRefresh();
     }
-    // Also refresh usage bars
     fetchUsageBars();
   };
   return (
@@ -87,18 +81,17 @@ const TransactionSummary: React.FC<TransactionSummaryProps> = ({
                   <div className="w-full bg-white/20 rounded-full h-2 sm:h-2.5 md:h-3 overflow-hidden">
                     <div 
                       className={`h-2 sm:h-2.5 md:h-3 rounded-full transition-all duration-300 ${
-                        bar.percentage == 100 
+                        bar.percentage == 0 
                           ? 'bg-gradient-to-r from-[#FF6B47] to-[#FF4444]' 
                           : 'bg-gradient-to-r from-[#00F5A0] to-[#00E68F]'
                       }`}
-                      style={{ width: `${Math.min(bar.percentage || 0, 100)}%` }}
+                      style={{ width: `${Math.min(bar.percentage)}%` }}
                     ></div>
                   </div>
                     <div className="text-right mb-4 sm:mb-6">
-          <span className="text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl font-bold">Rp {Number(bar.today_spending).toLocaleString('id-ID')}/Rp  {Number(bar.daily_limit).toLocaleString('id-ID')}</span>
-         
+          <span className="text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl font-bold">Rp {(bar.current_daily_budget)}/Rp  {(bar.daily_limit)}</span>
         </div>
-                  {bar.percentage == 100 && (
+                  {bar.percentage == 0 && (
                     <div className="text-xs text-red-400 mt-1">
                       ⚠️ Anda telah melebihi limit harian!
                     </div>

@@ -609,7 +609,7 @@ export interface StreakResponse {
 
 
 export interface UsageBar {
-  today_spending: string;
+  current_daily_budget: string;
   daily_limit: string;
   percentage: number;
 }
