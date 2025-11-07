@@ -12,8 +12,8 @@ const GoalsProgress = () => {
       try {
         const data = await getGoalsProgress();
         setGoalsData(data);
-      } catch  {
-    
+      } catch {
+
       } finally {
         setLoading(false);
       }
@@ -34,33 +34,63 @@ const GoalsProgress = () => {
   }
 
   const mainTarget = goalsData?.data?.main_saving_target;
-  
-  // Safely extract values
-  const progressPercentage = typeof mainTarget?.progress_percentage === 'number' 
-    ? mainTarget.progress_percentage 
-    : 0;
-  
-  const currentAmount = typeof mainTarget?.formatted_current === 'string'
-    ? mainTarget.formatted_current
-    : 'Rp 0';
-    
-  const targetAmount = typeof mainTarget?.formatted_amount === 'string'
-    ? mainTarget.formatted_amount
-    : 'Rp 0';
 
-  console.log('GoalsProgress data:', { mainTarget, progressPercentage, currentAmount, targetAmount });
+  // Safely extract values
+  const progressPercentage =
+    typeof mainTarget?.progress_percentage === 'number'
+      ? mainTarget.progress_percentage
+      : 0;
+
+  const currentAmount =
+    typeof mainTarget?.formatted_current === 'string'
+      ? mainTarget.formatted_current
+      : 'Rp 0';
+
+  const targetAmount =
+    typeof mainTarget?.formatted_amount === 'string'
+      ? mainTarget.formatted_amount
+      : 'Rp 0';
+
+
+
+  const isCompleted = progressPercentage >= 100;
+
+  if (isCompleted) {
+    return (
+      <div className="bg-gradient-to-tl from-[#00F5A0]/60 to-[#373456]/20 rounded-2xl p-6 text-white">
+        <div className="flex justify-between items-center mb-3">
+          <h3 className="text-xl font-bold">Goals Selesai!</h3>
+          
+        </div>
+        <div className="text-center">
+          <p className="text-base text-white/90">
+            Selamat! Kamu telah mencapai target:
+          </p>
+          <p className="text-2xl font-bold text-[#00F5A0] mt-1">
+            {targetAmount}
+          </p>
+        </div>
+        <div className="w-full bg-[#BDB7DC] rounded-full h-3 mt-4">
+          <div
+            className="bg-[#00F5A0] h-3 rounded-full"
+            style={{ width: `100%` }}
+          ></div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-gradient-to-tl from-[#7971BC] to-[#373456/10] rounded-2xl p-6 text-white">
       <div className="flex justify-between items-center mb-4">
         <h3 className="text-xl font-bold">Goals Progress</h3>
         <span className="text-base font-medium">
-          {currentAmount}/{targetAmount}
+          {currentAmount} / {targetAmount}
         </span>
       </div>
       <div className="w-full bg-[#BDB7DC] rounded-full h-3">
-        <div 
-          className="bg-[#00F5A0] h-3 rounded-full transition-all duration-500" 
+        <div
+          className="bg-[#00F5A0] h-3 rounded-full transition-all duration-500"
           style={{ width: `${progressPercentage}%` }}
         ></div>
       </div>
