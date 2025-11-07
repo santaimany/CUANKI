@@ -4,8 +4,7 @@ import { createNavigateHandler, resolveElement } from '../utils';
 export const goalsTour: TourConfig = {
   id: 'dashboard-goals',
   routes: ['/dashboard/goals'],
-  autoStart: true,
-  autoStartDelay: 1000,
+  autoStart: false,
   options: {
     showProgress: true,
     nextBtnText: 'Lanjut',

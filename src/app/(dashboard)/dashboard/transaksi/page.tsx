@@ -88,12 +88,12 @@ const TransaksiPage = () => {
             filterType={transactionType} 
             searchQuery={searchQuery} 
             onRefresh={handleRefreshTransactions}
-            key={refreshKey} // Force re-render when key changes
+            key={refreshKey} 
           />
         </TourAnchor>
       </div> 
       <TourAnchor id="transactions-profile" variant="desktop" className="hidden lg:flex lg:col-span-1 flex-col gap-6">
-        <UserProfileHeader userData={userData} userProfile={userProfile} />
+        <UserProfileHeader userData={userData} userProfile={userProfile}  key={refreshKey}  />
         <TourAnchor id="transactions-reminder" variant="desktop">
           <AIReminder page="transaction" />
         </TourAnchor>

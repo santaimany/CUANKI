@@ -218,14 +218,6 @@ export interface DailySavingResponse {
   status: string;
   data: {
     daily_saving: number;
-    budget: DailySavingBudget;
-    budget_records_count: number;
-    formatted: {
-      daily_saving: string;
-      current_daily_budget: string;
-      initial_daily_budget: string;
-      budget_difference: string;
-    };
   };
 }
 

@@ -4,6 +4,7 @@ import React, { useLayoutEffect, useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { gsap } from 'gsap';
 import { getAdvice, type AdviceResponse } from '@/lib/services/onboardingService';
+import { queueNextTour } from '@/lib/tour/utils';
 
 // Asumsi path import ini sudah benar
 import CardKiri from '@/assets/getstarted/image/card-kiri.svg';
@@ -100,7 +101,12 @@ export default function OnboardingCompletePage() {
   };
 
   const handleToDashboard = () => {
-    window.location.href = '/dashboard';
+    queueNextTour('dashboard-home');
+    const win = (typeof globalThis === 'object' && 'window' in globalThis)
+      ? (globalThis as typeof globalThis & { window?: Window }).window
+      : undefined;
+
+    win?.location.assign('/dashboard');
   };
 
   useEffect(() => {

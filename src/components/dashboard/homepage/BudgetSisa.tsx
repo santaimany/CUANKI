@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { getDailySaving } from '@/lib/services/dashboardService';
 
 const BudgetSisa = () => {
-  const [dailySaving, setDailySaving] = useState<string>('Rp 0');
+  const [dailySaving, setDailySaving] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -16,15 +16,15 @@ const BudgetSisa = () => {
         const response = await getDailySaving();
         
 
-        if (response.data?.formatted?.daily_saving) {
-          setDailySaving(response.data.formatted.daily_saving);
+        if (response.data?.daily_saving) {
+          setDailySaving(response.data.daily_saving);
         }
         
 
       } catch (err) {
        
         setError(err instanceof Error ? err.message : 'Failed to load data');
-        setDailySaving('Rp 0'); 
+        setDailySaving(0); 
       } finally {
         setIsLoading(false);
       }
@@ -48,7 +48,9 @@ const BudgetSisa = () => {
           <span className="text-sm font-medium text-red-600">Error loading data</span>
         )}
         {!isLoading && !error && (
-          <span className="text-sm font-medium">{dailySaving}</span>
+          <span className="text-sm font-medium">
+            Rp {dailySaving.toLocaleString('id-ID')}
+          </span>
         )}
       </div>
     </div>

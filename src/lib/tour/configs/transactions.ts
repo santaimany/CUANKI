@@ -4,8 +4,7 @@ import { createNavigateHandler, resolveElement } from '../utils';
 export const transactionsTour: TourConfig = {
   id: 'dashboard-transactions',
   routes: ['/dashboard/transaksi'],
-  autoStart: true,
-  autoStartDelay: 1000,
+  autoStart: false,
   steps: [
     {
       element: resolveElement([

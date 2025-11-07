@@ -4,8 +4,7 @@ import { createNavigateHandler, resolveElement } from '../utils';
 export const profileTour: TourConfig = {
   id: 'dashboard-profile',
   routes: ['/dashboard/profile'],
-  autoStart: true,
-  autoStartDelay: 1000,
+  autoStart: false,
   steps: [
     {
       element: resolveElement([

@@ -4,8 +4,7 @@ import { createNavigateHandler, resolveElement } from '../utils';
 export const assetsTour: TourConfig = {
   id: 'dashboard-assets',
   routes: ['/dashboard/aset'],
-  autoStart: true,
-  autoStartDelay: 1200,
+  autoStart: false,
   steps: [
     {
       element: resolveElement([

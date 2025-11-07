@@ -129,7 +129,7 @@ const DashboardPage = () => {
           <BalanceOverview userData={userData} onRefresh={handleTransactionRefresh} />
         </TourAnchor>
         <TourAnchor id="dashboard-profile" variant="tablet">
-          <UserProfileHeader userData={userData} userProfile={userProfile} />
+          <UserProfileHeader userData={userData} userProfile={userProfile} key={refreshTransactions}/>
         </TourAnchor>
         <TourAnchor id="dashboard-budget" variant="tablet">
           <BudgetSisa/>
@@ -178,13 +178,13 @@ const DashboardPage = () => {
           <UserProfileHeader userData={userData} userProfile={userProfile} key={refreshTransactions} />
         </TourAnchor>
         <TourAnchor id="dashboard-accounts" variant="desktop" style={{ gridArea: 'accounts' }}>
-          <MyAccounts />
+          <MyAccounts key={refreshTransactions} />
         </TourAnchor>
         <TourAnchor id="dashboard-goals" variant="desktop" style={{ gridArea: 'goals' }}>
           <GoalsProgress />
         </TourAnchor>
         <TourAnchor id="dashboard-budget" variant="desktop" style={{ gridArea: 'budget' }}>
-          <BudgetSisa/>
+          <BudgetSisa key={refreshTransactions}/>
         </TourAnchor>
         <TourAnchor id="dashboard-calendar" variant="desktop" style={{ gridArea: 'calendar' }}>
             <CalendarView />
