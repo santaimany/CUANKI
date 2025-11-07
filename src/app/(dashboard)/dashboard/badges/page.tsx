@@ -8,6 +8,7 @@ import { GreetingUsersResponse, UserProfileResponse } from '@/types/api';
 import { getUserGreeting, getUserProfile } from '@/lib/api/user';
 import { useToast } from '@/context/ToastContext';
 import LoadingScreen from '@/components/commons/LoadingScreen';
+import TourAnchor from '@/components/tour/TourAnchor';
 
 export default function BadgesPage() {
   const [badges, setBadges] = useState<Badge[]>([]);
@@ -88,29 +89,35 @@ export default function BadgesPage() {
         {/* Left Column - Main Content (3 columns) */}
         <div className="lg:col-span-3 space-y-4 sm:space-y-6">
           {/* Badge Header */}
-          <BadgeHeader
-            featuredBadge={getFeaturedBadge()}
-          />
+          <TourAnchor id="badges-header" variant="main">
+            <BadgeHeader
+              featuredBadge={getFeaturedBadge()}
+            />
+          </TourAnchor>
 
           {/* Badge List */}
-          <BadgeList 
-            badges={badges} 
-            totalBadges={badgesData?.total_badges || 0}
-            earnedBadges={badgesData?.earned_badges || 0}
-            onRefresh={handleRefresh}
-          />
+          <TourAnchor id="badges-list" variant="main">
+            <BadgeList 
+              badges={badges} 
+              totalBadges={badgesData?.total_badges || 0}
+              earnedBadges={badgesData?.earned_badges || 0}
+              onRefresh={handleRefresh}
+            />
+          </TourAnchor>
         </div>
 
         {/* Right Column - User Profile & AI Reminder - Hidden on mobile, shown on lg+ */}
-        <div className="hidden lg:flex lg:col-span-1 flex-col gap-6">
+        <TourAnchor id="badges-profile" variant="desktop" className="hidden lg:flex lg:col-span-1 flex-col gap-6">
           <UserProfile userData={userData} userProfile={userProfile} />
-          <AIReminder page="goals" />
-        </div>
+          <TourAnchor id="badges-reminder" variant="desktop">
+            <AIReminder page="goals" />
+          </TourAnchor>
+        </TourAnchor>
         
         {/* AI Reminder Floating Button - Mobile only */}
-        <div className="block lg:hidden">
+        <TourAnchor id="badges-reminder" variant="mobile" className="block lg:hidden">
           <AIReminder page="goals" isFloating={true} />
-        </div>
+        </TourAnchor>
       </div>
     </div>
   );

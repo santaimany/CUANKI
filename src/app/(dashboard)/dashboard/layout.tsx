@@ -3,6 +3,8 @@ import React from 'react';
 import Sidebar from '@/components/dashboard/Sidebar';
 import { useAuth } from '@/hooks/useAuth';
 import LoadingScreen from '@/components/commons/LoadingScreen';
+import TourManager from '@/components/tour/TourManager';
+import TourHelpButton from '@/components/tour/TourHelpButton';
 
 export default function DashboardLayout({
   children,
@@ -26,6 +28,8 @@ export default function DashboardLayout({
 
   return (
     <div className="bg-[#363256] min-h-screen">
+      <TourManager />
+      <TourHelpButton />
       {/* Sidebar - Hidden on mobile by default, shown via toggle */}
       <Sidebar />
       

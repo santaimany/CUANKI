@@ -12,6 +12,7 @@ import { useGoals } from '@/hooks/useGoals';
 import type { Goal, CreateGoalRequest, UpdateGoalRequest } from '@/lib/services/goalsService';
 import { useToast } from '@/context/ToastContext';
 import LoadingScreen from '@/components/commons/LoadingScreen';
+import TourAnchor from '@/components/tour/TourAnchor';
 
 export default function GoalsPage() {
   const { goals, summary, loading, fetchGoals, addGoal, editGoal, removeGoal } = useGoals();
@@ -121,19 +122,23 @@ export default function GoalsPage() {
         {/* Left Column - Main Content (3 columns) */}
         <div className="lg:col-span-3 space-y-4 sm:space-y-6">
           {/* Goal Header with Progress */}
-          <GoalHeader
-            goalName={summary ? `Total ${summary.total_goals} Goals` : "Goals Kamu"}
-            currentAmount={totalCurrentAmount}
-            targetAmount={totalTargetAmount}
-            formattedCurrent={formattedTotalCurrent}
-            formattedTarget={formattedTotalTarget}
-          />
+          <TourAnchor id="goals-header" variant="main">
+            <GoalHeader
+              goalName={summary ? `Total ${summary.total_goals} Goals` : "Goals Kamu"}
+              currentAmount={totalCurrentAmount}
+              targetAmount={totalTargetAmount}
+              formattedCurrent={formattedTotalCurrent}
+              formattedTarget={formattedTotalTarget}
+            />
+          </TourAnchor>
 
           {/* Savings Chart */}
-          <SavingsChart />
+          <TourAnchor id="goals-chart" variant="main">
+            <SavingsChart />
+          </TourAnchor>
 
           {/* Action Buttons */}
-          <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
+          <TourAnchor id="goals-actions" variant="main" className="flex flex-col sm:flex-row gap-2 sm:gap-3">
             <button 
               onClick={handleAddGoal}
               className="bg-gradient-to-r from-[#A3FFD6] to-[#0EFF95] border-b-2 border-white text-black font-bold px-6 sm:px-8 md:px-9 py-3 sm:py-4 rounded-2xl sm:rounded-3xl hover:shadow-lg hover:scale-105 transition-all duration-200 text-sm sm:text-base flex items-center justify-center gap-2"
@@ -143,26 +148,30 @@ export default function GoalsPage() {
               </svg>
               Tambah Goals
             </button>
-          </div>
+          </TourAnchor>
 
           {/* Goal List */}
-          <GoalList 
-            goals={goals} 
-            onEdit={handleEditGoal}
-            onDelete={handleDeleteGoal}
-          />
+          <TourAnchor id="goals-list" variant="main">
+            <GoalList 
+              goals={goals} 
+              onEdit={handleEditGoal}
+              onDelete={handleDeleteGoal}
+            />
+          </TourAnchor>
         </div>
 
         {/* Right Column - User Profile & AI Reminder - Hidden on mobile, shown on lg+ */}
-        <div className="hidden lg:flex lg:col-span-1 flex-col gap-6">
+        <TourAnchor id="goals-profile" variant="desktop" className="hidden lg:flex lg:col-span-1 flex-col gap-6">
           <UserProfile userData={userData} userProfile={userProfile} />
-          <AIReminder page="goals" />
-        </div>
-        
+          <TourAnchor id="goals-reminder" variant="desktop">
+            <AIReminder page="goals" />
+          </TourAnchor>
+        </TourAnchor>
+
         {/* AI Reminder Floating Button - Mobile only */}
-        <div className="block lg:hidden">
+        <TourAnchor id="goals-reminder" variant="mobile" className="block lg:hidden">
           <AIReminder page="goals" isFloating={true} />
-        </div>
+        </TourAnchor>
       </div>
 
       {/* Modals */}

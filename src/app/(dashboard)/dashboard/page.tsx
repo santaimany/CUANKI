@@ -11,8 +11,8 @@ import MyAccounts from '@/components/dashboard/homepage/card/MyAccount';
 import TransactionHistoryList from '@/components/dashboard/homepage/TransactionHistory';
 import { GreetingUsersResponse, UserProfileResponse } from '@/types/api';
 import { getUserGreeting, getUserProfile } from '@/lib/api/user';
-import Loading from '@/app/loading';
 import LoadingScreen from '@/components/commons/LoadingScreen';
+import TourAnchor from '@/components/tour/TourAnchor';
 
 const DashboardPage = () => {
   const [userData, setUserData] = useState<GreetingUsersResponse | null>(null);
@@ -83,54 +83,75 @@ const DashboardPage = () => {
   
   return (
     <div className="pb-20 md:pb-0">
+      <TourAnchor
+        id="dashboard-welcome"
+        style={{ position: 'fixed', top: '50%', left: '50%', width: 1, height: 1, pointerEvents: 'none' }}
+        aria-hidden="true"
+      />
  
       {/* --- 1. MOBILE LAYOUT ( --- */}
      
       <div className="lg:hidden flex flex-col gap-4">
-        <BalanceOverview userData={userData} onRefresh={handleTransactionRefresh} />
-        <GoalsProgress />
-        <BudgetSisa />
-        <MyAccounts />
+        <TourAnchor id="dashboard-balance" variant="mobile">
+          <BalanceOverview userData={userData} onRefresh={handleTransactionRefresh} />
+        </TourAnchor>
+        <TourAnchor id="dashboard-goals" variant="mobile">
+          <GoalsProgress />
+        </TourAnchor>
+        <TourAnchor id="dashboard-budget" variant="mobile">
+          <BudgetSisa />
+        </TourAnchor>
+        <TourAnchor id="dashboard-accounts" variant="mobile">
+          <MyAccounts />
+        </TourAnchor>
         
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <CalendarView />
-          <DailyExpenseSummary />
+          <TourAnchor id="dashboard-calendar" variant="mobile">
+            <CalendarView />
+          </TourAnchor>
+          <TourAnchor id="dashboard-expenses" variant="mobile">
+            <DailyExpenseSummary />
+          </TourAnchor>
         </div>
         
-        <SavingsChart />
-        <TransactionHistoryList key={refreshTransactions} onRefresh={handleTransactionRefresh} />
+        <TourAnchor id="dashboard-savings" variant="mobile">
+          <SavingsChart />
+        </TourAnchor>
+        <TourAnchor id="dashboard-transactions" variant="mobile">
+          <TransactionHistoryList key={refreshTransactions} onRefresh={handleTransactionRefresh} />
+        </TourAnchor>
       </div>
 
       {/* --- 2. TABLET LAYOUT --- */}
  
       <div className="hidden lg:grid xl:hidden grid-cols-2 gap-4 p-4">
-        <div className="col-span-2">
+        <TourAnchor id="dashboard-balance" variant="tablet" className="col-span-2">
           <BalanceOverview userData={userData} onRefresh={handleTransactionRefresh} />
-        </div>
-        <div>
+        </TourAnchor>
+        <TourAnchor id="dashboard-profile" variant="tablet">
           <UserProfileHeader userData={userData} userProfile={userProfile} />
-        </div>
-        <div>
+        </TourAnchor>
+        <TourAnchor id="dashboard-budget" variant="tablet">
           <BudgetSisa/>
-        </div>
-        <div>
+        </TourAnchor>
+        <TourAnchor id="dashboard-goals" variant="tablet">
           <GoalsProgress />
-        </div>
-        <div>
+        </TourAnchor>
+        <TourAnchor id="dashboard-accounts" variant="tablet">
           <MyAccounts />
-        </div>
-        <div>
+        </TourAnchor>
+        <TourAnchor id="dashboard-calendar" variant="tablet">
           <CalendarView />
-        </div>
-        <div>
+        </TourAnchor>
+        <TourAnchor id="dashboard-expenses" variant="tablet">
           <DailyExpenseSummary />
-        </div>
-        <div className="col-span-2">
+        </TourAnchor>
+        <TourAnchor id="dashboard-savings" variant="tablet" className="col-span-2">
           <SavingsChart />
-        </div>
-        <div className="col-span-2">
+        </TourAnchor>
+        <TourAnchor id="dashboard-transactions" variant="tablet" className="col-span-2">
           <TransactionHistoryList key={refreshTransactions} onRefresh={handleTransactionRefresh} />
-        </div>
+        </TourAnchor>
       </div>
 
       {/* --- 3. DESKTOP LAYOUT  --- */}
@@ -150,33 +171,33 @@ const DashboardPage = () => {
         }}
       >
    
-        <div style={{ gridArea: 'balance' }}>
+        <TourAnchor id="dashboard-balance" variant="desktop" style={{ gridArea: 'balance' }}>
           <BalanceOverview userData={userData} onRefresh={handleTransactionRefresh} />
-        </div>
-        <div style={{ gridArea: 'profile' }}>
+        </TourAnchor>
+        <TourAnchor id="dashboard-profile" variant="desktop" style={{ gridArea: 'profile' }}>
           <UserProfileHeader userData={userData} userProfile={userProfile} key={refreshTransactions} />
-        </div>
-        <div style={{ gridArea: 'accounts' }}>
+        </TourAnchor>
+        <TourAnchor id="dashboard-accounts" variant="desktop" style={{ gridArea: 'accounts' }}>
           <MyAccounts />
-        </div>
-        <div style={{ gridArea: 'goals' }}>
+        </TourAnchor>
+        <TourAnchor id="dashboard-goals" variant="desktop" style={{ gridArea: 'goals' }}>
           <GoalsProgress />
-        </div>
-        <div style={{ gridArea: 'budget' }}>
+        </TourAnchor>
+        <TourAnchor id="dashboard-budget" variant="desktop" style={{ gridArea: 'budget' }}>
           <BudgetSisa/>
-        </div>
-        <div style={{ gridArea: 'calendar' }}>
+        </TourAnchor>
+        <TourAnchor id="dashboard-calendar" variant="desktop" style={{ gridArea: 'calendar' }}>
             <CalendarView />
-        </div>
-        <div style={{ gridArea: 'expenses' }}>
+        </TourAnchor>
+        <TourAnchor id="dashboard-expenses" variant="desktop" style={{ gridArea: 'expenses' }}>
             <DailyExpenseSummary key={refreshTransactions} />
-        </div>
-        <div style={{ gridArea: 'transactions' }}>
+        </TourAnchor>
+        <TourAnchor id="dashboard-transactions" variant="desktop" style={{ gridArea: 'transactions' }}>
           <TransactionHistoryList key={refreshTransactions} onRefresh={handleTransactionRefresh} />
-        </div>
-        <div style={{ gridArea: 'chart' }}>
+        </TourAnchor>
+        <TourAnchor id="dashboard-savings" variant="desktop" style={{ gridArea: 'chart' }}>
           <SavingsChart />
-        </div>
+        </TourAnchor>
       </div>
     </div>
   );

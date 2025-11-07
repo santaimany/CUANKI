@@ -8,6 +8,7 @@ import AIReminder from '@/components/dashboard/AIReminder';
 import { UserAccount, GreetingUsersResponse, UserProfileResponse } from '@/types/api';
 import { getUserGreeting, getUserProfile } from '@/lib/api/user';
 import LoadingScreen from '@/components/commons/LoadingScreen';
+import TourAnchor from '@/components/tour/TourAnchor';
 
 export default function AsetPage() {
   const [accounts, setAccounts] = useState<UserAccount[]>([]);
@@ -62,25 +63,33 @@ export default function AsetPage() {
           </h1>
           
           {/* Asset Summary with Pie Chart */}
-          <AssetSummary accounts={accounts} />
+          <TourAnchor id="assets-summary" variant="main">
+            <AssetSummary accounts={accounts} />
+          </TourAnchor>
 
           {/* Asset Cards with Pagination and Action Buttons */}
-          <AssetCards showButtons={true} onAccountsChange={handleAccountsChange} />
+          <TourAnchor id="assets-list" variant="main">
+            <AssetCards showButtons={true} onAccountsChange={handleAccountsChange} />
+          </TourAnchor>
 
           {/* Saving Progress */}
-          <AssetProgress />
+          <TourAnchor id="assets-progress" variant="main">
+            <AssetProgress />
+          </TourAnchor>
         </div>
 
         {/* Right Column - User Profile & AI Reminder - Hidden on mobile, shown on lg+ */}
-        <div className="hidden lg:hidden xl:flex xl:col-span-1 flex-col gap-6">
+        <TourAnchor id="assets-profile" variant="desktop" className="hidden lg:hidden xl:flex xl:col-span-1 flex-col gap-6">
           <UserProfile userData={userData} userProfile={userProfile} />
-          <AIReminder page="asset" />
-        </div>
+          <TourAnchor id="assets-reminder" variant="desktop">
+            <AIReminder page="asset" />
+          </TourAnchor>
+        </TourAnchor>
         
         {/* AI Reminder Floating Button - Mobile only */}
-        <div className="block xl:hidden">
+        <TourAnchor id="assets-reminder" variant="mobile" className="block xl:hidden">
           <AIReminder page="asset" isFloating={true} />
-        </div>
+        </TourAnchor>
       </div>
     </div>
   );
