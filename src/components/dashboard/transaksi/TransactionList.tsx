@@ -41,7 +41,6 @@ const formatDateToAPI = (date: Date): string => {
 
 const TransactionList: React.FC<TransactionListProps> = ({ 
   filterType = 'expense', 
-  onRefresh, 
   searchQuery = '' 
 }) => {
   const [showCalendar, setShowCalendar] = useState(false);
@@ -80,12 +79,11 @@ const TransactionList: React.FC<TransactionListProps> = ({
     }
   }, [filterType, showError]);
 
-  // Load data
+
   useEffect(() => {
     fetchTransactionData(selectedDate);
   }, [selectedDate, filterType, fetchTransactionData]);
-  
-  // Close calendar on outside click
+ 
   useEffect(() => {
     if (!showCalendar) return;
     const handleClickOutside = (event: MouseEvent) => {
@@ -98,7 +96,6 @@ const TransactionList: React.FC<TransactionListProps> = ({
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [showCalendar]);
 
-  // Format transaksi (Memoized)
   const allDisplayTransactions: DisplayTransaction[] = useMemo(() => {
     return transactions.map((transaction) => {
       if (filterType === 'expense') {
@@ -110,7 +107,7 @@ const TransactionList: React.FC<TransactionListProps> = ({
           amount: -Number.parseFloat(expense.amount), // Negatif
           date: expense.formatted.expense_date,
           time: expense.formatted.expense_time,
-          source: expense.from_bank.bank_name,
+          source: expense.from_bank.code_name,
           datetime: expense.formatted.expense_datetime,
         };
       } else {
@@ -122,15 +119,13 @@ const TransactionList: React.FC<TransactionListProps> = ({
           amount: Number.parseFloat(income.amount), // Positif
           date: income.formatted.received_date,
           time: income.formatted.received_time,
-          source: income.to_bank.bank_name,
+          source: income.to_bank.code_name,
           datetime: income.formatted.received_datetime,
-          status: income.formatted.confirmation_status,
         };
       }
     });
   }, [transactions, filterType]);
 
-  // Filter transaksi berdasarkan pencarian (Memoized)
   const displayTransactions = useMemo(() => {
     if (!searchQuery.trim()) return allDisplayTransactions;
     
@@ -142,7 +137,6 @@ const TransactionList: React.FC<TransactionListProps> = ({
     );
   }, [allDisplayTransactions, searchQuery]);
 
-  // Buat ringkasan dinamis berdasarkan pencarian (Memoized)
   const displaySummary = useMemo(() => {
     const isSearching = searchQuery.trim().length > 0;
     
@@ -196,13 +190,13 @@ const TransactionList: React.FC<TransactionListProps> = ({
 
   return (
     <div className="space-y-4 sm:space-y-6 bg-[#50488A] p-3 sm:p-4 rounded-xl sm:rounded-2xl">
-      {/* Date Navigation Header */}
+
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-0 mb-3 sm:mb-4">
         <div>
           <h3 className="text-white text-base sm:text-lg md:text-xl font-medium">
             Transaksi {selectedDate.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}
           </h3>
-          {/* Gunakan displaySummary yang dinamis */}
+      
           {displaySummary && (
             <p className="text-[#00F5A0] text-xs sm:text-sm mt-1">
               {filterType === 'expense' 
@@ -213,8 +207,6 @@ const TransactionList: React.FC<TransactionListProps> = ({
           )}
         </div>
 
-        {/* --- INI BAGIAN YANG ANDA MAKSUD --- */}
-        {/* Panah navigasi tanggal tetap ada di sini */}
         <div className="flex items-center gap-2 sm:gap-3 md:gap-4">
           <button 
             onClick={handlePrevDate}
@@ -251,11 +243,10 @@ const TransactionList: React.FC<TransactionListProps> = ({
             </svg>
           </button>
         </div>
-        {/* --- AKHIR DARI BAGIAN NAVIGASI TANGGAL --- */}
+
 
       </div>
 
-      {/* Transaction Content */}
       {loading && (
         <div className="text-center py-8 sm:py-12">
           <div className="text-white/50 text-base sm:text-lg md:text-xl mb-2">Memuat transaksi...</div>

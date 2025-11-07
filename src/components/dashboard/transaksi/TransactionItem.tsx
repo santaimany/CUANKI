@@ -15,7 +15,7 @@ const TransactionItem: React.FC<TransactionItemProps> = ({ transaction }) => {
       key={id}
       className="bg-[#7971BC] rounded-xl sm:rounded-2xl p-3 sm:p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-0 hover:bg-[#6B5CE7]/40 transition-colors"
     >
-      {/* Bagian Kiri - Icon dan Info (Sesuai Asli) */}
+ 
       <div className="flex items-center gap-2 sm:gap-3 md:gap-4 min-w-0 flex-1">
         <div className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 bg-white/10 rounded-2xl sm:rounded-3xl flex items-center justify-center flex-shrink-0">
           <svg className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
@@ -25,7 +25,7 @@ const TransactionItem: React.FC<TransactionItemProps> = ({ transaction }) => {
         <div className="min-w-0 flex-1">
           <h4 className="text-white font-semibold text-sm sm:text-base md:text-lg lg:text-xl truncate">{category}</h4>
           <p className="text-white/70 text-xs sm:text-sm md:text-base lg:text-lg truncate">{description}</p>
-          {/* Status (Hanya untuk income) */}
+       
           {!isExpense && status && (
             <span className={`inline-block px-2 py-1 rounded-full text-xs font-medium mt-1 ${
               status === 'Pending' 
@@ -38,7 +38,7 @@ const TransactionItem: React.FC<TransactionItemProps> = ({ transaction }) => {
         </div>
       </div>
 
-      {/* Bagian Kanan - Waktu & Nominal (Layout Asli Anda + 1 perbaikan typo) */}
+  
       <div className="flex flex-col sm:flex-row items-start sm:items-end justify-between gap-2 sm:gap-0 w-full sm:w-auto">
         <div className="text-white text-xs sm:text-sm md:text-base sm:mb-10 lg:text-xl sm:mr-5">
           {time}
@@ -53,7 +53,7 @@ const TransactionItem: React.FC<TransactionItemProps> = ({ transaction }) => {
             </span>
           </div>
           
-          <div className="text-white/50 text-xs sm:text-sm md:text-base lg:text-lg mt-1 truncate">{source}</div>
+          <div className="text-white/50 text-xs sm:text-sm md:text-base lg:text-lg mt-1 truncate">From {source}</div>
         </div>
         
       </div>
