@@ -154,7 +154,7 @@ const DashboardPage = () => {
           <BalanceOverview userData={userData} onRefresh={handleTransactionRefresh} />
         </div>
         <div style={{ gridArea: 'profile' }}>
-          <UserProfileHeader userData={userData} userProfile={userProfile} />
+          <UserProfileHeader userData={userData} userProfile={userProfile} key={refreshTransactions} />
         </div>
         <div style={{ gridArea: 'accounts' }}>
           <MyAccounts />
