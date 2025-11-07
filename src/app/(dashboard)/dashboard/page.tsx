@@ -21,7 +21,6 @@ const DashboardPage = () => {
   const [error, setError] = useState<string | null>(null);
   const [refreshTransactions, setRefreshTransactions] = useState(0);
 
-  // --- (Logika Fetching Data Anda - Tidak Berubah) ---
   const handleTransactionRefresh = () => {
     setRefreshTransactions(prev => prev + 1);
     fetchGreeting();
@@ -138,7 +137,6 @@ const DashboardPage = () => {
       <div 
         className="hidden xl:grid gap-6 h-full"
         style={{
-          // Peta layout grid-template-areas Anda (sudah benar)
           gridTemplateAreas: `
             "balance  balance  balance  profile"
             "balance  balance  balance  accounts"
@@ -171,7 +169,7 @@ const DashboardPage = () => {
             <CalendarView />
         </div>
         <div style={{ gridArea: 'expenses' }}>
-            <DailyExpenseSummary />
+            <DailyExpenseSummary key={refreshTransactions} />
         </div>
         <div style={{ gridArea: 'transactions' }}>
           <TransactionHistoryList key={refreshTransactions} onRefresh={handleTransactionRefresh} />
