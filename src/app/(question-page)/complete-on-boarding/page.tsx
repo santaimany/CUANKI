@@ -12,11 +12,11 @@ import CardTengah from '@/assets/getstarted/image/card-tengah.svg';
 import CardKanan from '@/assets/getstarted/image/card-kanan.svg';
 
 export default function OnboardingCompletePage() {
-  const mainRef = useRef(null);
-  const leftCardRef = useRef(null);
-  const centerCardRef = useRef(null);
-  const rightCardRef = useRef(null);
-  const textRef = useRef(null);
+  const mainRef = useRef<HTMLDivElement | null>(null);
+  const leftCardRef = useRef<HTMLButtonElement | null>(null);
+  const centerCardRef = useRef<HTMLButtonElement | null>(null);
+  const rightCardRef = useRef<HTMLButtonElement | null>(null);
+  const textRef = useRef<HTMLHeadingElement | null>(null);
   
   const [flippedCard, setFlippedCard] = useState<number | null>(null);
   const [adviceData, setAdviceData] = useState<AdviceResponse | null>(null);
@@ -26,6 +26,35 @@ export default function OnboardingCompletePage() {
 
   const cardImages = [CardKiri, CardTengah, CardKanan];
   const cardAlts = ["Card Pattern Left", "Card Pattern Center", "Card Pattern Right"];
+
+  const renderCardCTA = (position: number) => {
+    const isFlipped = flippedCard === cardOrder[position];
+    if (isFlipped) return null;
+
+    const label = position === 1 ? 'Flip me' : 'Tap to reveal';
+
+    return (
+      <div className="pointer-events-none absolute -top-7 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 sm:-top-9">
+        <span className="rounded-full bg-[#0EFF95] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide text-[#1F1845] shadow-[0_6px_16px_rgba(14,11,48,0.3)] animate-pulse sm:text-xs sm:px-3">
+          {label}
+        </span>
+        <svg
+          className="h-4 w-4 animate-bounce text-[#0EFF95] sm:h-5 sm:w-5"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M12 4v16M12 20l-5-5M12 20l5-5"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+      </div>
+    );
+  };
 
   const handleCardClick = (position: number) => {
     if (isAnimating) return;
@@ -165,10 +194,12 @@ export default function OnboardingCompletePage() {
       <div className="relative flex items-center justify-center w-full h-64 sm:h-72 md:h-96 lg:h-[500px] xl:h-[550px]">
         
         {/* Left Card */}
-        <div 
+        <button 
           ref={leftCardRef} 
+          type="button"
           onClick={() => handleCardClick(0)}
-          className="absolute w-32 h-48 sm:w-40 sm:h-56 md:w-56 md:h-72 lg:w-72 lg:h-96 xl:w-80 xl:h-[450px] transform -rotate-[15deg] sm:-rotate-[20deg] -translate-x-16 sm:-translate-x-20 md:-translate-x-28 lg:-translate-x-80 xl:-translate-x-96 translate-y-4 sm:translate-y-6 md:translate-y-8 lg:translate-y-10 p-2 sm:p-3 md:p-4 lg:p-5 xl:p-6 cursor-pointer"
+          aria-label="Reveal insight card"
+          className="absolute w-32 h-48 sm:w-40 sm:h-56 md:w-56 md:h-72 lg:w-72 lg:h-96 xl:w-80 xl:h-[450px] transform -rotate-[15deg] sm:-rotate-[20deg] -translate-x-16 sm:-translate-x-20 md:-translate-x-28 lg:-translate-x-80 xl:-translate-x-96 translate-y-4 sm:translate-y-6 md:translate-y-8 lg:translate-y-10 p-2 sm:p-3 md:p-4 lg:p-5 xl:p-6 cursor-pointer bg-transparent border-none appearance-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0EFF95]/60"
           style={{ transformStyle: 'preserve-3d' }}
         >
           <div 
@@ -196,13 +227,16 @@ export default function OnboardingCompletePage() {
               {isLoadingAdvice ? 'Loading advice...' : (adviceData?.cards?.[cardOrder[0]]?.content || 'No advice available')}
             </p>
           </div>
-        </div>
+          {renderCardCTA(0)}
+        </button>
 
         {/* Center Card */}
-        <div 
+        <button 
           ref={centerCardRef} 
+          type="button"
           onClick={() => handleCardClick(1)}
-          className="absolute z-10 w-36 h-52 sm:w-44 sm:h-60 md:w-60 md:h-80 lg:w-80 lg:h-[450px] xl:w-96 xl:h-[500px] transform scale-105 sm:scale-110 p-2 sm:p-3 md:p-4 lg:p-5 xl:p-6 shadow-black/20 cursor-pointer"
+          aria-label="Flip featured recommendation"
+          className="absolute z-10 w-36 h-52 sm:w-44 sm:h-60 md:w-60 md:h-80 lg:w-80 lg:h-[450px] xl:w-96 xl:h-[500px] transform scale-105 sm:scale-110 p-2 sm:p-3 md:p-4 lg:p-5 xl:p-6 shadow-black/20 cursor-pointer bg-transparent border-none appearance-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0EFF95]/60"
           style={{ transformStyle: 'preserve-3d' }}
         >
           <div 
@@ -230,13 +264,16 @@ export default function OnboardingCompletePage() {
               {isLoadingAdvice ? 'Loading recommendations...' : (adviceData?.cards?.[cardOrder[1]]?.content || 'No recommendations available')}
             </p>
           </div>
-        </div>
+         
+        </button>
 
         {/* Right Card */}
-        <div 
+        <button 
           ref={rightCardRef} 
+          type="button"
           onClick={() => handleCardClick(2)}
-          className="absolute w-32 h-48 sm:w-40 sm:h-56 md:w-56 md:h-72 lg:w-72 lg:h-96 xl:w-80 xl:h-[450px] transform rotate-[15deg] sm:rotate-[20deg] translate-x-16 sm:translate-x-20 md:translate-x-28 lg:translate-x-80 xl:translate-x-96 translate-y-4 sm:translate-y-6 md:translate-y-8 lg:translate-y-10 p-2 sm:p-3 md:p-4 lg:p-5 xl:p-6 cursor-pointer"
+          aria-label="Reveal summary card"
+          className="absolute w-32 h-48 sm:w-40 sm:h-56 md:w-56 md:h-72 lg:w-72 lg:h-96 xl:w-80 xl:h-[450px] transform rotate-[15deg] sm:rotate-[20deg] translate-x-16 sm:translate-x-20 md:translate-x-28 lg:translate-x-80 xl:translate-x-96 translate-y-4 sm:translate-y-6 md:translate-y-8 lg:translate-y-10 p-2 sm:p-3 md:p-4 lg:p-5 xl:p-6 cursor-pointer bg-transparent border-none appearance-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0EFF95]/60"
           style={{ transformStyle: 'preserve-3d' }}
         >
           <div 
@@ -264,7 +301,8 @@ export default function OnboardingCompletePage() {
               {isLoadingAdvice ? 'Loading summary...' : (adviceData?.cards?.[cardOrder[2]]?.content || 'Complete your onboarding to get personalized financial insights!')}
             </p>
           </div>
-        </div>
+          {renderCardCTA(2)}
+  </button>
       </div>
 
       <button 
