@@ -235,7 +235,7 @@ const SavingsChart: React.FC<SavingsChartProps> = ({ period = '12months' }) => {
 
   return (
     <div className="bg-[#50488A] rounded-2xl p-6 text-white">
-      <h3 className="text-sm font-medium text-white/80">Saldo saat ini</h3>
+      <h3 className="text-sm font-medium text-white/80">Perkembangan tabunganmu:</h3>
       <p className="text-4xl font-bold mb-4">{formattedBalance}</p>
       <div className="flex items-baseline gap-2 mb-4">
         <span className="text-sm text-green-400">{growthPercentage}</span>

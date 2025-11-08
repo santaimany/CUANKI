@@ -4,7 +4,7 @@
 
 // Tipe data yang sudah diformat untuk ditampilkan di UI
 export interface DisplayTransaction {
-  id: number;
+  id: string;
   category: string;
   description: string;
   amount: number; // Negatif untuk expense, Positif untuk income

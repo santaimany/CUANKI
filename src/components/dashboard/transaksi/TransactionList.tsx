@@ -101,28 +101,29 @@ const TransactionList: React.FC<TransactionListProps> = ({
       if (filterType === 'expense') {
         const expense = transaction as ExpenseItem;
         return {
-          id: expense.expense_id,
-          category: expense.category.name,
+          id: `expense-${expense.expense_id}-${expense.formatted.expense_datetime}`,
+          category: expense.category?.name ?? 'Tanpa kategori',
           description: expense.note,
           amount: -Number.parseFloat(expense.amount), // Negatif
           date: expense.formatted.expense_date,
           time: expense.formatted.expense_time,
-          source: expense.from_bank.code_name,
+          source: expense.from_bank?.code_name ?? 'Tidak diketahui',
           datetime: expense.formatted.expense_datetime,
         };
-      } else {
-        const income = transaction as IncomeItem;
-        return {
-          id: income.income_id,
-          category: income.income_source,
-          description: income.note,
-          amount: Number.parseFloat(income.amount), // Positif
-          date: income.formatted.received_date,
-          time: income.formatted.received_time,
-          source: income.to_bank.code_name,
-          datetime: income.formatted.received_datetime,
-        };
       }
+
+      const income = transaction as IncomeItem;
+      return {
+        id: `income-${income.income_id}-${income.formatted.received_datetime}`,
+        category: income.income_source ?? 'Pemasukan',
+        description: income.note,
+        amount: Number.parseFloat(income.amount), // Positif
+        date: income.formatted.received_date,
+        time: income.formatted.received_time,
+        source: income.to_bank?.code_name ?? 'Tidak diketahui',
+        datetime: income.formatted.received_datetime,
+        status: income.confirmation_status,
+      };
     });
   }, [transactions, filterType]);
 
@@ -164,6 +165,15 @@ const TransactionList: React.FC<TransactionListProps> = ({
     return null;
 
   }, [searchQuery, summary, displayTransactions, filterType]);
+
+  const emptyStateDescription = useMemo(() => {
+    if (searchQuery.trim().length > 0) {
+      return 'Coba kata kunci lain';
+    }
+
+    const label = filterType === 'expense' ? 'pengeluaran' : 'pendapatan';
+    return `Belum ada ${label} pada tanggal ini`;
+  }, [searchQuery, filterType]);
 
 
   // Nama bulan
@@ -260,10 +270,7 @@ const TransactionList: React.FC<TransactionListProps> = ({
             {searchQuery.trim().length > 0 ? 'Transaksi tidak ditemukan' : 'Tidak ada transaksi'}
           </div>
           <div className="text-white/30 text-sm sm:text-base md:text-lg">
-            {searchQuery.trim().length > 0
-              ? 'Coba kata kunci lain'
-              : `Belum ada ${filterType === 'expense' ? 'pengeluaran' : 'pendapatan'} pada tanggal ini`
-            }
+            {emptyStateDescription}
           </div>
         </div>
       )}

@@ -7,14 +7,13 @@ interface TransactionItemProps {
 }
 
 const TransactionItem: React.FC<TransactionItemProps> = ({ transaction }) => {
-  const { id, category, description, amount, time, source, status } = transaction;
+  const { category, description, amount, time, source, status } = transaction;
   const isExpense = amount < 0;
+  const displayCategory = category || 'Tanpa kategori';
+  const displaySource = source ? `From ${source}` : 'Sumber tidak diketahui';
 
   return (
-    <div
-      key={id}
-      className="bg-[#7971BC] rounded-xl sm:rounded-2xl p-3 sm:p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-0 hover:bg-[#6B5CE7]/40 transition-colors"
-    >
+    <div className="bg-[#7971BC] rounded-xl sm:rounded-2xl p-3 sm:p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-0 hover:bg-[#6B5CE7]/40 transition-colors">
  
       <div className="flex items-center gap-2 sm:gap-3 md:gap-4 min-w-0 flex-1">
         <div className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 bg-white/10 rounded-2xl sm:rounded-3xl flex items-center justify-center flex-shrink-0">
@@ -23,7 +22,7 @@ const TransactionItem: React.FC<TransactionItemProps> = ({ transaction }) => {
           </svg>
         </div>
         <div className="min-w-0 flex-1">
-          <h4 className="text-white font-semibold text-sm sm:text-base md:text-lg lg:text-xl truncate">{category}</h4>
+          <h4 className="text-white font-semibold text-sm sm:text-base md:text-lg lg:text-xl truncate">{displayCategory}</h4>
           <p className="text-white/70 text-xs sm:text-sm md:text-base lg:text-lg truncate">{description}</p>
        
           {!isExpense && status && (
@@ -53,7 +52,7 @@ const TransactionItem: React.FC<TransactionItemProps> = ({ transaction }) => {
             </span>
           </div>
           
-          <div className="text-white/50 text-xs sm:text-sm md:text-base lg:text-lg mt-1 truncate">From {source}</div>
+          <div className="text-white/50 text-xs sm:text-sm md:text-base lg:text-lg mt-1 truncate">{displaySource}</div>
         </div>
         
       </div>
