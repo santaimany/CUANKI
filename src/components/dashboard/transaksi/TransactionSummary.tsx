@@ -120,14 +120,11 @@ const TransactionSummary: React.FC<TransactionSummaryProps> = ({
           )}
         </div>
         
-        {/* Amount Display */}
-      
-        
-        {/* Action Buttons */}
+       
         <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 md:gap-4 text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl">
           <button 
             onClick={() => handleOpenModal('income')}
-            className="bg-gradient-to-r from-[#A3FFD6] to-[#0EFF95] border-b-2 border-white cursor-pointer text-black font-semibold py-3 sm:py-4 px-4 sm:px-6 rounded-2xl sm:rounded-3xl hover:bg-[#00E68F] transition-colors"
+            className="bg-gradient-to-r from-[#A3FFD6] to-[#0EFF95] border-b-2 border-white cursor-pointer text-[#50488A] font-semibold py-3 sm:py-4 px-4 sm:px-6 rounded-2xl sm:rounded-3xl hover:bg-[#00E68F] transition-colors"
           >
             + pendapatan
           </button>

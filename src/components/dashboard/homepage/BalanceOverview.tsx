@@ -61,26 +61,21 @@ const BalanceOverview: React.FC<BalanceOverviewProps> = ({ userData, onRefresh }
             <p className="text-xs sm:text-sm md:text-base mb-1 sm:mb-2">Hai {firstName}!, ini uang kamu hari ini:</p>
             <h2 className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-bold mb-3 sm:mb-4">{dailyBudget}</h2>
             
-            {/* DIUBAH: Membungkus tombol dalam div dengan max-w-sm 
-              agar tidak terlalu lebar di layar besar (lg/xl).
-              'mx-auto md:mx-0' digunakan untuk center di mobile dan rata kiri di desktop.
-            */}
-            <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 max-w-sm mx-auto md:mx-0">
-              <button 
-                onClick={() => handleOpenModal('income')}
-                /* DIUBAH: Dibuat w-full sm:w-auto agar tombol sama lebar di mobile */
-                className="w-full sm:w-auto bg-[#00F5A0] text-[#363256] cursor-pointer px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl text-sm sm:text-base md:text-lg font-semibold border-b-2 border-white hover:opacity-90 transition-opacity"
-              >
-                + pendapatan
-              </button>
-              <button 
-                onClick={() => handleOpenModal('expense')}
-                /* DIUBAH: Dibuat w-full sm:w-auto agar tombol sama lebar di mobile */
-                className="w-full sm:w-auto bg-[#E85D5D] text-white cursor-pointer px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl text-sm sm:text-base md:text-lg font-semibold border-b-2 border-white hover:opacity-90 transition-opacity"
-              >
-                - pengeluaran
-              </button>
-            </div>
+         
+               <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 md:gap-4 text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl">
+          <button 
+            onClick={() => handleOpenModal('income')}
+            className="bg-gradient-to-r from-[#A3FFD6] to-[#0EFF95] border-b-2 border-white cursor-pointer text-[#50488A] font-semibold py-3 sm:py-4 px-4 sm:px-6 rounded-2xl sm:rounded-3xl hover:bg-[#00E68F] transition-colors"
+          >
+            + pendapatan
+          </button>
+          <button 
+            onClick={() => handleOpenModal('expense')}
+            className="bg-[#DF4000] text-white font-semibold py-3 sm:py-4 px-4 sm:px-6 rounded-2xl sm:rounded-3xl hover:bg-[#FF5530] transition-colors border-b-2 border-white cursor-pointer"
+          >
+            - pengeluaran
+          </button>
+        </div>
           </div>
         </div>
         
