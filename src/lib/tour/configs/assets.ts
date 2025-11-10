@@ -11,8 +11,8 @@ export const assetsTour: TourConfig = {
         '[data-tour-id="assets-summary-main"]',
       ]),
       popover: {
-        title: 'Ringkasan Aset',
-        description: 'Lihat distribusi aset kamu secara keseluruhan dan bagaimana perbandingan antar kategori.',
+        title: 'Selamat datang di Aset',
+        description: 'Disini kamu dapat melihat, membuat, dan mengatur aset pribadi kamu secara keseluruhan.',
         side: 'bottom',
         align: 'start',
       },
@@ -23,7 +23,7 @@ export const assetsTour: TourConfig = {
       ]),
       popover: {
         title: 'Detail Aset',
-        description: 'Kelola setiap aset, update saldonya, dan tambahkan aset baru melalui bagian ini.',
+        description: 'Kalo kamu baru buat akun, yuk isi aset kebutuhan kamu biar bisa dapet budget harian. Selain itu, kamu bisa mengatur lebih lanjut aset kamu di bagian ini.',
         side: 'left',
         align: 'start',
       },
