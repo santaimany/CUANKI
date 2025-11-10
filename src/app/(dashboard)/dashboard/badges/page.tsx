@@ -109,9 +109,6 @@ export default function BadgesPage() {
         {/* Right Column - User Profile & AI Reminder - Hidden on mobile, shown on lg+ */}
         <TourAnchor id="badges-profile" variant="desktop" className="hidden lg:flex lg:col-span-1 flex-col gap-6">
           <UserProfile userData={userData} userProfile={userProfile} />
-          <TourAnchor id="badges-reminder" variant="desktop">
-            <AIReminder page="goals" />
-          </TourAnchor>
         </TourAnchor>
         
         {/* AI Reminder Floating Button - Mobile only */}
