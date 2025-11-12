@@ -148,7 +148,7 @@ const AboutUsSection = () => {
                                     </>
                                 ) : (
                                     <>
-                                        Our <span className="font-black">innovative</span> solutions <span className="font-black">streamline</span> your <span className="font-black">business growth</span>
+                                        From <span className="font-black">Financial</span> solutions <span className="font-black">streamline</span> your <span className="font-black">business growth</span>
                                     </>
                                 )}
                             </h2>
@@ -156,9 +156,9 @@ const AboutUsSection = () => {
                                 activeTab === "aboutus" ? "text-[#363256]" : "text-[#4A4978]"
                             }`}>
                                 {activeTab === "aboutus" ? (
-                                    "Exposing your inventory to incidents is a thing of the past. We have a professional insurance policy that protects all your items against damage and theft."
+                                    "Ubah impian finansial Anda menjadi rencana yang dapat dicapai. Kami memandu Anda selangkah demi selangkah untuk melewati setiap milestone, memastikan tujuan besar Anda tidak lagi hanya sekadar angan-angan."
                                 ) : (
-                                    "From cutting-edge technology to bespoke services, we provide comprehensive solutions tailored to your unique needs, ensuring maximum efficiency and security."
+                                    "Cuanki dirancang untuk menutup kesenjangan kompetensi keuangan di Indonesia. Kami memberdayakan Anda dengan alat cerdas untuk mengkategorikan aset , melacak tujuan , dan belajar , sambil menerima saran AI yang dipersonalisasi untuk mengamankan masa depan finansial Anda."
                                 )}
                             </p>
                         </div>
@@ -243,13 +243,13 @@ const AboutUsSection = () => {
                                 ) : (
                                     <>
                                         <div className="font-medium mb-1 sm:mb-2 md:mb-3 lg:mb-4 xl:mb-5">
-                                            Our <span className="font-black">innovative</span> solutions
+                                            From <span className="font-black">Financial</span>
                                         </div>
                                         <div className="font-black mb-1 sm:mb-2 md:mb-3 lg:mb-4 xl:mb-5">
-                                            <span className="text-[#4A4978]">streamline</span> your
+                                            <span className="text-[#4A4978]">Access</span> to Financial
                                         </div>
                                         <div className="font-black">
-                                            <span className="text-[#4A4978]">business growth</span>
+                                            <span className="text-[#4A4978]">Competence</span>
                                         </div>
                                     </>
                                 )}
@@ -258,9 +258,9 @@ const AboutUsSection = () => {
                                 activeTab === "aboutus" ? "text-[#2C3E50]" : "text-[#4A4978]"
                             }`}>
                                 {activeTab === "aboutus" ? (
-                                    "Exposing your inventory to incidents is a thing of the past. We have a professional insurance policy that protects all your items against damage and theft."
+                                    "Ubah impian finansial Anda menjadi rencana yang dapat dicapai. Kami memandu Anda selangkah demi selangkah untuk melewati setiap milestone, memastikan tujuan besar Anda tidak lagi hanya sekadar angan-angan."
                                 ) : (
-                                    "From cutting-edge technology to bespoke services, we provide comprehensive solutions tailored to your unique needs, ensuring maximum efficiency and security."
+                                    "Cuanki dirancang untuk menutup kesenjangan kompetensi keuangan di Indonesia. Kami memberdayakan Anda dengan alat cerdas untuk mengkategorikan aset , melacak tujuan , dan belajar , sambil menerima saran AI yang dipersonalisasi untuk mengamankan masa depan finansial Anda."
                                 )}
                             </p>
                          </div>

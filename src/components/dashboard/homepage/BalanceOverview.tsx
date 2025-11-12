@@ -1,9 +1,9 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Chart as ChartJS, ArcElement } from 'chart.js';
-import { Doughnut } from 'react-chartjs-2';
-import { GreetingUsersResponse } from '@/types/api';
+import { GreetingUsersResponse, CalendarDate } from '@/types/api';
 import AddTransactionModal from '@/components/dashboard/transaksi/AddTransactionModal';
+import { getCalendarStatus } from '@/lib/services/dashboardService';
 
 ChartJS.register(ArcElement);
 
@@ -14,6 +14,7 @@ interface BalanceOverviewProps {
 
 const BalanceOverview: React.FC<BalanceOverviewProps> = ({ userData, onRefresh }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [newDailyBudget, setNewDailyBudget] = useState<CalendarDate | null>(null);
   const [modalType, setModalType] = useState<'income' | 'expense'>('income');
 
   const handleOpenModal = (type: 'income' | 'expense') => {
@@ -28,19 +29,20 @@ const BalanceOverview: React.FC<BalanceOverviewProps> = ({ userData, onRefresh }
     }
   };
 
-  // Get daily budget data
-  const dailyBudget = userData?.data?.user.daily_budget || null;
-
-  const options = {
-    responsive: true,
-    maintainAspectRatio: false,
-    cutout: '75%',
-    rotation: -135,
-    circumference: 270,
-    plugins: {
-      tooltip: { enabled: false },
+  useEffect(() => {
+    const fetchDailyBudget = async () => {
+      try {
+        const response = await getCalendarStatus();
+        const today = response.data.calendar_dates.find(date => date.is_today);
+        setNewDailyBudget(today || null);
+      } catch (error) {
+        console.error('Failed to fetch daily budget:', error);
+      }
     }
-  };
+    fetchDailyBudget();
+  }, []);
+
+ 
 
   const userName = userData?.data?.user?.username || 'User';
   const firstName = typeof userName === 'string' ? userName.split(' ')[0] : 'User';
@@ -59,7 +61,7 @@ const BalanceOverview: React.FC<BalanceOverviewProps> = ({ userData, onRefresh }
           
           <div className="flex-1 text-center md:text-left">
             <p className="text-xs sm:text-sm md:text-base mb-1 sm:mb-2">Hai {firstName}!, ini uang kamu hari ini:</p>
-            <h2 className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-bold mb-3 sm:mb-4">{dailyBudget}</h2>
+            <h2 className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-bold mb-3 sm:mb-4">{newDailyBudget?.formatted.remaining_budget}</h2>
             
          
                <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 md:gap-4 text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl">

@@ -46,7 +46,7 @@ const Footer = () => {
                             </li>
                             <li>
                                 <Link href="#" className="text-white/80 hover:text-white transition-colors text-sm sm:text-base md:text-lg lg:text-xl font-normal">
-                                    Pricing
+                                    Education
                                 </Link>
                             </li>
                             <li>
@@ -63,17 +63,17 @@ const Footer = () => {
                         <ul className="space-y-3 sm:space-y-4 md:space-y-6 lg:space-y-8">
                             <li>
                                 <Link href="#" className="text-white/80 hover:text-white transition-colors text-sm sm:text-base md:text-lg lg:text-xl font-normal">
-                                    Features
+                                    Register
                                 </Link>
                             </li>
                             <li>
                                 <Link href="#" className="text-white/80 hover:text-white transition-colors text-sm sm:text-base md:text-lg lg:text-xl font-normal">
-                                    Pricing
+                                    Login
                                 </Link>
                             </li>
                             <li>
                                 <Link href="#" className="text-white/80 hover:text-white transition-colors text-sm sm:text-base md:text-lg lg:text-xl font-normal">
-                                    About Us
+                                    Form
                                 </Link>
                             </li>
                         </ul>
@@ -85,17 +85,17 @@ const Footer = () => {
                         <ul className="space-y-3 sm:space-y-4 md:space-y-6 lg:space-y-8">
                             <li>
                                 <Link href="#" className="text-white/80 hover:text-white transition-colors text-sm sm:text-base md:text-lg lg:text-xl font-normal">
-                                    Features
+                                    Homepage
                                 </Link>
                             </li>
                             <li>
                                 <Link href="#" className="text-white/80 hover:text-white transition-colors text-sm sm:text-base md:text-lg lg:text-xl font-normal">
-                                    Pricing
+                                    Transaction
                                 </Link>
                             </li>
                             <li>
                                 <Link href="#" className="text-white/80 hover:text-white transition-colors text-sm sm:text-base md:text-lg lg:text-xl font-normal">
-                                    About Us
+                                    Assets
                                 </Link>
                             </li>
                         </ul>

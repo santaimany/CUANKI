@@ -428,9 +428,7 @@ const FeaturesSection = () => {
               <div className="grid grid-cols-1 lg:grid-cols-2 items-end lg:mt-0">
                 <div className="lg:-translate-y-[12vw] sm:lg:-translate-y-[14vw] md:lg:-translate-y-[13vw] xl:lg:-translate-y-[12vw]">
                   <p className="text-[#50488A] text-[2vw] max-w-[40vw] text-justify milestone-paragraph sm:text-[2.8vw] sm:max-w-[55vw] md:text-[2.4vw] md:max-w-[48vw] lg:text-[2.2vw] lg:max-w-[42vw] xl:text-[2vw] xl:max-w-[40vw]">
-                    Exposing your inventory to incidents is a thing of the past.
-                    We have a professional insurance policy that protects all
-                    your items against damage and theft.
+                    Jangan Cuma Punya Mimpi. Wujudkan Bersama Kami.Cuanki adalah solusi untuk mengubah goals besarmu menjadi langkah-langkah harian yang pasti bisa kamu lakukan.
                   </p>
                 </div>
 

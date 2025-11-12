@@ -78,9 +78,8 @@ const AIReminder: React.FC<AIReminderProps> = ({ page, isFloating = false }) => 
         const response = await getAIReminder(page);
         setReminderData(response.data);
       } catch (error) {
-        console.error('Error fetching AI reminder:', error);
         if (error instanceof Error) {
-          showError(error.message);
+          showError("Gagal memuat AI reminder");
         } else {
           showError('Gagal memuat AI reminder');
         }

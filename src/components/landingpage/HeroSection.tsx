@@ -271,7 +271,7 @@ const HeroSection = () => {
 
           
             <p ref={paragraphRef} className="text-gray-300 relative text-2xl leading-9">
-              Exposing your inventory to incidents is a thing of the past. We have a professional insurance policy that protects all your items.
+              Ubah impian finansial Anda <br/> menjadi rencana yang <br/> dapat dicapai
             </p>
           </div>
         </div>
