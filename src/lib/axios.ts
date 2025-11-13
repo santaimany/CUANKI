@@ -1,22 +1,121 @@
 import axios from 'axios';
+import type { AxiosError } from 'axios';
 import toast from 'react-hot-toast';
 
 
 let lastUnauthorizedToast = 0;
+let lastNetworkToast = 0;
 const TOAST_THROTTLE_DURATION = 5000;
+const NETWORK_TOAST_THROTTLE_DURATION = 5000;
+
+const resolveWindow = (): Window | undefined => {
+    if (typeof globalThis === 'undefined') {
+        return undefined;
+    }
+
+    const maybeWindow = (globalThis as typeof globalThis & { window?: Window }).window;
+    return maybeWindow;
+};
+
+const sanitizeBaseUrl = (raw: string): string => {
+    const trimmed = raw.trim();
+    const hasLeadingQuote = trimmed.startsWith('"') || trimmed.startsWith('\'');
+    const withoutLeadingQuote = hasLeadingQuote ? trimmed.slice(1) : trimmed;
+    const hasTrailingQuote = withoutLeadingQuote.endsWith('"') || withoutLeadingQuote.endsWith('\'');
+    return hasTrailingQuote ? withoutLeadingQuote.slice(0, -1) : withoutLeadingQuote;
+};
 
 const getBaseURL = () => {
-  
-    if (typeof window !== 'undefined' && window.location.hostname !== 'localhost') {
+    const win = resolveWindow();
+    if (win && win.location.hostname !== 'localhost') {
         return '/api/proxy';
     }
-    
-    const url = process.env.NEXT_PUBLIC_API_URL || 'http://103.186.0.127';
 
-    return url.replace(/^['"]|['"]$/g, '').trim();
+    const url = process.env.NEXT_PUBLIC_API_URL || 'http://103.186.0.127';
+    return sanitizeBaseUrl(url);
 };
 
 const baseURL = getBaseURL();
+
+const showNetworkToast = (message: string) => {
+    const now = Date.now();
+    if (now - lastNetworkToast > NETWORK_TOAST_THROTTLE_DURATION) {
+        lastNetworkToast = now;
+        toast.error(message, { duration: 3000 });
+    }
+};
+
+const clearAuthStorage = () => {
+    if (typeof globalThis === 'undefined' || !('localStorage' in globalThis)) {
+        return;
+    }
+
+    localStorage.removeItem('token');
+    localStorage.removeItem('refresh_token');
+    localStorage.removeItem('onboarding_completed');
+};
+
+const handleSessionExpired = () => {
+    const now = Date.now();
+
+    if (now - lastUnauthorizedToast > TOAST_THROTTLE_DURATION) {
+        lastUnauthorizedToast = now;
+        toast.error('Sesi Anda telah berakhir. Silakan login kembali.', {
+            duration: 3000,
+        });
+    }
+
+    clearAuthStorage();
+
+    const win = resolveWindow();
+    if (!win) {
+        return;
+    }
+
+    const authPaths = ['/login', '/register', '/auth/google/callback'];
+    if (!authPaths.some((path) => win.location.pathname.startsWith(path))) {
+        console.log('🔄 Redirecting to login page...');
+        setTimeout(() => {
+            win.location.href = '/login';
+        }, 1500);
+    }
+};
+
+const handleUnauthorizedError = (error: AxiosError): never => {
+    const requestUrl = error.config?.url ?? '';
+    const isLoginRequest = requestUrl.includes('/login') || requestUrl.includes('/api/login');
+
+    if (isLoginRequest) {
+        throw error;
+    }
+
+    handleSessionExpired();
+    throw error;
+};
+
+const mapNetworkError = (error: AxiosError): Error | null => {
+    const message = error.message ?? '';
+
+    if (error.code === 'ECONNABORTED' || message.includes('timeout')) {
+        console.warn('⏰ Request taking longer than expected');
+        showNetworkToast('Permintaan lambat, coba ulangi sebentar lagi.');
+
+        const timeoutError = new Error('Permintaan membutuhkan waktu lebih lama dari biasanya. Silakan coba lagi.');
+        timeoutError.name = 'TimeoutError';
+        return timeoutError;
+    }
+
+    if (message.includes('Network Error')) {
+        console.warn('🌐 Network error detected');
+        showNetworkToast('Tidak dapat terhubung ke server. Periksa koneksi lalu coba lagi.');
+
+        const networkError = new Error('Tidak dapat terhubung ke server. Silakan coba lagi.');
+        networkError.name = 'NetworkError';
+        return networkError;
+    }
+
+    return null;
+};
 
 if (process.env.NODE_ENV === 'development') {
     console.log('🌐 API Base URL:', baseURL);
@@ -25,110 +124,51 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 const axiosInstance = axios.create({
-    baseURL: baseURL,
-    timeout: 15000, // 15 seconds timeout
+    baseURL,
     headers: {
         'Content-Type': 'application/json',
     },
 });
 
-// Request interceptor
 axiosInstance.interceptors.request.use(
     (config) => {
+        if (resolveWindow()) {
+            const token = localStorage.getItem('token');
 
-        const token = localStorage.getItem('token');
-        if (token) {
-            config.headers.Authorization = `Bearer ${token}`;
-            
-        } 
-        
-       
+            if (token) {
+                config.headers = config.headers ?? {};
+                (config.headers as Record<string, string>).Authorization = `Bearer ${token}`;
+            }
+        }
+
         return config;
     },
     (error) => {
-        return Promise.reject(error);
+        throw error;
     }
 );
 
-// Response interceptor
 axiosInstance.interceptors.response.use(
-    (response) => {
-        return response;
-    },
+    (response) => response,
     (error) => {
-        // Handle error responses
-        if (error.response) {
-            const { status } = error.response;
-            
-            // Handle unauthorized (401) error
-            if (status === 401) {
-                // Check if this is a login request - if so, don't show session expired message
-                const isLoginRequest = error.config?.url?.includes('/login') || 
-                                     error.config?.url?.includes('/api/login');
-                
-                if (isLoginRequest) {
-                   
-                } else {
-                  
-                    // Throttle unauthorized toast untuk mencegah spam
-                    const now = Date.now();
-                    if (now - lastUnauthorizedToast > TOAST_THROTTLE_DURATION) {
-                        lastUnauthorizedToast = now;
-                        
-                        // Show toast notification for session expired
-                        toast.error('Sesi Anda telah berakhir. Silakan login kembali.', {
-                            duration: 3000,
-                        });
-                    }
-                    
-                    // Clear token from localStorage (only once per session)
-                    if (localStorage.getItem('token')) {
-                        localStorage.removeItem('token');
-                        localStorage.removeItem('refresh_token');
-                        localStorage.removeItem('onboarding_completed');
-                        
-                        // Only redirect if we're in browser environment
-                        if (globalThis.window !== undefined) {
-                            // Check if we're not already on login/register pages to avoid infinite redirect
-                            const currentPath = globalThis.window.location.pathname;
-                            const authPaths = ['/login', '/register', '/auth/google/callback'];
-                            
-                            if (!authPaths.some(path => currentPath.startsWith(path))) {
-                                console.log('🔄 Redirecting to login page...');
-                                // Delay redirect slightly to show toast
-                                setTimeout(() => {
-                                    globalThis.window.location.href = '/login';
-                                }, 1500);
-                            }
-                        }
-                    }
-                }
+        const axiosError = error as AxiosError;
+
+        if (axiosError.response) {
+            if (axiosError.response.status === 401) {
+                handleUnauthorizedError(axiosError);
             }
-            
-        } else if (error.request) {
-            
-            
-            
-            
-            
-            
-            
-            if (error.code === 'ECONNABORTED' || error.message.includes('timeout')) {
-                console.warn('⏰ Request timeout detected');
-                
-                const timeoutError = new Error('Koneksi timeout. Periksa koneksi internet Anda dan coba lagi.');
-                timeoutError.name = 'TimeoutError';
-                return Promise.reject(timeoutError);
-            } else if (error.message.includes('Network Error')) {
-                console.warn('🌐 Network error detected');
-                
-                const networkError = new Error('Gagal terhubung ke server. Periksa koneksi internet Anda.');
-                networkError.name = 'NetworkError';
-                return Promise.reject(networkError);
-            }
-        } else {
-            return Promise.reject(error);
+
+            throw axiosError;
         }
+
+        if (axiosError.request) {
+            const mappedError = mapNetworkError(axiosError);
+            if (mappedError) {
+                throw mappedError;
+            }
+        }
+
+        throw axiosError;
     }
 );
 
