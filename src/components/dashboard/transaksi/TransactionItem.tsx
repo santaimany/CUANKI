@@ -7,7 +7,7 @@ interface TransactionItemProps {
 }
 
 const TransactionItem: React.FC<TransactionItemProps> = ({ transaction }) => {
-  const { category, description, amount, time, source, status } = transaction;
+  const { category, description, amount, time, source } = transaction;
   const isExpense = amount < 0;
   const displayCategory = category || 'Tanpa kategori';
   const displaySource = source ? `From ${source}` : 'Sumber tidak diketahui';
@@ -25,15 +25,6 @@ const TransactionItem: React.FC<TransactionItemProps> = ({ transaction }) => {
           <h4 className="text-white font-semibold text-sm sm:text-base md:text-lg lg:text-xl truncate">{displayCategory}</h4>
           <p className="text-white/70 text-xs sm:text-sm md:text-base lg:text-lg truncate">{description}</p>
        
-          {!isExpense && status && (
-            <span className={`inline-block px-2 py-1 rounded-full text-xs font-medium mt-1 ${
-              status === 'Pending' 
-                ? 'bg-yellow-500/20 text-yellow-300' 
-                : 'bg-green-500/20 text-green-300'
-            }`}>
-              {status}
-            </span>
-          )}
         </div>
       </div>
 

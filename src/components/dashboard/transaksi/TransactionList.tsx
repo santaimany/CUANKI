@@ -122,7 +122,6 @@ const TransactionList: React.FC<TransactionListProps> = ({
         time: income.formatted.received_time,
         source: income.to_bank?.code_name ?? 'Tidak diketahui',
         datetime: income.formatted.received_datetime,
-        status: income.confirmation_status,
       };
     });
   }, [transactions, filterType]);
